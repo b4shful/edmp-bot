@@ -78,7 +78,7 @@ module.exports = (client) => {
       if (props.init) {
         props.init(client);
       }
-      client.commands.set(props.help.name, props);
+      client.commands.set(props.help.name.toLowerCase(), props);
       props.conf.aliases.forEach(alias => {
         client.aliases.set(alias, props.help.name);
       });
