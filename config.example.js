@@ -17,14 +17,18 @@ const config = {
   // VIA COMMANDS IN THE GUILD.
   
   "defaultSettings" : {
-    "prefix": "-",
+    "prefix": "!",
     "modLogChannel": "mod-log",
+
+    "mentorRole": "Mentor",
+    "staffRole": "Staff",
     "modRole": "Moderator",
     "adminRole": "Administrator",
+
     "systemNotice": "true", // This gives a notice when a user tries to run a command that they do not have permission to use.
-    "welcomeChannel": "welcome",
-    "welcomeMessage": "Say hello to {{user}}, everyone! We all need a warm welcome sometimes :D",
-    "welcomeEnabled": "false"
+    "welcomeChannel": "intro",
+    "welcomeMessage": "Welcome to EDMP {{user}}! Please make sure to tell one of the staff what DAW you use to make music by tagging \`@Staff\` in order to get access to other rooms!",
+    "welcomeEnabled": "true"
   },
 
   // PERMISSION LEVEL DEFINITIONS.
@@ -36,6 +40,34 @@ const config = {
       // Don't bother checking, just return true which allows them to execute any command their
       // level allows them to.
       check: () => true
+    },
+
+    { level: 1,
+      name: "Mentor",
+      check: (message) => {
+        try {
+          const mentorRole = message.guild.roles
+            .find(role => role.name.toLowerCase() === message.settings.mentorRole.toLowerCase());
+
+          if (mentorRole && message.member.roles.has(mentorRole.id)) return true;
+        } catch (e) {
+          return false;
+        }
+      }
+    },
+
+    { level: 2,
+      name: "Staff",
+      check: (message) => {
+        try {
+          const staffRole = message.guild.roles
+            .find(role => role.name.toLowerCase() === message.settings.staffRole.toLowerCase());
+
+          if (staffRole && message.member.roles.has(staffRole.id)) return true;
+        } catch (e) {
+          return false;
+        }
+      }
     },
 
     // This is your permission level, the staff levels should always be above the rest of the roles.
