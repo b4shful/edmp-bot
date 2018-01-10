@@ -1,0 +1,4 @@
+#!/bin/bash
+#stop
+pid=$(pgrep node)
+kill -9 $pid
