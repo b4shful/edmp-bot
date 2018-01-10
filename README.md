@@ -17,12 +17,19 @@ source env/python/bin/activate && source env/node/bin/activate
 deactivate
 ```
 
+You will now be able to install the Node.js dependencies used by the bot
+by running `npm install` in the project root directory. Be sure to do this
+before attempting to start the bot.
+
 ## Required Configuration
 
-Before running the bot there are two configuration values required; the
-bot's `ownerId` and the bot's `token`. Discord provides bot-users who
-are invited to a server for operation. The `token` is what associates
-this bot to that user account.
+Copy `config.example.js` to `config.js` to provide most of the necessary
+configuration used by the bot. You'll need to update the `prefix`,
+`modLogChannel`, `ownerID`, and `token` values before running the bot.
+
+The two big ones are the bot's `ownerId` and the bot's `token`. Discord
+provides bot-users who are invited to a server for operation. The `token`
+is what associates this bot to that user account.
 
 ## Running the Bot
 
