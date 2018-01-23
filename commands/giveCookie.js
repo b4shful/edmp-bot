@@ -22,11 +22,12 @@ const buildEmbed = (client, member) => new Discord.RichEmbed()
 
 /**
  * @param {Discord.Guild} guild The Discord server
+ * @param {Discord.Snowflake} roleId The id of the Cookie role
  * @returns {Discord.Role} The cookie role
  * @throws {TypeError} If the cookie role is missing from the guild
  */
-const getCookieRole = guild => {
-  const cookie = guild.roles.find('name', 'Cookie');
+const getCookieRole = (guild, roleId) => {
+  const cookie = guild.roles.get(roleId);
 
   if (!cookie) {
     const error = new TypeError('Server is missing the Cookie role.');
@@ -70,8 +71,12 @@ const getMentionedMember = message => {
  * @throws {TypeError} When a role is unable to be removed
  */
 const removePreviousCookie = async cookie => {
+  const previousOwner = cookie.members.first();
+
+  if (!previousOwner) { return; }
+
   try {
-    await cookie.members.first().removeRole(cookie.id);
+    await previousOwner.removeRole(cookie.id);
   }
   catch (error) {
     // DiscordAPIError: Missing Permissions =>
@@ -84,11 +89,11 @@ const removePreviousCookie = async cookie => {
 /**
  * Assigns the cookie role the given server member.
  * 
- * @param {Discord.Role} cookie The cookie role
  * @param {Discord.Member} member Discord member to receive the cookie role
+ * @param {Discord.Role} cookie The cookie role
  * @throws {TypeError} When adding a role fails
  */
-const assignCookie = async (cookie, member) => {
+const assignCookie = async (member, cookie) => {
   try {
     await member.addRole(cookie);
   }
@@ -111,6 +116,7 @@ const assignCookie = async (cookie, member) => {
  * - If the cookie is assigned to the message author
  */
 const parse = async (client, message) => {
+  const cookieId = client.config.roleIds.cookie;
   const guild = Message.getGuild(message);
   const member = Message.getMember(message);
 
@@ -118,7 +124,7 @@ const parse = async (client, message) => {
     throw new TypeError('Server is currently unavailable.');
   }
 
-  const cookie = getCookieRole(guild);
+  const cookie = getCookieRole(guild, cookieId);
   const mentionedMember = getMentionedMember(message);
 
   if (mentionedMember.mute) {
@@ -138,7 +144,7 @@ const parse = async (client, message) => {
   // There should only be one cookie!
 
   await removePreviousCookie(cookie);
-  await assignCookie(cookie, mentionedMember);
+  await assignCookie(mentionedMember, cookie);
 
   return { embed: buildEmbed(mentionedMember) };
 };
@@ -150,17 +156,14 @@ const parse = async (client, message) => {
  * @param {Discord.Message} message A message on Discord
  */
 exports.run = async (client, message) => {
-  let response;
-  try {
-    response = await parse(client, message);
-  }
-  catch (error) {
-    const { message: msg = 'Unable to parse message.' } = error;
-    response = msg;
-  }
-  finally {
-    message.channel.send(response);
-  }
+  return Message.respond(message, async () => {
+    if (!client.config.roleIds.cookie) {
+      Logger.error('Missing `roleIds.cookie: string` in config file.');
+      throw new TypeError('The cookie is missing, please notify `@Staff`.');
+    }
+
+    return parse(client, message);
+  });
 };
 
 exports.conf = {
