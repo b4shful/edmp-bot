@@ -27,3 +27,24 @@ exports.getGuild = message => {
 
   return guild;
 };
+
+/**
+ * Handles sending a message response using the given callback.
+ * 
+ * @param {Discord.Message} message A Discord message
+ * @param {() => Discord.StringResolvable} callback A function that will return
+ * any type that can resolve to a string to be sent to a Discord GuildChannel
+ */
+exports.respond = async (message, callback) => {
+  let response;
+  try {
+    response = await callback();
+  }
+  catch (error) {
+    const { message: msg = 'Unable to parse message.' } = error;
+    response = msg;
+  }
+  finally {
+    message.channel.send(response);
+  }
+};
