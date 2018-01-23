@@ -22,6 +22,13 @@ client.config = require(configPath);
 // client.config.token contains the bot's token
 // client.config.prefix contains the message prefix
 
+// Check for required config and exit with error if missing.
+if (!client.config.roleIds) {
+  console.error(new TypeError('Config files is missing `roleIds` property'));
+  process.exitCode = 1;
+  return;
+}
+
 // Require our logger
 client.logger = require("./util/Logger");
 
