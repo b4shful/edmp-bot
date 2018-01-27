@@ -1,0 +1,15 @@
+#!/bin/bash
+
+GIT_DIR=/home/bot/repo
+WORK_TREE=/home/bot/edmp-bot
+
+while read oldrev newrev ref
+do
+	if [[ $ref =~ .*/master$ ]];
+	then
+		echo "Master ref received. Deploying master branch to production..."
+		git --work-tree=$WORK_TREE --git-dir=$GIT_DIR checkout -f
+	else
+		echo "Ref $ref successfully received. Doing nothing: only the master branch may be deployed on this server."
+	fi
+done
