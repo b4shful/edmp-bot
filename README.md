@@ -1,38 +1,18 @@
 # EDMP Bot
 
-## Environment Setup
-
-This repo includes two virtual environments created by `venv` and `nodeenv` to
-include the Python and Node.js used in development. To use them run the
-following in the project root directory:
-
-```
-source env/python/bin/activate && source env/node/bin/activate
-
-# You'll see (node)(python)$ in your shell indicating you're in two virtual
-# environments which include the version of node.js and python used for
-# development.
-
-# To exit the virtual environments run:
-deactivate
-```
-
-You will now be able to install the Node.js dependencies used by the bot
-by running `npm install` in the project root directory. Be sure to do this
-before attempting to start the bot.
+The EDMP Discord bot.
 
 ## Required Configuration
 
-Copy `config.example.js` to `config.js` to provide most of the necessary
-configuration used by the bot. You'll need to update the `prefix`,
-`modLogChannel`, `ownerID`, and `token` values before running the bot.
+Copy `config.example.js` to `config.js` to provide most of the necessary configuration used by the bot. You'll need to update the `prefix`, `modLogChannel`, `ownerID`, and `token` values before running the bot.
 
-The two big ones are the bot's `ownerId` and the bot's `token`. Discord
-provides bot-users who are invited to a server for operation. The `token`
-is what associates this bot to that user account.
+The two big ones are the bot's `ownerId` and the bot's `token`. Discord provides bot-users who are invited to a server for operation. The `token` is what associates this bot to that user account.
 
-## Running the Bot
+## Making Changes to the Bot in Production
 
-In production use the `start` and `stop` scripts included in the project
-root directory so the bot will remain running on the server without an
-active user session. For development, run `npm start`.
+The bot is run from a repository stored on the same server which applies changes to code using githooks. If you have SSH access to the
+bot user account on the server you can add it the server repo using `git remote add production bot@<server_IP>:edmp-bot` and push changes to the server using `git push production master`. Only changes to the master branch will be applied, do not push branches to production as they will be ignored and waste bandwidth.
+
+## Management in Production
+
+If you SSH into the server you'll have access to the `start`, `stop`, `checkquick`, and `checklive` scripts. Currently, when the bot is stopped or told to restart there is process used to have it start again automatically. You will need to SSH into the server and run `~/edmp-bot/start &` to bring it back up. You can use the check scripts to see logging information.
