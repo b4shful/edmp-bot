@@ -1,3 +1,3 @@
 #!/bin/bash
 #test
-nohup node bot.js &
+nohup pm2 start bot.js &
