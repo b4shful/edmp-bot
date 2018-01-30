@@ -1,3 +1,4 @@
 #!/bin/bash
-
+# Stop bot
 pkill -f "node index.js"
+

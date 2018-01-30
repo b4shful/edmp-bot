@@ -1,3 +1,4 @@
 #!/bin/bash
+# Start bot using pm2
+nohup pm2 start index.js &
 
-nohup node index.js &
