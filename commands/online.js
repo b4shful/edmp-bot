@@ -1,6 +1,6 @@
 /**
- * Responds with the number online, idle, and offline users in the server
- * (excluding bots). Using Discord Rich Embed.
+ * Responds with the number online, idle, dnd, and offline users in the server
+ * (excluding bots). Uses Discord Rich Embed.
  * 
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
