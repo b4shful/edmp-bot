@@ -63,3 +63,6 @@ typings/
 
 # gyp build
 build/
+
+#Eslint settings
+.eslintrc.json
