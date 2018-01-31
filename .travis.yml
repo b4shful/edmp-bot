@@ -5,20 +5,19 @@ node_js:
 dist: trusty
 sudo: false
 
-addons:
-  ssh_known_hosts: $PRODUCTION_SERVER_IP
-
 # We're only using travis to deploy, not testing
 install: true
 script: true
 
 # Generate encrypted private key using travis cli and add public key to authorized keys on server.
+# The ssh config is also updated to skip host key checking, which prevents the build from pausing indefinitely.
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_a1ae36dceb3a_key -iv $encrypted_a1ae36dceb3a_iv -in .travis/deploy_rsa.enc -out .travis/deploy_rsa -d
   - eval "$(ssh-agent -s)"
   - cp .travis/deploy_rsa ~/.ssh/deploy_rsa
   - chmod 600 ~/.ssh/deploy_rsa
   - ssh-add ~/.ssh/deploy_rsa
+  - echo -e "Host $PRODUCTION_SERVER_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 deploy:
   provider: script
