@@ -8,6 +8,9 @@ sudo: false
 addons:
   ssh_known_hosts:
   - $PRODUCTION_SERVER_IP
+  apt:
+    packages:
+      - gyp
 
 # Generate encrypted private key using travis cli and add public key to authorized keys on server.
 before_install:
