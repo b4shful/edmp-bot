@@ -4,6 +4,7 @@ The EDMP Discord bot.
 
 ## Dependencies
 To run the bot, the following node.js modules are required:
+
 |Dependency    | Install Command                 |
 |--------------| --------------------------------|
 |discord.js    | `npm install --save discord.js` |
