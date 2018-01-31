@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "node"
 
-dist: precise
+dist: trusty
 sudo: false
 
 addons:
@@ -10,6 +10,8 @@ addons:
   - $PRODUCTION_SERVER_IP
   apt:
     packages:
+      - build-essential
+      - python-minimal
       - gyp
 
 # Generate encrypted private key using travis cli and add public key to authorized keys on server.
