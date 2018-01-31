@@ -1,2 +1,2 @@
 #!/bin/bash
-tail -f nohup.out
+pm2 logs index

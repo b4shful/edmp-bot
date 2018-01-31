@@ -4,15 +4,12 @@ The EDMP Discord bot.
 
 ## Dependencies
 To run the bot, the following node.js modules are required:
+* discord.js
+* enmap
+* enmap-level
+* PM2
 
-|Dependency    | Install Command                 |
-|--------------| --------------------------------|
-|discord.js    | `npm install --save discord.js` |
-|Enmap         | `npm install enmap`             |
-|Enmap-level   | `npm install enmap-level`       |
-|PM2           | `npm install pm2 -g`            |
-
-To install these dependencies, start a terminal in the folder in which the bot is located, and run the install command above.
+To install these dependencies, start a terminal in the folder in which the bot is located, and run `npm install`.
 
 ## Required Configuration
 
