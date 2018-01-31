@@ -1,0 +1,7 @@
+#!/bin/bash
+
+remote="$1"
+set -e
+
+git remote add production $remote
+git push production master
