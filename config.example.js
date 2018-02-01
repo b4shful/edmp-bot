@@ -130,7 +130,16 @@ const config = {
       // Another simple check, compares the message author id to the one stored in the config file.
       check: (message) => message.client.config.ownerID === message.author.id
     }
-  ]
+  ],
+
+  roleIds: {},
+
+  emojis: {
+    online: '<:online:407564377622052864>',
+    offline: '<:offline:407565080390008834>',
+    idle: '<:idle:407565088598261760>',
+    dnd: '<:dnd:407565097246916609>'
+  }
 };
 
 module.exports = config;
