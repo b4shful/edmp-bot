@@ -156,7 +156,7 @@ const parse = async (client, message) => {
   await removePreviousCookie(cookie);
   await assignCookie(mentionedMember, cookie);
 
-  return { embed: buildEmbed(mentionedMember) };
+  return { embed: buildEmbed(client, mentionedMember) };
 };
 
 /**
