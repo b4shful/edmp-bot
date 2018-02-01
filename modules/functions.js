@@ -89,11 +89,13 @@ module.exports = (client) => {
   };
 
   client.unloadCommand = async (commandName) => {
+    const commandKey = commandName.toLowerCase();
     let command;
-    if (client.commands.has(commandName)) {
-      command = client.commands.get(commandName);
-    } else if (client.aliases.has(commandName)) {
-      command = client.commands.get(client.aliases.get(commandName));
+
+    if (client.commands.has(commandKey)) {
+      command = client.commands.get(commandKey);
+    } else if (client.aliases.has(commandKey)) {
+      command = client.commands.get(client.aliases.get(commandKey));
     }
     if (!command) return `The command \`${commandName}\` doesn"t seem to exist, nor is it an alias. Try again!`;
   
