@@ -8,12 +8,13 @@ const COOKIE_IMAGE_URL = 'https://cdn.discordapp.com/attachments/311541291869798
  * Returns a Discord.js RichEmbed to use as a response for a user earning
  * a cookie.
  * 
+ * @param {Discord.Client} client The Discord API client
  * @param {Discord.GuildMember} member A member of the server
  * @returns {Discord.RichEmbed} A Discord custom embed object
  */
-const buildEmbed = member => new Discord.RichEmbed()
+const buildEmbed = (client, member) => new Discord.RichEmbed()
   .setTitle('Golden Cookie')
-  .setAuthor('EDMP Bot', member.user.avatarURL)
+  .setAuthor('EDMP Bot', client.user.avatarURL)
   .setColor(0x00ae86)
   .setDescription(`${member} has the golden cookie!`)
   .setFooter('This bot was made by your caring EDMP overlords')
@@ -155,7 +156,7 @@ const parse = async (client, message) => {
   await removePreviousCookie(cookie);
   await assignCookie(mentionedMember, cookie);
 
-  return { embed: buildEmbed(mentionedMember) };
+  return { embed: buildEmbed(client, mentionedMember) };
 };
 
 /**
