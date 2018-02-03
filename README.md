@@ -2,26 +2,26 @@
 
 The EDMP Discord bot.
 
-## Dependencies
-To run the bot, the following node.js modules are required:
-* discord.js
-* enmap
-* enmap-level
-* PM2
+## Getting Started
 
-To install these dependencies, start a terminal in the folder in which the bot is located, and run `npm install`.
+For development you will need to set up your own Discord server and a bot user. Read [this](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) on how to register your personal bot as a Discord application, get a bot token, and invite the bot user to your own server. The token is what associates your locally running bot to that user account. You will also need to enable developer mode on your Discord client in order to [get your user ID](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-).
 
-## Required Configuration
+### Environment Dependencies
 
-Copy `config.example.js` to `config.js` to provide most of the necessary configuration used by the bot. You'll need to update the `prefix`, `modLogChannel`, `ownerID`, and `token` values before running the bot.
+Before starting you must have a version of Node.js on your system. Install it using [nvm](https://github.com/creationix/nvm) to keep everything in your user home directory. Install the most recent version of node using `nvm install node`; the bot requires Node.js 8 or greater.
 
-The two big ones are the bot's `ownerId` and the bot's `token`. Discord provides bot-users who are invited to a server for operation. The `token` is what associates this bot to that user account.
+### Installation
 
-## Making Changes to the Bot in Production
+```
+git clone [repo_url]
+cd edmp-bot
+npm install
+```
 
-The bot is run from a repository stored on the same server which applies changes to code using githooks. If you have SSH access to the
-bot user account on the server you can add it the server repo using `git remote add production bot@<server_IP>:edmp-bot` and push changes to the server using `git push production master`. Only changes to the master branch will be applied, do not push branches to production as they will be ignored and waste bandwidth.
+### Configuration
 
-## Management in Production
+Copy `config.example.js` to `config.js` to provide most of the necessary configuration used by the bot. You'll need to update the `prefix`, `modLogChannel`, `ownerID`, and `token` values before running the bot. The bot token is provided by Discord and the `ownerId` is your Discord user ID.
 
-If you SSH into the server you'll have access to the `start`, `stop`, `checkquick`, and `checklive` scripts. Currently, when the bot is stopped or told to restart there is process used to have it start again automatically. You will need to SSH into the server and run `~/edmp-bot/start &` to bring it back up. You can use the check scripts to see logging information.
+### Usage
+
+Run the bot using `npm start`. When the bot is running you'll be able to make changes to commands and reload them using the `reload` command. Other changes will require you to stop the bot and run `npm start` again.
