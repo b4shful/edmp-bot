@@ -11,12 +11,15 @@
 
 const Discord = require('discord.js');
 
-const onlineEmoji = '<:online:407564377622052864>'
-const offlineEmoji = '<:offline:407565080390008834>'
-const idleEmoji = '<:idle:407565088598261760>'
-const dndEmoji = '<:dnd:407565097246916609>'
 
-exports.run = (client, message, args, level) => {
+
+exports.run = (client, message) => {
+  
+  const onlineEmoji = client.config.emoji.online;
+  const offlineEmoji = client.config.emoji.offline;
+  const idleEmoji = client.config.emoji.idle;
+  const dndEmoji = client.config.emoji.dnd;
+
   const onlineUsers = message.guild.members
     .filter(member => member.presence.status === 'online' && !member.user.bot)
     .size;
@@ -26,11 +29,11 @@ exports.run = (client, message, args, level) => {
   const offlineUsers = message.guild.members
     .filter(member => member.presence.status === 'offline' && !member.user.bot)
     .size;
-    const dndUsers = message.guild.members
+  const dndUsers = message.guild.members
     .filter(member => member.presence.status === 'dnd' && !member.user.bot)
     .size;
-  
-    const buildEmbed = new Discord.RichEmbed()
+  //Build Embed for message
+  const buildEmbed = new Discord.RichEmbed()
     .setTitle('Members')
     .setAuthor('EDMP Bot', client.user.avatarURL)
     .setColor(0x00ae86)
