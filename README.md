@@ -1,5 +1,7 @@
 # EDMP Bot
 
+[![Build Status](https://travis-ci.org/buosseph/edmp-bot.svg?branch=master)](https://travis-ci.org/buosseph/edmp-bot)
+
 The EDMP Discord bot.
 
 ## Getting Started
