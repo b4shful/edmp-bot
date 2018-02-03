@@ -79,9 +79,13 @@ const removePreviousCookie = async cookie => {
     await previousOwner.removeRole(cookie.id);
   }
   catch (error) {
-    // DiscordAPIError: Missing Permissions =>
-    // "Bot permission are not high enough to modify the server roles."
     Logger.error(error);
+
+    // Checking DiscordAPIErrors could be better.
+    if (error.message === 'Missing Access') {
+      throw new Error('Bot permissions are not high enough to modify server roles.');
+    }
+
     throw new TypeError('Unable to remove previous cookies.');
   }
 };
@@ -99,6 +103,12 @@ const assignCookie = async (member, cookie) => {
   }
   catch (error) {
     Logger.error(error);
+
+    // Checking DiscordAPIErrors could be better.
+    if (error.message === 'Missing Access') {
+      throw new Error('Bot permissions are not high enough to modify server roles.');
+    }
+
     throw new TypeError('Unable to assign cookie role.');
   }
 };
@@ -146,7 +156,7 @@ const parse = async (client, message) => {
   await removePreviousCookie(cookie);
   await assignCookie(mentionedMember, cookie);
 
-  return { embed: buildEmbed(mentionedMember) };
+  return { embed: buildEmbed(client, mentionedMember) };
 };
 
 /**
