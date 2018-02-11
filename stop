@@ -1,4 +1,3 @@
 #!/bin/bash
 # Stop bot
-pkill -f "node index.js"
-
+pm2 stop edmp-bot
