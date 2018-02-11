@@ -1,2 +1,2 @@
 #!/bin/bash
-pm2 logs index
+pm2 logs edmp-bot
