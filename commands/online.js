@@ -40,7 +40,7 @@ exports.run = (client, message) => {
     .setDescription(`${onlineEmoji}Online Members: ${onlineUsers}\n\
 ${idleEmoji}Away Members: ${awayUsers}\n${offlineEmoji}Offline Members: ${offlineUsers}\n\
 ${dndEmoji}DND Members: ${dndUsers}`)
-    .setFooter('This bot was made by your caring EDMP overlords');
+    .setFooter('This bot was made by your caring EDMP overlords.');
     //.setThumbnail(COOKIE_IMAGE_URL);
 
   message.channel.send({embed: buildEmbed});

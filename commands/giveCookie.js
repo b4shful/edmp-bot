@@ -17,7 +17,7 @@ const buildEmbed = (client, member) => new Discord.RichEmbed()
   .setAuthor('EDMP Bot', client.user.avatarURL)
   .setColor(0x00ae86)
   .setDescription(`${member} has the golden cookie!`)
-  .setFooter('This bot was made by your caring EDMP overlords')
+  .setFooter('This bot was made by your caring EDMP overlords.')
   .setThumbnail(COOKIE_IMAGE_URL);
 
 /**
