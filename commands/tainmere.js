@@ -7,7 +7,7 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send('Tainmere: https://soundcloud.com/tainmere');
+  message.channel.send('Tainmere\'s Production Resources: http://bit.ly/2AZyDOc');
 };
   
 exports.conf = {
@@ -20,7 +20,7 @@ exports.conf = {
 exports.help = {
   name: "tainmere",
   category: "Links",
-  description: "Responds with a link to Tainmere's SoundCloud.",
+  description: "Responds with a link to Tainmere's Music Resources.",
   usage: "tainmere"
 };
   
