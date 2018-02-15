@@ -12,43 +12,42 @@ exports.run = async (client, message, args, level) => {
     var url = "http://edmpdiscord.com/rules.json";
 
     http.get(url, res => {
-  res.setEncoding("utf8");
-  let body = "";
-  res.on("data", data => {
-    body += data;
-  });
-  res.on("end", () => {
-      var rulesJson = JSON.parse(body);
+	res.setEncoding("utf8");
+	let body = "";
+	res.on("data", data => {
+	    body += data;
+	});
+	res.on("end", () => {
+	    var rulesJson = JSON.parse(body);
 
-	if (!args[0]) {
-	    rulesList = "Server rules:\n";
+	    if (!args[0]) {
+		rulesList = "Server rules:\n";
 
-	    var ruleNumber = 1;
+		var ruleNumber = 1;
 
-	    for (let rule of rulesJson.rules) {
-		rulesList += rule + "\n";
-		ruleNumber++;
+		for (let rule of rulesJson.rules) {
+		    rulesList += rule + "\n";
+		    ruleNumber++;
+		}
+		message.channel.send(rulesList);
+	    } else if (parseInt(args[0]) < rulesJson.rules.length) {
+		message.channel.send(rulesJson.rules[parseInt(args[0]) - 1]);
 	    }
-	    message.channel.send(rulesList);
-	} else if (parseInt(args[0]) < rulesJson.rules.length) {
-	    message.channel.send(rulesJson.rules[parseInt(args[0]) - 1]);
-	}
-  });
-});
+	});
+    });
 
-    
 };
 
 exports.conf = {
-  enabled: true,
-  guildOnly: true,
-  aliases: [],
-  permLevel: "User"
+    enabled: true,
+    guildOnly: true,
+    aliases: [],
+    permLevel: "User"
 };
 
 exports.help = {
-  name: "rules",
-  category: "Moderation",
-  description: "Responds with a list of all rules, or the specific numbered rule.",
-  usage: "rules, or rules #"
+    name: "rules",
+    category: "Miscellaneous",
+    description: "Responds with a list of all rules, or the specific numbered rule.",
+    usage: "rules, or rules #"
 };
