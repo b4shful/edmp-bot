@@ -46,7 +46,7 @@ exports.run = async (client, message, args, level) => {
 		value: ref
 	    }],
 	footer: {
-	    text: "Use this command with: " + message.settings.prefix + "collab need: ___ style: ___ daw: ___ ref: ___"
+	    text: "Use this command with: :edmp: collab need: ___ style: ___ daw: ___ ref: ___"
 	}
     }});
 };
