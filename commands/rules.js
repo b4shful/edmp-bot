@@ -30,8 +30,10 @@ exports.run = async (client, message, args, level) => {
 		    ruleNumber++;
 		}
 		message.channel.send(rulesList);
-	    } else if (parseInt(args[0]) < rulesJson.rules.length) {
+	    } else if (parseInt(args[0]) <= rulesJson.rules.length) {
 		message.channel.send(rulesJson.rules[parseInt(args[0]) - 1]);
+	    } else if (args[0] === "34") {
+		message.channel.send("If it exists, there is porn of it – no exceptions");
 	    }
 	});
     });
