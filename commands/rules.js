@@ -8,8 +8,8 @@
  */
 exports.run = async (client, message, args, level) => { 
     
-    const http = require("http");
-    var url = "http://edmpdiscord.com/rules.json";
+    const http = require("https");
+    var url = "https://edmpdiscord.com/rules.json";
 
     http.get(url, res => {
 	res.setEncoding("utf8");

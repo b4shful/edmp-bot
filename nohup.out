@@ -1,0 +1,67 @@
+nohup: pm2: No such file or directory
+
+                        -------------
+
+__/\\\\\\\\\\\\\____/\\\\____________/\\\\____/\\\\\\\\\_____
+ _\/\\\/////////\\\_\/\\\\\\________/\\\\\\__/\\\///////\\\___
+  _\/\\\_______\/\\\_\/\\\//\\\____/\\\//\\\_\///______\//\\\__
+   _\/\\\\\\\\\\\\\/__\/\\\\///\\\/\\\/_\/\\\___________/\\\/___
+    _\/\\\/////////____\/\\\__\///\\\/___\/\\\________/\\\//_____
+     _\/\\\_____________\/\\\____\///_____\/\\\_____/\\\//________
+      _\/\\\_____________\/\\\_____________\/\\\___/\\\/___________
+       _\/\\\_____________\/\\\_____________\/\\\__/\\\\\\\\\\\\\\\_
+        _\///______________\///______________\///__\///////////////__
+
+
+                          Community Edition
+
+            Production Process Manager for Node.js applications
+                     with a built-in Load Balancer.
+
+
+                Start and Daemonize any application:
+                $ pm2 start app.js
+
+                Load Balance 4 instances of api.js:
+                $ pm2 start api.js -i 4
+
+                Monitor in production:
+                $ pm2 monitor
+
+                Make pm2 auto-boot at server restart:
+                $ pm2 startup
+
+                To go further checkout:
+                http://pm2.io/
+
+
+                        -------------
+
+[PM2] Spawning PM2 daemon with pm2_home=/Users/robertrandolph/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /Users/robertrandolph/Documents/Programming/EDMP/edmp-bot/index.js in fork_mode (1 instance)
+[PM2] Done.
+┌──────────┬────┬──────┬───────┬────────┬─────────┬────────┬─────┬───────────┬────────────────┬──────────┐
+│ App name │ id │ mode │ pid   │ status │ restart │ uptime │ cpu │ mem       │ user           │ watching │
+├──────────┼────┼──────┼───────┼────────┼─────────┼────────┼─────┼───────────┼────────────────┼──────────┤
+│ index    │ 0  │ fork │ 39748 │ online │ 0       │ 0s     │ 10% │ 15.3 MB   │ robertrandolph │ disabled │
+└──────────┴────┴──────┴───────┴────────┴─────────┴────────┴─────┴───────────┴────────────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
+[PM2] Applying action restartProcessId on app [index](ids: 0)
+[PM2] [index](0) ✓
+[PM2] Process successfully started
+┌──────────┬────┬──────┬───────┬────────┬─────────┬────────┬─────┬───────────┬────────────────┬──────────┐
+│ App name │ id │ mode │ pid   │ status │ restart │ uptime │ cpu │ mem       │ user           │ watching │
+├──────────┼────┼──────┼───────┼────────┼─────────┼────────┼─────┼───────────┼────────────────┼──────────┤
+│ index    │ 0  │ fork │ 40229 │ online │ 15      │ 0s     │ 0%  │ 13.8 MB   │ robertrandolph │ disabled │
+└──────────┴────┴──────┴───────┴────────┴─────────┴────────┴─────┴───────────┴────────────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
+[PM2] Applying action restartProcessId on app [index](ids: 0)
+[PM2] [index](0) ✓
+[PM2] Process successfully started
+┌──────────┬────┬──────┬───────┬────────┬─────────┬────────┬─────┬───────────┬────────────────┬──────────┐
+│ App name │ id │ mode │ pid   │ status │ restart │ uptime │ cpu │ mem       │ user           │ watching │
+├──────────┼────┼──────┼───────┼────────┼─────────┼────────┼─────┼───────────┼────────────────┼──────────┤
+│ index    │ 0  │ fork │ 43321 │ online │ 30      │ 0s     │ 0%  │ 10.6 MB   │ robertrandolph │ disabled │
+└──────────┴────┴──────┴───────┴────────┴─────────┴────────┴─────┴───────────┴────────────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
