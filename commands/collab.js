@@ -62,5 +62,5 @@ exports.help = {
     name: "collab",
     category: "Miscellaneous",
     description: "Create a collaboration message",
-    usage: "collab need: thing style: thing daw: thing ref: thing"
+    usage: "collab need: ___ style: ___ daw: ___ ref: ___"
 };
