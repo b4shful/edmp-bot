@@ -21,19 +21,13 @@ exports.run = async (client, message, args, level) => {
 	    var rulesJson = JSON.parse(body);
 
 	    if (!args[0]) {
-		rulesList = "Server rules:\n";
-
-		var ruleNumber = 1;
-
-		for (let rule of rulesJson.rules) {
-		    rulesList += rule + "\n";
-		    ruleNumber++;
-		}
-		message.channel.send(rulesList);
-	    } else if (parseInt(args[0])) {
-		message.channel.send("Please use the rule command to specify a rule");
-	    } else {
-		message.channel.send("I'm sorry, Dave. I'm afraid I can't do that.");
+		message.channel.send("Please specify a rule");
+	    } else if (parseInt(args[0]).isNaN()) {
+		message.channel.send("Please specific an actual number, thanks.");
+	    } else if (parseInt(args[0]) <= rulesJson.rules.length) {
+		message.channel.send(rulesJson.rules[parseInt(args[0]) - 1]);
+	    } else if (args[0] === "34") {
+		message.channel.send("If it exists, there is porn of it – no exceptions");
 	    }
 	});
     });
@@ -48,8 +42,8 @@ exports.conf = {
 };
 
 exports.help = {
-    name: "rules",
+    name: "rule",
     category: "Miscellaneous",
-    description: "Responds with a list of all rules",
-    usage: "rules"
+    description: "Responds with a specific rule",
+    usage: "rule #"
 };
