@@ -22,7 +22,7 @@ exports.run = async (client, message, args, level) => {
 
 	    if (!args[0]) {
 		message.channel.send("Please specify a rule");
-	    } else if (parseInt(args[0]).isNaN()) {
+	    } else if (isNaN(parseInt(args[0]))) {
 		message.channel.send("Please specific an actual number, thanks.");
 	    } else if (parseInt(args[0]) <= rulesJson.rules.length) {
 		message.channel.send(rulesJson.rules[parseInt(args[0]) - 1]);
