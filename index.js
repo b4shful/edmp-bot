@@ -66,6 +66,8 @@ const init = async () => {
 
 
   // Subsequently, if not obviously, we load channel filters
+  // Filters are stored with the channelID as the key, this is important!
+  // You must use help.name for the name.
   const fltrFiles = await readdir("./filters/");  
   client.logger.log(`Loading a total of ${fltrFiles.length} Filters.`);
   fltrFiles.forEach(f => {

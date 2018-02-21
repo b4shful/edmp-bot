@@ -108,11 +108,15 @@ module.exports = (client) => {
     
   client.unloadFilter = async (filterName) => {
     const filterKey = filterName.toLowerCase();
-    let filter;
+      let filter;
 
-    if (client.filters.has(filterKey)) {
-      filter = client.commands.get(commandKey);
-    }
+      for([k,v] of client.filters) {
+        if (v.help.name === filterKey) {
+          filter = client.filters.get(k);
+	  break;
+	}
+      }
+      
     if (!filter) return `The filter \`${filterName}\` doesn"t seem to exist. Try again!`;
   
     if (filter.shutdown) {

@@ -26,6 +26,6 @@ Please try again!`);
 };
     
 exports.help = {
-    name: "Collab-Bro token filter",
+    name: "collab",
     channelID: "414450318601093120"
 };
