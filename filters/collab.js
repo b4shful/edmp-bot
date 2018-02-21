@@ -27,5 +27,5 @@ Please try again!`);
     
 exports.help = {
     name: "collab",
-    channelID: "414450318601093120"
+    channelID: "284393945151307776"
 };
