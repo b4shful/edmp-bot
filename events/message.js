@@ -13,8 +13,16 @@ module.exports = (client, message) => {
     ? client.settings.get(message.guild.id)
     : client.config.defaultSettings;
 
+  // First we check filters before we mess with commands
+  const filter = client.filters.get(message.channel.id);
 
-   
+  // Run the filter if it exists and matches the channelID
+  if (filter) {
+      if (message.channel.id == filter.help.channelID) {
+	  filter.run(client, message);
+      }
+  }
+    
   // For ease of use in commands and functions, we'll attach the settings
   // to the message object, so `message.settings` is accessible.
   message.settings = settings;

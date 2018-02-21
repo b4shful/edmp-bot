@@ -88,6 +88,41 @@ module.exports = (client) => {
     }
   };
 
+
+  // load channel filters
+  client.loadFilter = (filterName) => {
+    try {
+      const props = require(`../filters/${filterName}`);
+      client.logger.log(`Loading Filter: ${props.help.name}. 👌`);
+      // Leaving init here. Unsure if it'd be necessary, but why not?
+      if (props.init) {
+        props.init(client);
+      }
+      client.filters.set(props.help.channelID, props);
+      return false;
+    } catch (e) {
+      return `Unable to load command ${filterName}: ${e}`;
+    }
+  };
+
+    
+  client.unloadFilter = async (filterName) => {
+    const filterKey = filterName.toLowerCase();
+    let filter;
+
+    if (client.filters.has(filterKey)) {
+      filter = client.commands.get(commandKey);
+    }
+    if (!filter) return `The filter \`${filterName}\` doesn"t seem to exist. Try again!`;
+  
+    if (filter.shutdown) {
+      await filter.shutdown(client);
+    }
+     
+    delete require.cache[require.resolve(`../filters/${filterName}.js`)];
+    return false;
+  };
+
   client.unloadCommand = async (commandName) => {
     const commandKey = commandName.toLowerCase();
     let command;
