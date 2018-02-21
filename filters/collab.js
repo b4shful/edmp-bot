@@ -20,7 +20,14 @@ exports.run = async (client, message) => {
 
 You were missing: ${missing.join(', ')}
 
-Please try again!`);
+Please try like this:
+
+Need: Female diva vocalist
+Style: post-neo-trapstep
+DAW: Disableton Studio Tools 10.5.3
+References: http://soma.fm
+
+(If you actually post that, a Staff member will visit you with a ban-stick in hand.)`);
     message.delete(0);
     }
 };
