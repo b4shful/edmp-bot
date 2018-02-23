@@ -1,5 +1,5 @@
 /**
- * Responds with a link to dyce.'s SoundCloud.
+ * Responds with a link to Lysol's SoundCloud.
  * 
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
@@ -7,19 +7,19 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send('dyce. - https://soundcloud.com/dyce-dot');
+  message.channel.send('Aero Soul: https://soundcloud.com/aerosoul');
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
-  aliases: ["dyce."],
+  aliases: [],
   permLevel: "User"
 };
 
 exports.help = {
-  name: "dyce",
+  name: "lysol",
   category: "Links",
-  description: "Responds with a link to dyce.'s SoundCloud.",
-  usage: "dyce"
+  description: "Responds with a link to Lysol's SoundCloud.",
+  usage: "lysol"
 };

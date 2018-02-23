@@ -44,6 +44,9 @@ require('./modules/database')(client);
 client.commands = new Enmap();
 client.aliases = new Enmap();
 
+// and so are filters
+client.filters = new Enmap();
+
 // Now we integrate the use of Evie's awesome Enhanced Map module, which
 // essentially saves a collection to disk. This is great for per-server configs,
 // and makes things extremely easy for this purpose.
@@ -64,6 +67,18 @@ const init = async () => {
     if (response) console.log(response);
   });
 
+
+  // Subsequently, if not obviously, we load channel filters
+  // Filters are stored with the channelID as the key, this is important!
+  // You must use help.name for the name.
+  const fltrFiles = await readdir("./filters/");  
+  client.logger.log(`Loading a total of ${fltrFiles.length} Filters.`);
+  fltrFiles.forEach(f => {
+    if (!f.endsWith(".js")) return;
+    const response = client.loadFilter(f);
+    if (response) console.log(response);
+  });
+    
   // Then we load events, which will include our message and ready event.
   const evtFiles = await readdir("./events/");
   client.logger.log(`Loading a total of ${evtFiles.length} events.`);

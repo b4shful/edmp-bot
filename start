@@ -1,4 +1,3 @@
 #!/bin/bash
 # Start bot using pm2
-nohup pm2 start index.js &
-
+pm2 start index.js --name edmp-bot

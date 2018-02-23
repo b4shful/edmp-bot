@@ -23,7 +23,7 @@ const config = {
     "mentorRole": "Mentor",
     "staffRole": "Staff",
     "modRole": "Moderator",
-    "adminRole": "Administrator",
+    "adminRole": "Admin",
 
     "systemNotice": "true", // This gives a notice when a user tries to run a command that they do not have permission to use.
     "welcomeChannel": "intro",
@@ -130,7 +130,11 @@ const config = {
       // Another simple check, compares the message author id to the one stored in the config file.
       check: (message) => message.client.config.ownerID === message.author.id
     }
-  ]
+  ],
+
+  roleIds: {},
+
+  emojis: {}
 };
 
 module.exports = config;

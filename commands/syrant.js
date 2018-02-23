@@ -1,5 +1,5 @@
 /**
- * Responds with a link to POZI's SoundCloud.
+ * Responds with a link to Syrant's SoundCloud.
  * 
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
@@ -7,7 +7,7 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send('POZI: https://soundcloud.com/pozijam');
+  message.channel.send('Syrant: https://soundcloud.com/syrantmusic');
 };
 
 exports.conf = {
@@ -18,8 +18,8 @@ exports.conf = {
 };
 
 exports.help = {
-  name: "pozi",
+  name: "syrant",
   category: "Links",
-  description: "Responds with a link to POZI's SoundCloud.",
-  usage: "pozi"
+  description: "Responds with a link to Syrant's SoundCloud.",
+  usage: "syrant"
 };

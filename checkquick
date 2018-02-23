@@ -1,2 +1,2 @@
 #!/bin/bash
-pm2 logs index --lines=10
+pm2 logs edmp-bot --lines=10

@@ -13,6 +13,18 @@ module.exports = (client, message) => {
     ? client.settings.get(message.guild.id)
     : client.config.defaultSettings;
 
+  // First we check filters before we mess with commands
+  const filter = client.filters.get(message.channel.id);
+
+  // Run the filter if it exists and matches the channelID
+  // This should check for a channelID of 'all' or be changed to an array of channels.
+  // TODO ^
+  if (filter) {
+      if (message.channel.id == filter.help.channelID) {
+	  filter.run(client, message);
+      }
+  }
+    
   // For ease of use in commands and functions, we'll attach the settings
   // to the message object, so `message.settings` is accessible.
   message.settings = settings;
@@ -64,4 +76,10 @@ module.exports = (client, message) => {
   // If the command exists, **AND** the user has permission, run it.
   client.logger.cmd(`[CMD] ${client.config.permLevels.find(l => l.level === level).name} ${message.author.username} (${message.author.id}) ran command ${cmd.help.name}`);
   cmd.run(client, message, args, level);
+
+  
+  // After all is said and done... delete everything in collab-bro.
+  //if (message.channel.id === '414450318601093120') {
+  //  message.delete(0);
+  //} 
 };
