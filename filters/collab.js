@@ -5,11 +5,11 @@
  * @param {Discord.Message} message A message on Discord
  */
 exports.run = async (client, message) => { 
-    var tags = ['need', 'style', 'DAW', 'reference'];
-    var missing = [];
-    var idiotValidation = true;
+    let tags = ['need', 'style', 'DAW', 'reference'];
+    let missing = [];
+    let idiotValidation = true;
 
-    for (var i = 0; i < tags.length; i++) {
+    for (let i = 0; i < tags.length; i++) {
 	if (!message.content.toLowerCase().includes(tags[i])) {
 	    missing.push(tags[i]);
 	}
