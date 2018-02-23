@@ -1,8 +1,8 @@
 const Logger = require('../util/Logger');
 const sqlite = require('sqlite');
 
-const PATH = process.env.DATABASE_PATH || './database.sqlite';
-const PORT = process.env.DATABASE_PORT || 3000;
+const PATH = process.env.BOT_DATABASE_PATH || './database.sqlite';
+const PORT = process.env.BOT_DATABASE_PORT || 3000;
 
 /**
  * Adds a database instance to the bot client.
@@ -12,17 +12,21 @@ const PORT = process.env.DATABASE_PORT || 3000;
  * 
  * @param {*} client 
  */
-module.exports = async (client) => {
+module.exports = async client => {
 	Logger.log('Establishing SQLite connection...');
 
 	try {
-		const connection = await sqlite.open(PATH, {
+		let database = await sqlite.open(PATH, {
 			cached: true
 		});
 
-		// TODO: Add database migrations to set up schema.
+		// NOTE: For the development environment, while working on the database
+		// schema, you may want to set `force: 'last'` (default `false`) that
+		// will force the migration API to rollback and re-apply the latest
+		// migration over again each time when Node.js app launches.
+		database = await database.migrate();
 
-		client.database = connection;
+		client.database = database;
 		Logger.log('Successfully added database connection to client.');
 	}
 	catch (error) {
