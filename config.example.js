@@ -24,6 +24,7 @@ const config = {
     "staffRole": "Staff",
     "modRole": "Moderator",
     "adminRole": "Admin",
+    "abletonRole": "Ableton",
 
     "systemNotice": "true", // This gives a notice when a user tries to run a command that they do not have permission to use.
     "welcomeChannel": "intro",
@@ -40,6 +41,20 @@ const config = {
       // Don't bother checking, just return true which allows them to execute any command their
       // level allows them to.
       check: () => true
+    },
+
+    { level: 0,
+      name: "Ableton",
+      check: (message) => {
+        try {
+          const abletonRole = message.guild.roles
+            .find(role => role.name.toLowerCase() === message.settings.abletonRole.toLowerCase());
+
+          if (abletonRole && message.member.roles.has(abletonRole.id)) return true;
+        } catch (e) {
+          return false;
+        }
+      }
     },
 
     { level: 1,
