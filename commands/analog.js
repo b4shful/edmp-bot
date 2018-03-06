@@ -7,14 +7,19 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send(':warmth: ***A N A L O G   W A R M T H*** :warmth:');
+  if(message.member.roles.find("name", "Ableton")){
+  	  message.channel.send(':warmth: ***A N A L O G   W A R M T H*** :warmth:');
+  }
+  else {
+  	message.channel.send('This command is only availble to the Superior DAW, Failbleton :tatoithurts:')
+  }
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "Ableton"
+  permLevel: "User"
 };
 
 exports.help = {
