@@ -7,7 +7,7 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send('Tainmere\'s Production Resources: http://bit.ly/2AZyDOc');
+  message.channel.send('Tainmere\'s Production Resources: http://bit.ly/2Ffgthb');
 };
   
 exports.conf = {
