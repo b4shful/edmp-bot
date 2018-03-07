@@ -3,59 +3,29 @@
 // you.
 if (process.version.slice(1).split(".")[0] < 8) throw new Error("Node 8.0.0 or higher is required. Update Node on your system.");
 
-// Load up the discord.js library
 const Discord = require("discord.js");
-// We also load the rest of the things we need in this file:
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
 const EnmapLevel = require("enmap-level");
 
-// This is your client. Some people call it `bot`, some people call it `self`,
-// some might call it `cootchie`. Either way, when you see `client.something`,
-// or `bot.something`, this is what we're refering to. Your client.
-const client = new Discord.Client();
+const addModules = async client => {
+  // Logger is not necessarily a "module" but we can use it like one.
+  client.logger = require("./util/Logger");
 
-// Here we load the config file that contains our token and our prefix values.
-const configPath = process.env.CONFIG_PATH || './config.js';
-client.config = require(configPath);
-// client.config.token contains the bot's token
-// client.config.prefix contains the message prefix
+  // Let's start by getting some useful functions that we'll use throughout
+  // the bot, like logs and elevation features.
+  require("./modules/functions.js")(client);
 
-// Check for required config and exit with error if missing.
-if (!client.config.roleIds) {
-  console.error(new TypeError('Config files is missing `roleIds` property'));
-  process.exitCode = 1;
-  return;
-}
+  // Add database module.
+  await require('./modules/database')(client);
+};
 
-// Require our logger
-client.logger = require("./util/Logger");
-
-// Let's start by getting some useful functions that we'll use throughout
-// the bot, like logs and elevation features.
-require("./modules/functions.js")(client);
-
-// Add database module.
-require('./modules/database')(client);
-
-// Aliases and commands are put in collections where they can be read from,
-// catalogued, listed, etc.
-client.commands = new Enmap();
-client.aliases = new Enmap();
-
-// and so are filters
-client.filters = new Enmap();
-
-// Now we integrate the use of Evie's awesome Enhanced Map module, which
-// essentially saves a collection to disk. This is great for per-server configs,
-// and makes things extremely easy for this purpose.
-client.settings = new Enmap({provider: new EnmapLevel({name: "settings"})});
-
-// We're doing real fancy node 8 async/await stuff here, and to do that
-// we need to wrap stuff in an anonymous function. It's annoying but it works.
-
-const init = async () => {
+const addCommands = async client => {
+  // Aliases and commands are put in collections where they can be read from,
+  // catalogued, listed, etc.
+  client.commands = new Enmap();
+  client.aliases = new Enmap();
 
   // Here we load **commands** into memory, as a collection, so they're accessible
   // here and everywhere else.
@@ -66,7 +36,10 @@ const init = async () => {
     const response = client.loadCommand(f);
     if (response) console.log(response);
   });
+};
 
+const addFilters = async client => {
+  client.filters = new Enmap();
 
   // Subsequently, if not obviously, we load channel filters
   // Filters are stored with the channelID as the key, this is important!
@@ -78,7 +51,9 @@ const init = async () => {
     const response = client.loadFilter(f);
     if (response) console.log(response);
   });
-    
+};
+
+const addEventListeners = async client => {
   // Then we load events, which will include our message and ready event.
   const evtFiles = await readdir("./events/");
   client.logger.log(`Loading a total of ${evtFiles.length} events.`);
@@ -89,18 +64,51 @@ const init = async () => {
     client.on(eventName, event.bind(null, client));
     delete require.cache[require.resolve(`./events/${file}`)];
   });
+};
 
+const addPermissions = client => {
   // Generate a cache of client permissions for pretty perms
   client.levelCache = {};
   for (let i = 0; i < client.config.permLevels.length; i++) {
     const thisLevel = client.config.permLevels[i];
     client.levelCache[thisLevel.name] = thisLevel.level;
   }
+};
 
-  // Here we login the client.
+const init = async () => {
+  const client = new Discord.Client();
+
+  // Load client (bot) config.
+  //
+  // client.config.token contains the bot's token
+  // client.config.prefix contains the message prefix
+  const configPath = process.env.CONFIG_PATH || './config.js';
+  client.config = require(configPath);
+
+  // Check for required config and exit with error if missing.
+  if (!client.config.roleIds) {
+    console.error(new TypeError('Config files is missing `roleIds` property'));
+    process.exitCode = 1;
+    return;
+  }
+
+  await addModules(client);
+
+  // Now we integrate the use of Evie's awesome Enhanced Map module, which
+  // essentially saves a collection to disk. This is great for per-server configs,
+  // and makes things extremely easy for this purpose.
+  client.settings = new Enmap({
+    provider: new EnmapLevel({ name: "settings" })
+  });
+
+  await addCommands(client);
+  await addFilters(client);
+  await addEventListeners(client);
+
+  addPermissions(client);
+
+  // Log into Discord.
   client.login(client.config.token);
-
-// End top-level async/await function.
 };
 
 init();
