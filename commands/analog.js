@@ -7,11 +7,11 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  if(message.member.roles.find("name", "Ableton")){
-  	  message.channel.send(':warmth: ***A N A L O G   W A R M T H*** :warmth:');
+  if (message.member.roles.find("name", "Ableton Live")) {
+    message.channel.send(':warmth: ***A N A L O G   W A R M T H*** :warmth:');
   }
   else {
-  	message.channel.send('This command is only availble to the Superior DAW, Failbleton :tatoithurts:')
+    message.channel.send('This command is only availble to the Superior DAW, Failbleton :tatoithurts:');
   }
 };
 
