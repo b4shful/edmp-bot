@@ -8,7 +8,7 @@
  */
 exports.run = (client, message) => {
   if (message.member.roles.find("name", "Ableton Live")) {
-    message.channel.send(':warmth: ***A N A L O G   W A R M T H*** :warmth:');
+    message.channel.send('<:warmth:419293308653797386> ***A N A L O G   W A R M T H*** <:warmth:419293308653797386>');
   }
   else {
     message.channel.send('This command is only availble to the Superior DAW, Failbleton <:tatoithurts:312740987547942912>');
