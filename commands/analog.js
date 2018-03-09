@@ -11,7 +11,7 @@ exports.run = (client, message) => {
     message.channel.send(':warmth: ***A N A L O G   W A R M T H*** :warmth:');
   }
   else {
-    message.channel.send('This command is only availble to the Superior DAW, Failbleton :tatoithurts:');
+    message.channel.send('This command is only availble to the Superior DAW, Failbleton <:tatoithurts:312740987547942912>');
   }
 };
 
