@@ -98,7 +98,15 @@ module.exports = (client) => {
       if (props.init) {
         props.init(client);
       }
-      client.filters.set(props.help.channelID, props);
+
+      // Support arrays of channel IDs incase the filter applies to multiple channels.	
+      if (props.help.channelID.constructor === Array) {
+	  for (let i of props.help.channelID) {
+	      client.filters.set(i, props);
+	  }
+      } else {
+	  client.filters.set(props.help.channelID, props);
+      }
       return false;
     } catch (e) {
       return `Unable to load command ${filterName}: ${e}`;

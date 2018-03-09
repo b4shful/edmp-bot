@@ -31,8 +31,11 @@ References: http://soma.fm
     message.delete(0);
     }
 };
-    
+
+
+// Filters can have channelIDs as a single string or an array of strings.
+// This applies the filter to all IDs listed.
 exports.help = {
     name: "collab",
-    channelID: "284393945151307776"
+    channelID: ["284393945151307776", "414450318601093120"]
 };
