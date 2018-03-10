@@ -23,7 +23,7 @@ module.exports = async client => {
 		});
 
 		const migrations = fs.readdirSync('migrations')
-			.filter(file => path.extname(file) === '.sqlite');
+			.filter(file => path.extname(file) === '.sql');
 
 		if (migrations.length > 0) {
 			Logger.log('Applying database migrations');
