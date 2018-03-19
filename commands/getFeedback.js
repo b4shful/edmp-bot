@@ -1,3 +1,4 @@
+const Logger = require('../util/Logger');
 const FeedbackPoint = require('../util/FeedbackPoint');
 
 /**
@@ -8,6 +9,8 @@ const FeedbackPoint = require('../util/FeedbackPoint');
  */
 exports.run = (client, message) => {
 	if (message.author.bot) return;
+
+	if (!message.member) return; // Must be a server member.
 
 	if (message.channel.name !== 'feedback-trade') {
 		const feedbackChannel =
@@ -26,30 +29,22 @@ exports.run = (client, message) => {
 		.filterArray(point => point.userId === message.author.id);
 
 	let usedPoint = false;
-	for (let i = 0; i < userPoints.length; i++) {
-		const point = userPoints[i];
+	for (let point of userPoints) {
+		client.feedbackPoints.delete(point.id);
 
-		if (FeedbackPoint.isExpired(point)) continue;
-
-		const isFresh = (Date.now() - point.timestamp) < FeedbackPoint.timeToLive;
-		if (isFresh) {
-			client.feedbackPoints.set(point.id, FeedbackPoint.expire(point));
+		if (!FeedbackPoint.isExpired(point) && !point.used) {
+			Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) used a FeedbackPoint: ${JSON.stringify(point)}...`);
 			usedPoint = true;
 			break;
 		}
 
-		// If the point is expired but is not set to used, do so to
-		// speed up check for next time.
-		if (!point.used) {
-			client.feedbackPoints.set(point.id, FeedbackPoint.expire(point));
-		}
+		Logger.log(`Deleted an old FeedbackPoint for ${message.member.displayName} (${message.author.username}#${message.author.discriminator}): ${JSON.stringify(point)}...`);
 	}
 
 	if (usedPoint) {
 		message.channel.send('You submitted a track for feedback!');
 	}
 	else {
-		// No points are fresh, they cannot request feedback...
 		message.channel.send('You need to give feedback first.');
 	}
 };

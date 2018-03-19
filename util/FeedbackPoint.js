@@ -18,8 +18,6 @@ export type FeedbackPoint = {
 };
 */
 
-exports.timeToLive = ONE_HOUR;
-
 exports.create = (userId, message) => {
 	if (!userId || typeof userId !== 'string') {
 		throw new TypeError('A FeedbackPoint requires a userId string');
@@ -40,6 +38,6 @@ exports.create = (userId, message) => {
 	};
 };
 
-exports.isExpired = point => point.used;
+exports.isExpired = point => !((Date.now() - point.timestamp) < ONE_HOUR);
 
-exports.expire = point => ({ ...point, used: true });
+exports.use = point => ({ ...point, used: true });

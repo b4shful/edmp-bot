@@ -1,3 +1,4 @@
+const Logger = require('../util/Logger');
 const FeedbackPoint = require('../util/FeedbackPoint');
 
 const mentionsMember = message => {
@@ -32,6 +33,8 @@ const mentionsMember = message => {
 exports.run = (client, message) => {
 	if (message.author.bot) return;
 
+	if (!message.member) return; // Must be a server member.
+
 	if (message.channel.name !== 'feedback-trade') {
 		const feedbackChannel =
 			message.guild.channels.find('name', 'feedback-trade') || '#feedback-trade';
@@ -51,8 +54,9 @@ exports.run = (client, message) => {
 
 	message.channel.send('**TODO:** Parse for length');
 
-	const point = FeedbackPoint.create(message.author.id, message.content);
+	const point = FeedbackPoint.create(message.member.id, message.content);
 	client.feedbackPoints.set(point.id, point); // TODO: Use timestamp as id, don't need a special key.
+	Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint: ${JSON.stringify(point)}...`);
 
 	message.channel.send('You\'ve been rewarded a point for giving feedback!');
 };

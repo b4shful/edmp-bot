@@ -10,15 +10,16 @@ const FeedbackPoint = require('../util/FeedbackPoint');
 exports.run = (client, message) => {
 	if (message.author.bot) return;
 
+	if (!message.member) return; // Must be a server member.
+
 	const userPoints = client.feedbackPoints
 		.filterArray(point => {
 			const belongsToUser = point.userId === message.author.id;
-			const isFresh = (Date.now() - point.timestamp) < FeedbackPoint.timeToLive;
 			const unused = point.used === false;
-			return belongsToUser && isFresh && unused;
+			return belongsToUser && !FeedbackPoint.isExpired(point) && unused;
 		});
 
-	const numPoints = userPoints.length || 0;
+	const numPoints = userPoints.length;
 
 	const response = !userPoints || numPoints <= 0 ?
 		'You have no usable points, try giving some feedback.' :
