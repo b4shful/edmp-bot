@@ -1,6 +1,8 @@
 const Logger = require('../util/Logger');
 const FeedbackPoint = require('../util/FeedbackPoint');
 
+const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
+
 /**
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
@@ -20,10 +22,21 @@ exports.run = (client, message) => {
 		return;
 	};
 
-	// TODO: Parse feedback request to see if the link is allowed.
+	const matches = message.content.match(regex);
+
+	if (!matches || matches.length === 0) {
+		message.channel.send('You need to provide a link to your track.');
+		return;
+	}
+
+	if (matches.length > 1) {
+		message.channel.send('You can only ask for feedback on one track per point.');
+		return;
+	}
+
+	// TODO: Parse link if it's permitted (audio host whitelist).
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
-	message.channel.send('**TODO:** Parse link');
 
 	const userPoints = client.feedbackPoints
 		.filterArray(point => point.userId === message.author.id);
