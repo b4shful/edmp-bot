@@ -8,6 +8,7 @@ const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
 const EnmapLevel = require("enmap-level");
+const EnmapSqlite = require('enmap-sqlite');
 
 const addModules = async client => {
   // Logger is not necessarily a "module" but we can use it like one.
@@ -19,6 +20,8 @@ const addModules = async client => {
 
   // Add database module.
   await require('./modules/database')(client);
+
+  require('./modules/feedback')(client);
 };
 
 const addCommands = async client => {
