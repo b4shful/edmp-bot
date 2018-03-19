@@ -24,6 +24,14 @@ const mentionsMember = message => {
 	// TODO: Check if they're mentioning themself.
 };
 
+const isAcceptable = feedback => {
+	// TODO: Determine a more sophisticated solution for determining what is
+	// acceptable feedback.
+	if (feedback.length < 200) return false;
+
+	return true;
+};
+
 /**
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
@@ -47,12 +55,14 @@ exports.run = (client, message) => {
 		mentionsMember(message);
 	}
 	catch (error) {
-		// NOTE: Logging users who misuse the command may be useful.
 		message.channel.send(error.message);
 		return;
 	}
 
-	message.channel.send('**TODO:** Parse for length');
+	if (!isAcceptable(message.content)) {
+		message.channel.send('The feedback you gave is really short, please be more constructive.');
+		return;
+	}
 
 	const point = FeedbackPoint.create(message.member.id, message.content);
 	client.feedbackPoints.set(point.id, point); // TODO: Use timestamp as id, don't need a special key.
