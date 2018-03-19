@@ -13,15 +13,14 @@ module.exports = (client, message) => {
     ? client.settings.get(message.guild.id)
     : client.config.defaultSettings;
 
-  // First we check filters before we mess with commands
-  const filter = client.filters.get(message.channel.id);
+  const filterMap = client.filters;
 
   // Run the filter if it exists and matches the channelID
-  // This should check for a channelID of 'all' or be changed to an array of channels.
-  // TODO ^
-  if (filter) {
-      if (message.channel.id == filter.help.channelID) {
-	  filter.run(client, message);
+  // client.filters is an enmap, if the filter has an array of channelIDs then each ID is its own property
+  // the key is the filter object.
+  if (filterMap) {
+      if (filterMap.has(message.channel.id)) {
+	  filterMap.get(message.channel.id).run(client, message);
       }
   }
     

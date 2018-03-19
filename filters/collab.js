@@ -5,7 +5,7 @@
  * @param {Discord.Message} message A message on Discord
  */
 exports.run = async (client, message) => { 
-    let tags = ['need', 'style', 'DAW', 'reference'];
+    let tags = ['need', 'style', 'daw', 'reference'];
     let missing = [];
     let idiotValidation = true;
 
@@ -15,7 +15,7 @@ exports.run = async (client, message) => {
 	}
     }
 
-    if (missing.length > 1) {
+    if (missing.length > 0) {
 	message.author.send(` I'm sorry, but your message in #collab-bro must contain the following fields: "need", "style", "DAW", "reference" (or "references"). Quotes are not necessary.
 
 You were missing: ${missing.join(', ')}
@@ -31,8 +31,11 @@ References: http://soma.fm
     message.delete(0);
     }
 };
-    
+
+
+// Filters can have channelIDs as a single string or an array of strings.
+// This applies the filter to all IDs listed.
 exports.help = {
     name: "collab",
-    channelID: "284393945151307776"
+    channelID: ["284393945151307776", "414450318601093120"]
 };
