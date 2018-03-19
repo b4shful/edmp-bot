@@ -17,8 +17,8 @@ exports.run = (client, message) => {
 			const unused = point.used === false;
 			return belongsToUser && isFresh && unused;
 		});
-		console.log(userPoints);
-	const numPoints = userPoints.length;
+
+	const numPoints = userPoints.length || 0;
 
 	const response = !userPoints || numPoints <= 0 ?
 		'You have no usable points, try giving some feedback.' :

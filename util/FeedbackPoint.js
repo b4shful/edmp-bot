@@ -9,11 +9,24 @@
  */
 const ONE_HOUR = 60 * 60 * 1000;
 
+/*
+export type FeedbackPoint = {
+	userId: string,
+	timestamp: number,
+	used: boolean,
+	message: string
+};
+*/
+
 exports.timeToLive = ONE_HOUR;
 
-exports.create = userId => {
+exports.create = (userId, message) => {
 	if (!userId || typeof userId !== 'string') {
 		throw new TypeError('A FeedbackPoint requires a userId string');
+	}
+
+	if (!message || typeof message !== 'string') {
+		throw new TypeError('A FeedbackPoint requires a message string');
 	}
 
 	const timestamp = Date.now();
@@ -22,7 +35,8 @@ exports.create = userId => {
 		id: `${userId}.${timestamp}`,
 		userId,
 		timestamp,
-		used: false
+		used: false,
+		message
 	};
 };
 

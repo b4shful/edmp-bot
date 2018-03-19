@@ -17,22 +17,22 @@ exports.run = (client, message) => {
 		return;
 	};
 
+	// TODO: Parse feedback request to see if the link is allowed.
+	// NOTE: For some services, check if the link is a playlist/set
+	// and respond with a "you can only request feedback for one track".
 	message.channel.send('**TODO:** Parse link');
 
 	const userPoints = client.feedbackPoints
 		.filterArray(point => point.userId === message.author.id);
 
 	let usedPoint = false;
-	console.log(userPoints);
 	for (let i = 0; i < userPoints.length; i++) {
 		const point = userPoints[i];
-		console.log(point);
 
 		if (FeedbackPoint.isExpired(point)) continue;
 
 		const isFresh = (Date.now() - point.timestamp) < FeedbackPoint.timeToLive;
 		if (isFresh) {
-			console.log('fresh');
 			client.feedbackPoints.set(point.id, FeedbackPoint.expire(point));
 			usedPoint = true;
 			break;
