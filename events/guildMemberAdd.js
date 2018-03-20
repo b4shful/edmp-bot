@@ -11,6 +11,16 @@ const Welcome = require('../commands/welcome');
  * @param {Discord.Member} member A message on Discord
  */
 module.exports = (client, member) => {
+	const { modLogChannel } = client.settings.get(member.guild.id);
+
+	if (!modLogChannel) {
+		Logger.error('`modLogChannel` is missing from bot configuration.');
+	}
+
+	member.guild.channels.find('name', modLogChannel)
+		.send(`User ${member} joined EDMP.`)
+		.catch(Logger.error);
+
 	if (Welcome.conf.enabled) {
 		Welcome.run(client, `${member}`);
 	}

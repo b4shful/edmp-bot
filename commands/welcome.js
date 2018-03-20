@@ -1,8 +1,8 @@
+const Logger = require('../util/Logger');
 const Message = require('../util/Message');
 
-// TODO: Pass message object to get guild channels and roles.
-const welcomeMessage = (member) =>
-  `Welcome to EDMP ${member}! Please make sure to tell one of the staff what DAW you use to make music by tagging \`@Staff\` in order to get access to other rooms!`;
+const buildMessage = (member, rulesChannel) =>
+  `Welcome to EDMP ${member}! Please make sure to tell one of the staff what DAW you use to make music by tagging \`@Staff\` in order to get access to other rooms! ${rulesChannel}`;
 
 const getGuild = message => {
   const guild = Message.getGuild(message);
@@ -24,8 +24,10 @@ const getMember = message => {
   return member;
 };
 
-const getSettings = guild => {
+const getSettings = (client, guild) => {
   const {
+    modLogChannel,
+    welcomeChannel
   } = client.settings.get(guild.id);
 
   if (!modLogChannel) {
@@ -53,18 +55,12 @@ const parse = (client, message) => {
   const guild = getGuild(message);
   const member = getMember(message);
 
-  const { modLogChannel, welcomeChannel } = getSettings(guild);
-  const message = welcomeMessage(member);
+  const welcomeChannel = guild.channels.find('name', 'intro');
+  const rulesChannel = guild.channels.find('name', 'rules_and_how-to');
 
-  guild.channels.find('name', modLogChannel)
-    .send(`User ${member} joined EDMP.`)
-    .catch(Logger.error);
+  const welcomeMessage = buildMessage(member, rulesChannel);
 
-  // Send the welcome message to the welcome channel
-  // There's a place for more configs here.
-  guild.channels.find('name', welcomeChannel)
-    .send(message)
-    .catch(Logger.error);
+  welcomeChannel.send(welcomeMessage).catch(Logger.error);
 };
 
 /**
@@ -75,11 +71,14 @@ const parse = (client, message) => {
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
  */
-exports.run = (client, message) =>
-  Message.respond(message, () => {
-    checkSettings(message);
-    return parse(client, message);
-  });
+exports.run = (client, message) => {
+  try {
+    parse(client, message);
+  }
+  catch (error) {
+    Logger.error(`Something went wrong when parsing the command message:\n${error}`);
+  }
+};
 
 exports.conf = {
   enabled: true,
