@@ -1,5 +1,8 @@
 const Logger = require('../util/Logger');
 
+const welcomeMessage = (member, rulesChannel = '`#rules_and_how-to`') =>
+	`Welcome to EDMP ${member}! Take a moment to read ${rulesChannel}, then tell \`@Staff\` what DAW you use to get access to the dozens of other channesl we have available. Please be patient as staff may not be immediately available to give you your role(s), they sleep too!\n\nDon't produce? That's fine! Tell us if you're a vocalist, graphic artist, or just a music fan and you'll get access.`;
+
 /**
  * This event executes when a new member joins a server.
  * 
@@ -10,18 +13,12 @@ module.exports = (client, member) => {
 	const {
 		modLogChannel,
 		welcomeEnabled,
-		welcomeMessage,
 		welcomeChannel
 	} = client.settings.get(member.guild.id);
 
 	// If welcome is off, don't proceed (don't welcome the user)
 	if (welcomeEnabled !== 'true') {
 		Logger.error('Welcome message is not enabled in bot configuration.');
-		return;
-	}
-
-	if (!welcomeMessage) {
-		Logger.error('`welcomeMessage` is missing from bot configuration.');
 		return;
 	}
 
@@ -35,16 +32,19 @@ module.exports = (client, member) => {
 		return;
 	}
 
-	// Replace the placeholders in the welcome message with the member's mention.
-	const message = welcomeMessage.replace("{{user}}", `${member}`);
+	const rulesChannel = member.guild.channels.find('name', 'rules_and_how-to');
+
+	if (!rulesChannel) {
+		Logger.error('The `rules_and_how-to` channel is missing.');
+	}
+
+	const message = welcomeMessage(member, rulesChannel);
 
 	member.guild.channels.find('name', modLogChannel)
 		.send(`User ${member} joined EDMP.`)
 		.catch(Logger.error);
 
-	// Send the welcome message to the welcome channel
-	// There's a place for more configs here.
-	member.guild.channels.find("name", welcomeChannel)
+	member.guild.channels.find('name', welcomeChannel)
 		.send(message)
 		.catch(Logger.error);
 };
