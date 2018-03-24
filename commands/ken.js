@@ -1,5 +1,5 @@
 /**
- * Responds with a link to Blvcklight's SoundCloud.
+ * Responds with a link to Ken's SoundCloud.
  * 
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
@@ -7,7 +7,7 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send('Blvcklight: https://soundcloud.com/blvcklightnl');
+  message.channel.send('Ken: https://soundcloud.com/kerusira');
 };
 
 exports.conf = {
@@ -18,8 +18,8 @@ exports.conf = {
 };
 
 exports.help = {
-  name: "blvcklight",
+  name: "ken",
   category: "Links",
-  description: "Responds with a link to Blvcklight's SoundCloud.",
-  usage: "blvcklight"
+  description: "Responds with a link to Ken's SoundCloud.",
+  usage: "ken"
 };
