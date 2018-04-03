@@ -1,4 +1,4 @@
-const FeedbackPoint = require('../util/FeedbackPoint');
+const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 
 /**
  * 
@@ -7,24 +7,22 @@ const FeedbackPoint = require('../util/FeedbackPoint');
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
  */
-exports.run = (client, message) => {
+exports.run = async (client, message) => {
 	if (message.author.bot) return;
 
 	if (!message.member) return; // Must be a server member.
 
-	const userPoints = client.feedbackPoints
-		.filterArray(point => {
-			const belongsToUser = point.userId === message.author.id;
-			const unused = point.used === false;
-			return belongsToUser && !FeedbackPoint.isExpired(point) && unused;
-		});
+	let response;
+	try {
+		const numPoints = await FeedbackPoint.count(client.database, message.author.id);
+		response = numPoints > 0 ?
+			`You have ${numPoints} points.` :
+			'You have no usable points, try giving some feedback.';
+	}
+	catch (error) {
+		response = 'Something went wrong.';
+	}
 
-	const numPoints = userPoints.length;
-
-	const response = !userPoints || numPoints <= 0 ?
-		'You have no usable points, try giving some feedback.' :
-		`You have ${numPoints} points.`;
-	
 	message.channel.send(response);
 }
 
