@@ -14,7 +14,7 @@ exports.run = async (client, message) => {
 
 	let response;
 	try {
-		const numPoints = await FeedbackPoint.count(client.database, message.author.id);
+		const numPoints = await FeedbackPoint.count(client.database, message.member.id);
 		response = numPoints > 0 ?
 			`You have ${numPoints} points.` :
 			'You have no usable points, try giving some feedback.';
