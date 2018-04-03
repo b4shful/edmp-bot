@@ -21,7 +21,7 @@ const addModules = async client => {
   // Add database module.
   await require('./modules/database')(client);
 
-  require('./modules/feedback')(client);
+  await require('./modules/feedback')(client);
 };
 
 const addCommands = async client => {
