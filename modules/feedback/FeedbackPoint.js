@@ -99,8 +99,9 @@ exports.count = async (database, userId) => {
 	const SELECT_USABLE_POINT_COUNT = `
 		SELECT count(*) AS usablePoints
 		FROM FeedbackPoint
-		WHERE userId = $userId
-			AND timestamp > datetime('now', '-1 hour');
+			WHERE userId = $userId
+			AND timestamp > datetime('now', '-1 hour')
+			AND used = 0;
 	`;
 
 	const parameters = { $userId: userId };
