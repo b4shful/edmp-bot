@@ -1,5 +1,5 @@
 const Logger = require('../util/Logger');
-const FeedbackPoint = require('../util/FeedbackPoint');
+const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 
 const mentionsMember = message => {
 	const { mentions } = message;
@@ -38,7 +38,7 @@ const isAcceptable = feedback => {
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
  */
-exports.run = (client, message) => {
+exports.run = async (client, message) => {
 	if (message.author.bot) return;
 
 	if (!message.member) return; // Must be a server member.
@@ -64,11 +64,23 @@ exports.run = (client, message) => {
 		return;
 	}
 
-	const point = FeedbackPoint.create(message.member.id, message.content);
-	client.feedbackPoints.set(point.id, point); // TODO: Use timestamp as id, don't need a special key.
-	Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint: ${JSON.stringify(point)}...`);
+	let response;
+	try {
+		await FeedbackPoint.create(
+			client.database,
+			message.member.id,
+			message.content
+		);
 
-	message.channel.send('You\'ve been rewarded a point for giving feedback!');
+		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint`);
+
+		response = 'You\'ve been rewarded a point for giving feedback!';
+	}
+	catch (error) {
+		response = error.message;
+	}
+
+	message.channel.send(response);
 };
 
 exports.conf = {
