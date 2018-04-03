@@ -1,5 +1,5 @@
 const Logger = require('../util/Logger');
-const FeedbackPoint = require('../util/FeedbackPoint');
+const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
@@ -9,7 +9,7 @@ const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
  */
-exports.run = (client, message) => {
+exports.run = async (client, message) => {
 	if (message.author.bot) return;
 
 	if (!message.member) return; // Must be a server member.
@@ -38,28 +38,18 @@ exports.run = (client, message) => {
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
-	const userPoints = client.feedbackPoints
-		.filterArray(point => point.userId === message.author.id);
+	try {
+		await FeedbackPoint.redeem(client.database, message.member.id);
 
-	let usedPoint = false;
-	for (let point of userPoints) {
-		client.feedbackPoints.delete(point.id);
+		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) used a FeedbackPoint`);
 
-		if (!FeedbackPoint.isExpired(point) && !point.used) {
-			Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) used a FeedbackPoint: ${JSON.stringify(point)}...`);
-			usedPoint = true;
-			break;
-		}
-
-		Logger.log(`Deleted an old FeedbackPoint for ${message.member.displayName} (${message.author.username}#${message.author.discriminator}): ${JSON.stringify(point)}...`);
+		response = 'You submitted a track for feedback!';
+	}
+	catch (error) {
+		response = error.message;
 	}
 
-	if (usedPoint) {
-		message.channel.send('You submitted a track for feedback!');
-	}
-	else {
-		message.channel.send('You need to give feedback first.');
-	}
+	message.channel.send(response);
 };
 
 exports.conf = {

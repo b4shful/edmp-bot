@@ -72,7 +72,7 @@ exports.redeem = async (database, userId) => {
 		await database.get(SELECT_OLDEST_USABLE_POINT, selectParameters);
 
 	if (!point) {
-		throw new TypeError('You do not have any points available.');
+		throw new TypeError('You do not have any points available. Give someone else some feedback to earn a point to redeem.');
 	}
 
 	const UPDATE_USABLE_POINT = `
