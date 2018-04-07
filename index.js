@@ -8,9 +8,8 @@ const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const Enmap = require("enmap");
 const EnmapLevel = require("enmap-level");
-const EnmapSqlite = require('enmap-sqlite');
 
-const addModules = async client => {
+const addModules = client => {
   // Logger is not necessarily a "module" but we can use it like one.
   client.logger = require("./util/Logger");
 
@@ -18,10 +17,8 @@ const addModules = async client => {
   // the bot, like logs and elevation features.
   require("./modules/functions.js")(client);
 
-  // Add database module.
-  await require('./modules/database')(client);
-
-  await require('./modules/feedback')(client);
+  require('./modules/database')(client);
+  require('./modules/feedback')(client);
 };
 
 const addCommands = async client => {
@@ -95,7 +92,7 @@ const init = async () => {
     return;
   }
 
-  await addModules(client);
+  addModules(client);
 
   // Now we integrate the use of Evie's awesome Enhanced Map module, which
   // essentially saves a collection to disk. This is great for per-server configs,

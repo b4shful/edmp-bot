@@ -1,34 +1,48 @@
-const Sqlite = require('sqlite');
+const FeedbackPoint = require('./FeedbackPoint');
 
 const validateClient = client => {
 	if (!client.database) {
 		throw new TypeError('Database is missing.');
 	}
+
+	if (!client.database.open) {
+		throw new TypeError('Database connection is not open.');
+	}
 };
 
-const confirmTables = database => {
-	const expectedTables = [
-		'FeedbackPoint',
-		// 'FeedbackRequest'
-	];
+const CREATE_FEEDBACK_POINT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackPoint(
+	id INTEGER PRIMARY KEY,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- Unix Epoch in seconds
+	userId INTEGER NOT NULL,
+	used INTEGER DEFAULT 0 NOT NULL, -- boolean, 0 = false, 1 = true
+	message TEXT NOT NULL
+);`;
 
-	expectedTables.forEach(async tableName => {
-		const row = await database.get(
-			"SELECT name FROM sqlite_master WHERE type='table' AND name=?;",
-			tableName
-		);
+/**
+ * @param {Database} database
+ * @throws If execution of statement fails
+ */
+const createPointTable = database =>
+	database.prepare(CREATE_FEEDBACK_POINT_TABLE).run();
 
-		if (!row) {
-			throw new TypeError(`Database is missing required table for the feedback module: ${tableName}`);
-		}
-	});
+/**
+ * @param {Database} database
+ * @throws If execution of statement fails
+ */
+const validateTables = database => {
+	createPointTable(database);
 };
 
-module.exports = async client => {
+/**
+ * @param {*} client
+ * @throws If database is not found, or not open, in the client
+ * @throws If execution of database statement fails
+ */
+module.exports = client => {
 	client.logger.log('Adding feedback module...');
 
 	validateClient(client);
-	confirmTables(client.database);
+	validateTables(client.database);
 
 	client.logger.log('Successfully added feedback module to client.');
 };
