@@ -58,3 +58,23 @@ exports.recent = (database, length) => {
 	logQuery(SELECT_RECENT, parameters);
 	return database.prepare(SELECT_RECENT).all(parameters);
 };
+
+const URL_PATTERN = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
+/**
+ * Parses a FeedbackRequest message for the submitted track URL.
+ * @param {FeedbackRequest} request
+ * @returns {string} URL found in the message content
+ * @throws If no URL is found in the message content
+ */
+exports.getLink = request => {
+	const { message } = request;
+
+	const result = request.message.match(URL_PATTERN);
+
+	if (!result) {
+		throw new TypeError('FeedbackRequest message has no URL. This shouldn\'t have entered the database.');
+	}
+
+	return result[0];
+};
