@@ -3,10 +3,7 @@
  * request. It requires a reference to the feedback request, and should
  * reward a feedback point to the user making the comment.
  */
-const Logger = require('../../util/Logger');
-
-const logQuery = (query, parameters) =>
-	Logger.log(`Database operation:\n${query.trim()}\n${JSON.stringify(parameters, undefined, 2)}\n`);
+const logQuery = require('./utils').logQuery;
 
 /**
  * @param {Database} database

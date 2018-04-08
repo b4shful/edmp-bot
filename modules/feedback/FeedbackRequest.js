@@ -3,10 +3,7 @@
  * The request has a unique id that is used for tracking comments made about
  * a request.
  */
-const Logger = require('../../util/Logger');
-
-const logQuery = (query, parameters) =>
-	Logger.log(`Database operation:\n${query.trim()}\n${JSON.stringify(parameters, undefined, 2)}\n`);
+const logQuery = require('./utils').logQuery;
 
 /**
  * @param {Database} database

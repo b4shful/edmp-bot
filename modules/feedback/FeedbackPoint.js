@@ -5,15 +5,10 @@
  * FeedbackPoints are usable within an hour after they are created. Afterwards
  * an hour the point expires and cannot be redeemed for requesting feedback.
  */
-const Logger = require('../../util/Logger');
-
-const ONE_HOUR = 60 * 60 * 1000;
-
-const logQuery = (query, parameters) =>
-	Logger.log(`Database operation:\n${query.trim()}\n${JSON.stringify(parameters, undefined, 2)}\n`);
+const logQuery = require('./utils').logQuery;
 
 // After one hour a FeedbackPoint may not be redeemed.
-exports.TTL = ONE_HOUR;
+exports.TTL = 60 * 60 * 1000;
 
 /**
  * @param {Database} database
