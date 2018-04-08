@@ -34,3 +34,27 @@ exports.create = (database, userId, message) => {
 
 	return lastInsertROWID;
 };
+
+/**
+ * @param {Database} database
+ * @param {number} length
+ * @returns List of the `length` most recent FeedbackRequests
+ * @throws If execution of database statement fails
+ */
+exports.recent = (database, length) => {
+	if (!database) {
+		throw new TypeError('Expected a database connection.');
+	}
+
+	if (!length || typeof length !== 'number') {
+		throw new TypeError('Missing number of requests to retreive.');
+	}
+
+	const SELECT_RECENT = `SELECT * FROM FeedbackRequest
+	ORDER BY timestamp DESC
+	LIMIT $length`;
+	const parameters = { length };
+
+	logQuery(SELECT_RECENT, parameters);
+	return database.prepare(SELECT_RECENT).all(parameters);
+};
