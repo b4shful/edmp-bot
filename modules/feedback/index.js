@@ -1,5 +1,3 @@
-const FeedbackPoint = require('./FeedbackPoint');
-
 const validateClient = client => {
 	if (!client.database) {
 		throw new TypeError('Database is missing.');
@@ -13,10 +11,10 @@ const validateClient = client => {
 const CREATE_FEEDBACK_POINT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackPoint(
 	id INTEGER PRIMARY KEY,
 	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- Unix Epoch in seconds
-	userId INTEGER NOT NULL,
+	userId TEXT NOT NULL,
 	used INTEGER DEFAULT 0 NOT NULL, -- boolean, 0 = false, 1 = true
 	message TEXT NOT NULL
-);`;
+)`;
 
 /**
  * @param {Database} database
@@ -28,9 +26,9 @@ const createPointTable = database =>
 const CREATE_FEEDBACK_REQUEST_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackRequest (
 	id INTEGER PRIMARY KEY,
 	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- Unix Epoch in seconds
-	userId INTEGER NOT NULL,
+	userId TEXT NOT NULL,
 	message TEXT NOT NULL
-);`;
+)`;
 
 /**
  * @param {Database} database
@@ -42,10 +40,10 @@ const createRequestTable = database =>
 const CREATE_FEEDBACK_COMMENT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackComment (
 	id INTEGER PRIMARY KEY,
 	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- Unix Epoch in seconds
-	requestId INTEGER NOT NULL, -- The id of a feedback request
-	userId INTEGER NOT NULL,
+	requestId INTEGER NOT NULL REFERENCES FeedbackRequest, -- FeedbackRequest.id
+	userId TEXT NOT NULL,
 	message TEXT NOT NULL
-);`;
+)`;
 
 /**
  * @param {Database} database
