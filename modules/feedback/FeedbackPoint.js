@@ -5,6 +5,7 @@
  * FeedbackPoints are usable within an hour after they are created. Afterwards
  * an hour the point expires and cannot be redeemed for requesting feedback.
  */
+const Logger = require('../../util/Logger');
 const logQuery = require('./utils').logQuery;
 
 // After one hour a FeedbackPoint may not be redeemed.
