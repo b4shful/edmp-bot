@@ -25,7 +25,7 @@ const confirmRequestExists = (database, requestId) => {
 
 /**
  * @param {Database} database
- * @param {string} requestId
+ * @param {number} requestId
  * @param {string} userId
  * @param {string} message
  * @throws If a FeedbackRequest with `requestId` does not exist
@@ -36,8 +36,8 @@ exports.create = (database, requestId, userId, message) => {
 		throw new TypeError('Expected a database connection.');
 	}
 
-	if (!requestId || typeof requestId !== 'string') {
-		throw new TypeError('A FeedbackComment requires a requestId string');
+	if (!requestId || typeof requestId !== 'number') {
+		throw new TypeError('A FeedbackComment requires a requestId number');
 	}
 
 	if (!userId || typeof userId !== 'string') {

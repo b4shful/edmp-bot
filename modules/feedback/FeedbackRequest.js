@@ -29,9 +29,8 @@ exports.create = (database, userId, message) => {
 	const parameters = { userId, message };
 
 	logQuery(INSERT_REQUEST, parameters);
-	const { info: { lastInsertROWID } } = database.prepare(INSERT_REQUEST)
+	const { lastInsertROWID } = database.prepare(INSERT_REQUEST)
 		.run(parameters);
 
 	return lastInsertROWID;
 };
-
