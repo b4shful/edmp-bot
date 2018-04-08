@@ -25,12 +25,43 @@ const CREATE_FEEDBACK_POINT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackPoint(
 const createPointTable = database =>
 	database.prepare(CREATE_FEEDBACK_POINT_TABLE).run();
 
+const CREATE_FEEDBACK_REQUEST_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackRequest (
+	id INTEGER PRIMARY KEY,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- Unix Epoch in seconds
+	userId INTEGER NOT NULL,
+	message TEXT NOT NULL
+);`;
+
+/**
+ * @param {Database} database
+ * @throws If execution of statement fails
+ */
+const createRequestTable = database =>
+	database.prepare(CREATE_FEEDBACK_REQUEST_TABLE).run();
+
+const CREATE_FEEDBACK_COMMENT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackComment (
+	id INTEGER PRIMARY KEY,
+	timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- Unix Epoch in seconds
+	requestId INTEGER NOT NULL, -- The id of a feedback request
+	userId INTEGER NOT NULL,
+	message TEXT NOT NULL
+);`;
+
+/**
+ * @param {Database} database
+ * @throws If execution of statement fails
+ */
+const createCommmentTable = database =>
+	database.prepare(CREATE_FEEDBACK_COMMENT_TABLE).run();
+
 /**
  * @param {Database} database
  * @throws If execution of statement fails
  */
 const validateTables = database => {
 	createPointTable(database);
+	createRequestTable(database);
+	createCommmentTable(database);
 };
 
 /**
