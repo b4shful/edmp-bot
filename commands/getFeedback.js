@@ -1,5 +1,6 @@
 const Logger = require('../util/Logger');
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
+const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
@@ -38,12 +39,17 @@ exports.run = async (client, message) => {
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
+	let response;
 	try {
-		await FeedbackPoint.redeem(client.database, message.member.id);
+		const database = client.database;
+		const userId = message.member.id;
 
-		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) used a FeedbackPoint`);
+		FeedbackPoint.redeem(database, userId);
+		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) redeemed a FeedbackPoint`);
 
-		response = 'You submitted a track for feedback!';
+		const id = FeedbackRequest.create(database, userId, message.content);
+
+		response = `You submitted a track for feedback! People can give you feedback using \`giveFeedback ${id}\`.`;
 	}
 	catch (error) {
 		response = error.message;

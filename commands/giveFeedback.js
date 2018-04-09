@@ -1,5 +1,6 @@
 const Logger = require('../util/Logger');
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
+const FeedbackComment = require('../modules/feedback/FeedbackComment');
 
 const mentionsMember = message => {
 	const { mentions } = message;
@@ -27,7 +28,7 @@ const mentionsMember = message => {
 const isAcceptable = feedback => {
 	// TODO: Determine a more sophisticated solution for determining what is
 	// acceptable feedback.
-	if (feedback.length < 200) return false;
+	if (feedback.length < 140) return false;
 
 	return true;
 };
@@ -38,7 +39,7 @@ const isAcceptable = feedback => {
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
  */
-exports.run = async (client, message) => {
+exports.run = async (client, message, args) => {
 	if (message.author.bot) return;
 
 	if (!message.member) return; // Must be a server member.
@@ -51,8 +52,14 @@ exports.run = async (client, message) => {
 		return;
 	}
 
+	let requestId;
 	try {
 		mentionsMember(message);
+		requestId = parseInt(args[0]);
+
+		if (!requestId) {
+			throw new TypeError(`You must provide a valid request id to submit your feedback.\nUsage: \`${help.usage}\``);
+		}
 	}
 	catch (error) {
 		message.channel.send(error.message);
@@ -66,11 +73,12 @@ exports.run = async (client, message) => {
 
 	let response;
 	try {
-		await FeedbackPoint.create(
-			client.database,
-			message.member.id,
-			message.content
-		);
+		const database = client.database;
+		const userId = message.member.id;
+		const messageContent = message.content;
+
+		FeedbackComment.create(database, requestId, userId, messageContent);
+		FeedbackPoint.create(database, userId, messageContent);
 
 		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint`);
 
@@ -90,9 +98,11 @@ exports.conf = {
 	permLevel: 'User'
 };
 
-exports.help = {
+const help = {
 	name: 'giveFeedback',
 	category: 'Feedback',
 	description: '',
-	usage: 'giveFeedback'
+	usage: 'giveFeedback <requestId> <your feedback...>'
 };
+
+exports.help = help;
