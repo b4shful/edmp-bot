@@ -1,4 +1,5 @@
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
+const giveFeedbackUsage = require('./giveFeedback').help.usage;
 
 /**
  * 
@@ -17,7 +18,7 @@ exports.run = async (client, message) => {
 		const numPoints = await FeedbackPoint.count(client.database, message.member.id);
 		response = numPoints > 0 ?
 			`You have ${numPoints} points.` :
-			'You have no usable points, try giving some feedback.';
+			`You have no usable points, try giving some feedback.\nUsage: \`${giveFeedbackUsage}\``;
 	}
 	catch (error) {
 		response = 'Something went wrong.';
