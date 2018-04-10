@@ -11,9 +11,9 @@ const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-
  * @param {number} level The permission level of the author of the message
  */
 exports.run = async (client, message) => {
-	if (message.author.bot) return;
-
-	if (!message.member) return; // Must be a server member.
+	if (message.author.bot || !message.member) {
+		return;
+	}
 
 	if (message.channel.name !== 'feedback-trade') {
 		const feedbackChannel =
@@ -39,20 +39,36 @@ exports.run = async (client, message) => {
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
+	const database = client.database;
+	const userId = message.member.id;
+
+	let redeemed;
 	let response;
+
 	try {
-		const database = client.database;
-		const userId = message.member.id;
-
-		FeedbackPoint.redeem(database, userId);
-		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) redeemed a FeedbackPoint`);
-
-		const id = FeedbackRequest.create(database, userId, message.content);
-
-		response = `You submitted a track for feedback! People can give you feedback using \`giveFeedback ${id}\`.`;
+		redeemed = FeedbackPoint.redeem(database, userId);
 	}
 	catch (error) {
-		response = error.message;
+		Logger.error(error);
+		response = 'Something went wrong, please notify `@Staff`.';
+	}
+
+	if (!response && !redeemed) {
+		await message.delete();
+		response = `${message.member} you do not have any points available. Give someone else some feedback to earn a point to redeem.`;
+	}
+	
+	if (!response && redeemed) {
+		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) redeemed a FeedbackPoint`);
+
+		try {
+			const id = FeedbackRequest.create(database, userId, message.content);
+			response = `You submitted a track for feedback! People can give you feedback using \`giveFeedback ${id} <feedback...>\``;
+		}
+		catch (error) {
+			Logger.error(error);
+			response = 'Something went wrong, please notify `@Staff`.';
+		}
 	}
 
 	message.channel.send(response);
