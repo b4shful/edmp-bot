@@ -2,6 +2,9 @@ const Logger = require('../util/Logger');
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 const FeedbackComment = require('../modules/feedback/FeedbackComment');
 
+/**
+ * NOTE: Unused for the time being.
+ */
 const mentionsMember = message => {
 	const { mentions } = message;
 	const { everyone, roles, members } = mentions;
@@ -54,7 +57,6 @@ exports.run = async (client, message, args) => {
 
 	let requestId;
 	try {
-		mentionsMember(message);
 		requestId = parseInt(args[0]);
 
 		if (!requestId) {
