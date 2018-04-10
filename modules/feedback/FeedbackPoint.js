@@ -46,6 +46,7 @@ exports.create = (database, userId, message) => {
 /**
  * @param {Database} database
  * @param {string} userId
+ * @returns {boolean} True if a point was redeemed, false if the user didn't have any points to use
  * @throws If no usable points are found
  * @throws If execution of database statement fails
  */
@@ -76,9 +77,7 @@ exports.redeem = (database, userId) => {
 	const point = database.prepare(SELECT_OLDEST_USABLE_POINT)
 		.get(selectParameters);
 
-	if (!point) {
-		throw new TypeError('You do not have any points available. Give someone else some feedback to earn a point to redeem.');
-	}
+	if (!point) { return false; }
 
 	const UPDATE_USABLE_POINT = `
 		UPDATE FeedbackPoint
@@ -90,6 +89,8 @@ exports.redeem = (database, userId) => {
 
 	logQuery(UPDATE_USABLE_POINT, updateParameters)
 	database.prepare(UPDATE_USABLE_POINT).run(updateParameters);
+
+	return true;
 };
 
 /**
