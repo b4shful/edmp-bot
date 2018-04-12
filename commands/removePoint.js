@@ -30,7 +30,7 @@ const mentionsMember = message => {
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
  */
-exports.run = async (client, message, args) => {
+exports.run = async (client, message) => {
 	if (message.author.bot || !message.member) {
 		return;
 	}
@@ -75,11 +75,9 @@ exports.conf = {
 	permLevel: 'Mentor'
 };
 
-const help = {
+exports.help = {
 	name: 'removePoint',
 	category: 'Feedback',
 	description: 'Removes a user\'s most recent feedback point. This is for moderation purposes and should not be used often.',
 	usage: 'removePoint <member>'
 };
-
-exports.help = help;
