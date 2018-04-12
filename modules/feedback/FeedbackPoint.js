@@ -151,3 +151,49 @@ exports.all = (database, userId) => {
 	Logger.log(`User ${userId} has ${totalPoints} total points`);
 	return totalPoints;
 };
+
+/**
+ * Removes the given user's most recent point.
+ * 
+ * @param {Database} database
+ * @param {string} userId
+ * @throws If execution of database statement fails
+ */
+exports.removeLast = (database, userId) => {
+	if (!database) {
+		throw new TypeError('Expected a database connection.');
+	}
+
+	if (!userId || typeof userId !== 'string') {
+		throw new TypeError('A userId is required to remove a FeedbackPoint');
+	}
+
+	const SELECT_LATEST_USABLE_POINT = `
+		SELECT id FROM FeedbackPoint
+		WHERE userId = $userId
+			AND timestamp > datetime('now', '-1 hour')
+			AND used = 0
+		ORDER BY timestamp ASC
+		LIMIT 1
+	`;
+
+	const selectParameters = { userId };
+
+	logQuery(SELECT_LATEST_USABLE_POINT, selectParameters)
+	const point = database.prepare(SELECT_LATEST_USABLE_POINT)
+		.get(selectParameters);
+
+	if (!point) { return false; }
+
+	const DELETE_LASTEST_USABLE_POINT = `
+		DELETE FROM FeedbackPoint
+		WHERE id = $id
+	`;
+
+	const parameters = { id: point.id };
+
+	logQuery(DELETE_LASTEST_USABLE_POINT, parameters);
+	database.prepare(DELETE_LASTEST_USABLE_POINT).run(parameters);
+
+	return true;
+};
