@@ -7,7 +7,7 @@
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-  message.channel.send('Kindrid:\nhttps://soundcloud.com/kindridmusic\nhttps://twitter.com/KindridOfficial');
+  message.channel.send('Kindrid:\nhttps://soundcloud.com/kindridmusic\n<https://twitter.com/KindridOfficial>');
 };
 
 exports.conf = {
