@@ -9,19 +9,21 @@ const giveFeedbackUsage = require('./giveFeedback').help.usage;
  * @param {number} level The permission level of the author of the message
  */
 exports.run = async (client, message) => {
-	if (message.author.bot) return;
+	const { author, member } = message;
 
-	if (!message.member) return; // Must be a server member.
+	if (author.bot || !member) {
+		return;
+	}
 
 	let response;
 	try {
-		const numPoints = await FeedbackPoint.count(client.database, message.member.id);
+		const numPoints = await FeedbackPoint.count(client.database, member.id);
 		response = numPoints > 0 ?
-			`You have ${numPoints} points.` :
-			`You have no usable points, try giving some feedback.\nUsage: \`${giveFeedbackUsage}\``;
+			`${member} has ${numPoints} ${numPoints > 1 ? 'points.' : 'point.'}` :
+			`${member} has no usable points, try giving some feedback.\nUsage: \`${giveFeedbackUsage}\``;
 	}
 	catch (error) {
-		response = 'Something went wrong.';
+		response = 'Something went wrong, please notify `@Staff`.';
 	}
 
 	message.channel.send(response);
