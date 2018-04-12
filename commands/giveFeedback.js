@@ -60,7 +60,7 @@ exports.run = async (client, message, args) => {
 		requestId = parseInt(args[0]);
 
 		if (!requestId) {
-			throw new TypeError(`You must provide a valid request id to submit your feedback.\nUsage: \`${help.usage}\``);
+			throw new TypeError(`${message.member} You must provide a valid request id to submit your feedback.\nUsage: \`${help.usage}\``);
 		}
 	}
 	catch (error) {
@@ -69,7 +69,7 @@ exports.run = async (client, message, args) => {
 	}
 
 	if (!isAcceptable(message.content)) {
-		message.channel.send('The feedback you gave is really short, please be more constructive.');
+		message.channel.send(`${message.member} The feedback you gave is really short, please be more constructive.`);
 		return;
 	}
 
@@ -84,7 +84,7 @@ exports.run = async (client, message, args) => {
 
 		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint`);
 
-		response = 'You\'ve been rewarded a point for giving feedback!';
+		response = `${message.member} has been rewarded a point for giving feedback!`;
 	}
 	catch (error) {
 		response = error.message;
