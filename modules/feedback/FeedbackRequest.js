@@ -78,3 +78,56 @@ exports.getLink = request => {
 
 	return result[0];
 };
+
+/**
+ * @param {Database} database
+ * @param {number} requestId
+ * @returns {boolean} If the request was found and deleted along with it's associated comments
+ * @throws If execution of database statement fails
+ */
+exports.remove = (database, requestId) => {
+	if (!database) {
+		throw new TypeError('Expected a database connection.');
+	}
+
+	if (!requestId || typeof requestId !== 'number') {
+		throw new TypeError('An id number is required to remove a FeedbackRequest');
+	}
+
+	const SELECT_REQUEST = `
+		SELECT id FROM FeedbackRequest
+		WHERE id = $id
+		LIMIT 1
+	`;
+
+	const selectParameters = { id: requestId };
+
+	logQuery(SELECT_REQUEST, selectParameters)
+	const request = database.prepare(SELECT_REQUEST)
+		.get(selectParameters);
+
+	if (!request) { return false; }
+
+	const DELETE_REQUEST_COMMENTS = `
+		DELETE FROM FeedbackComment
+		WHERE requestId = $id
+	`;
+
+	const deleteCommentsParameters = { id: request.id };
+
+	logQuery(DELETE_REQUEST_COMMENTS, deleteCommentsParameters);
+	database.prepare(DELETE_REQUEST_COMMENTS).run(deleteCommentsParameters);
+
+
+	const DELETE_REQUEST = `
+		DELETE FROM FeedbackRequest
+		WHERE id = $id
+	`;
+
+	const parameters = { id: request.id };
+
+	logQuery(DELETE_REQUEST, parameters);
+	database.prepare(DELETE_REQUEST).run(parameters);
+
+	return true;
+};
