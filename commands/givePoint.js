@@ -55,7 +55,8 @@ exports.run = async (client, message, args) => {
 		try {
 			FeedbackPoint.create(client.database, mentionedMember.id, message.content);
 
-			Logger.log(`${mentionedMember.displayName} (${mentionedMember.username}#${mentionedMember.discriminator}) received a FeedbackPoint`);
+			const { member } = message;
+			Logger.log(`${member.displayName} (${member.username}#${member.discriminator}) gave a FeedbackPoint to ${mentionedMember.displayName} (${mentionedMember.username}#${mentionedMember.discriminator})`);
 
 			response = `${mentionedMember} received a point for giving feedback!`;
 		}

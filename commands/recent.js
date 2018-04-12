@@ -32,7 +32,11 @@ const formatRequestList = (members, requests) => {
  * @param {number} level The permission level of the author of the message
  */
 exports.run = (client, message) => {
-	if (message.author.bot) return;
+	const { author, member } = message;
+
+	if (author.bot || !member) {
+		return;
+	}
 
 	if (message.channel.name !== 'feedback-trade') {
 		const feedbackChannel =
@@ -40,7 +44,7 @@ exports.run = (client, message) => {
 
 		message.channel.send(`\`recent\` only works in ${feedbackChannel}.`);
 		return;
-	};
+	}
 
 	const members = message.guild.members;
 	const requests = FeedbackRequest.recent(client.database, 6);
