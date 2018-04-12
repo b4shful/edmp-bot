@@ -32,14 +32,14 @@ const parse = (client, message) => {
     throw new TypeError('Server is currently unavailable.');
   }
 
-  const slapper = message.author.username;
+  const slapper = message.member.displayName;
   const mentions = message.mentions.members;
 
   if (!mentions.first()) {
     throw new TypeError('Gotta mention who\'s getting slapped.');
   }
 
-  const slappees = mentions.map(member => member.user.username)
+  const slappees = mentions.map(member => member.displayName)
     .reduce((str, name, i, array) => {
       if (i === 0) {
         return `${name}`;
