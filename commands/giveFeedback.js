@@ -43,9 +43,9 @@ const isAcceptable = feedback => {
  * @param {number} level The permission level of the author of the message
  */
 exports.run = async (client, message, args) => {
-	if (message.author.bot) return;
-
-	if (!message.member) return; // Must be a server member.
+	if (message.author.bot || !message.member) {
+		return;
+	}
 
 	if (message.channel.name !== 'feedback-trade') {
 		const feedbackChannel =
@@ -55,39 +55,50 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 
-	let requestId;
-	try {
-		requestId = parseInt(args[0]);
+	const database = client.database;
+	const userId = message.member.id;
+	const messageContent = message.content;
 
-		if (!requestId) {
-			throw new TypeError(`${message.member} You must provide a valid request id to submit your feedback.\nUsage: \`${help.usage}\``);
+	let created;
+	let response;
+
+	const requestId = parseInt(args[0]);
+
+	if (!requestId) {
+		response = `${message.member} You must provide a valid request id to submit your feedback.\nUsage: \`${help.usage}\``;
+	}
+
+	if (!response && !isAcceptable(messageContent)) {
+		response = `${message.member} The feedback you gave is really short, please be more constructive.`;
+	}
+
+	if (!response) {
+		try {
+			created = FeedbackComment.create(database, requestId, userId, messageContent);
+		}
+		catch (error) {
+			Logger.error(error);
+			response = 'Something went wrong, please notify `@Staff`.';
 		}
 	}
-	catch (error) {
-		message.channel.send(error.message);
-		return;
+
+	if (!response && !created) {
+		await message.delete();
+		response = `${message.member} don't give feedback to yourself for points...`;
 	}
 
-	if (!isAcceptable(message.content)) {
-		message.channel.send(`${message.member} The feedback you gave is really short, please be more constructive.`);
-		return;
-	}
+	if (!response && created) {
+		try {
+			FeedbackPoint.create(database, userId, messageContent);
 
-	let response;
-	try {
-		const database = client.database;
-		const userId = message.member.id;
-		const messageContent = message.content;
+			Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint`);
 
-		FeedbackComment.create(database, requestId, userId, messageContent);
-		FeedbackPoint.create(database, userId, messageContent);
-
-		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint`);
-
-		response = `${message.member} has been rewarded a point for giving feedback!`;
-	}
-	catch (error) {
-		response = error.message;
+			response = `${message.member} has been rewarded a point for giving feedback!`;
+		}
+		catch (error) {
+			Logger.error(error);
+			response = 'Something went wrong, please notify `@Staff`.';
+		}
 	}
 
 	message.channel.send(response);
