@@ -1,23 +1,54 @@
+const Logger = require('../util/Logger');
+
+const getRole = (guild, roleId) => {
+  const role = guild.roles.get(roleId);
+
+  if (!role) {
+    const error = new TypeError('Server is missing the ${role} role.');
+    Logger.error(error);
+    throw error;
+  }
+
+  return role;
+}
+
+const assignRole = async (member, roleId) => {
+  try {
+    await member.addRole(roleiD);
+  }
+  catch (error) {
+    Logger.error(error);
+
+    throw new TypeError(`Unable to assign role ${roleId}`);
+  }
+};
+
 exports.run = async (client, message, args, level) => {
     const introChannelId = '371004421586550784';
     const settings = client.config;
     let roleFound = false;
-    let roleList = '';
+    let roleArray = [];
     
     if (message.channel.id === introChannelId) {
 	desiredRole = args.join(' ');
 
 	for (var p in settings.selfRoles) {
-	    if (settings.selfRoles[p].findIndex(x => x.toLowerCase() === desiredRole.toLowerCase()) > -1) {
+	    let roleCheck = settings.selfRoles[p].findIndex(x => x.toLowerCase() === desiredRole.toLowerCase());
+
+	    // findIndex returns -1 on no match otherwise the index is returned which is >=0
+	    if (if roleCheck > -1) {
+		let role = getRole(message.guild, p);
+
+		assignRole(message.member, role);
+		
 		message.channel.send(`Role ${desiredRole} found with id ${p}, thank you for doing business.`);
-		let role = message.guild.roles.get(p);
-		message.member.addRole(role);
 		roleFound = true;
 	    }
-	    roleList += settings.selfRoles[p].join(', ') + ', ';
+	    
+	    roleArray.concat(settings.selfRoles[p]);
 	}
 	if (roleFound === false) {
-	    message.channel.send(`Role ${desiredRole} not found. Here are the possible options: ${roleList.split(0, -2)}`);
+	    message.channel.send(`Role ${desiredRole} not found. Here are the possible options: ${roleArray.join(', ')}`);
 	}
 		
     }
