@@ -8,22 +8,32 @@ const logQuery = require('./utils').logQuery;
 /**
  * @param {Database} database
  * @param {string} requestId
- * @returns {FeedbackRequest} The FeedbackRequest with `requestId`
- * @throws If a FeedbackRequest with `requestId` does not exist
+ * @returns {FeedbackRequest | undefined} The FeedbackRequest with `requestId`, or undefined if not found
  * @throws If execution of database statement fails
  */
 const confirmRequestExists = (database, requestId) => {
 	const SELECT_REQUEST = `SELECT * FROM FeedbackRequest WHERE id = $requestId`;
-	const selectParameters = { requestId };
+	const parameters = { requestId };
 
-	logQuery(SELECT_REQUEST, selectParameters);
-	const request = database.prepare(SELECT_REQUEST).get(selectParameters);
+	logQuery(SELECT_REQUEST, parameters);
+	return database.prepare(SELECT_REQUEST).get(parameters);
+};
 
-	if (!request) {
-		throw new TypeError('Must reference an existing feedback request.');
-	}
+/**
+ * @param {Database} database
+ * @param {string} requestId
+ * @param {string} userId
+ * @returns {number} Number of FeedbackComments that exist for FeedbackRequest `requestId` by the user
+ * @throws If execution of database statement fails
+ */
+const numComments = (database, requestId, userId) => {
+	const SELECT_COMMENT = `SELECT count(*) as comments FROM FeedbackComment WHERE requestId = $requestId AND userId = $userId`;
+	const parameters = { requestId, userId };
 
-	return request;
+	logQuery(SELECT_COMMENT, parameters);
+	const { comments } = database.prepare(SELECT_COMMENT).get(parameters);
+
+	return comments;
 };
 
 /**
@@ -31,7 +41,11 @@ const confirmRequestExists = (database, requestId) => {
  * @param {number} requestId
  * @param {string} userId
  * @param {string} message
- * @returns {boolean} `true` if the request was found and a comment was created, `false` if the userId for the comment is for a FeedbackRequest with the same userId
+ * @returns {Object} An object with flags indicating invalid state for creation or confirmation.
+ * - `created` means the FeedbackComment was created successfully
+ * - `selfFeedback` means the comment was for a user's own FeedbackRequest and the comment was not created
+ * - `requestNotFound` means the comment was for a FeedbackRequest that does not exist
+ * - `extraFeedback` means another comment for the FeedbackReqeusts already exists by the user
  * @throws If a FeedbackRequest with `requestId` does not exist
  * @throws If execution of database statement fails
  */
@@ -52,10 +66,27 @@ exports.create = (database, requestId, userId, message) => {
 		throw new TypeError('A FeedbackComment requires a message string');
 	}
 
+	let result = {
+		created: false,
+		selfFeedback: false,
+		requestNotFound: false,
+		extraFeedback: false
+	};
+
 	const request = confirmRequestExists(database, requestId);
 
+	if (!request) {
+		return { ...result, requestNotFound: true };
+	}
+
 	if (request.userId === userId) {
-		return false;
+		return { ...result, selfFeedback: true };
+	}
+
+	const count = numComments(database, requestId, userId);
+	
+	if (count > 0) {
+		result = { ...result, extraFeedback: true };
 	}
 
 	const INSERT_COMMENT = `INSERT INTO FeedbackComment (requestId, userId, message) VALUES ($requestId, $userId, $message)`;
@@ -64,5 +95,5 @@ exports.create = (database, requestId, userId, message) => {
 	logQuery(INSERT_COMMENT, parameters);
 	database.prepare(INSERT_COMMENT).run(parameters);
 
-	return true;
+	return { ...result, created: true };
 };

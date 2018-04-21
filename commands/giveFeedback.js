@@ -59,7 +59,7 @@ exports.run = async (client, message, args) => {
 	const userId = message.member.id;
 	const messageContent = message.content;
 
-	let created;
+	let commentResult;
 	let response;
 
 	const requestId = parseInt(args[0]);
@@ -74,7 +74,7 @@ exports.run = async (client, message, args) => {
 
 	if (!response) {
 		try {
-			created = FeedbackComment.create(database, requestId, userId, messageContent);
+			commentResult = FeedbackComment.create(database, requestId, userId, messageContent);
 		}
 		catch (error) {
 			Logger.error(error);
@@ -82,12 +82,20 @@ exports.run = async (client, message, args) => {
 		}
 	}
 
-	if (!response && !created) {
+	if (!response && commentResult.selfFeedback) {
 		await message.delete();
-		response = `${message.member} don't give feedback to yourself for points...`;
+		response = `${message.member} Don't give feedback to yourself for points...`;
 	}
 
-	if (!response && created) {
+	if (!response && commentResult.requestNotFound) {
+		response = `${message.member} That track doesn't exists.`;
+	}
+
+	if (!response && commentResult.created && commentResult.extraFeedback) {
+		response = `${message.member} Your feedback was added, but you already received a point for this track.`;
+	}
+
+	if (!response && commentResult.created) {
 		try {
 			FeedbackPoint.create(database, userId, messageContent);
 
