@@ -36,6 +36,22 @@ const numComments = (database, requestId, userId) => {
 	return comments;
 };
 
+exports.searchByUrl = (database, url) => {
+	if (!database) {
+		throw new TypeError('Expected a database connection.');
+	}
+
+	if (!url || typeof url !== 'string') {
+		throw new TypeError('The url string is required to search.');
+	}
+
+	const query = `SELECT timestamp, message FROM (SELECT id FROM FeedbackRequest WHERE message LIKE '%$url%') requests JOIN FeedbackComment ON requests.id = FeedbackComment.requestId`;
+	const parameters = { url };
+
+	logQuery(query, parameters);
+	return database.prepare(query).all(parameters);
+};
+
 /**
  * @param {Database} database
  * @param {number} requestId
