@@ -9,6 +9,9 @@ sudo: false
 install: true
 script: true
 
+git:
+  depth: false
+
 # Generate encrypted private key using travis cli and add public key to authorized keys on server.
 # The ssh config is also updated to skip host key checking, which prevents the build from pausing indefinitely.
 before_deploy:
