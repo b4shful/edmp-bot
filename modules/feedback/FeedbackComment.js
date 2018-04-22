@@ -45,7 +45,7 @@ exports.searchByUrl = (database, url) => {
 		throw new TypeError('The url string is required to search.');
 	}
 
-	const query = `SELECT timestamp, message FROM (SELECT id FROM FeedbackRequest WHERE message LIKE $pattern) requests JOIN FeedbackComment ON requests.id = FeedbackComment.requestId`;
+	const query = `SELECT userId, timestamp, message FROM (SELECT id FROM FeedbackRequest WHERE message LIKE $pattern) requests JOIN FeedbackComment ON requests.id = FeedbackComment.requestId`;
 	const parameters = { pattern: `%${url}%` };
 
 	logQuery(query, parameters);

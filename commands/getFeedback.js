@@ -12,8 +12,23 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 
-	let response;
+	const guild = message.guild;
 
+	try {
+		if (!guild) {
+			throw new TypeError('Must be a member of the server to use this command');
+		}
+
+		if (!guild.available) {
+			throw new TypeError('Server is unavailable at the moment');
+		}
+	}
+	catch (error) {
+		message.member.send(error.message);
+		return;
+	}
+
+	let response;
 	const url = args[0];
 	const comments = FeedbackComment.searchByUrl(client.database, url);
 
@@ -22,8 +37,11 @@ exports.run = async (client, message, args) => {
 	}
 
 	if (!response) {
-		response = comments.reduce((response, { timestamp, message }) =>
-			`${response}\n\`<${timestamp}>\` ${message}`, `Feedback you've received for ${url}:`);
+		response = comments.reduce((response, { userId, timestamp, message }) => {
+			const readableTimestamp = new Date(timestamp);
+			const member = guild.members.get(userId);
+			return `${response}\n\`<${readableTimestamp}>\` From ${member}:\n${message}\n`;
+		}, `Feedback you've received for ${url}:\n`);
 	}
 
 	message.member.send(response);
@@ -40,5 +58,5 @@ exports.help = {
 	name: 'getFeedback',
 	category: 'Feedback',
 	description: '',
-	usage: ''
+	usage: ':edmp: getFeedback <link>'
 };
