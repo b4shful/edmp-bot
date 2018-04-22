@@ -65,12 +65,12 @@ exports.run = async (client, message, args) => {
 
 	const database = client.database;
 	const userId = message.member.id;
-	const messageContent = stripCommandFromMessage(message.content);
 
 	let commentResult;
 	let response;
 
 	const requestId = parseInt(args[0]);
+	const messageContent = stripCommandFromMessage(requestId, message.content);
 
 	if (!requestId) {
 		response = `${message.member} You must provide a valid request id to submit your feedback. Usage: \`${help.usage}\``;
