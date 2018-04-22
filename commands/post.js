@@ -6,6 +6,14 @@ const feedbackUsage = require('./feedback').help.usage;
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
 /**
+ * Removes the command and arguments from the message content.
+ */
+const stripCommandFromMessage = messageContent => {
+	const index = messageContent.indexOf(help.name) + help.name.length + 1;
+	return messageContent.substr(index);
+};
+
+/**
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
  * @param {Array<string>} args An array of tokens used as command arguments
@@ -63,7 +71,7 @@ exports.run = async (client, message) => {
 		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) redeemed a FeedbackPoint`);
 
 		try {
-			const id = FeedbackRequest.create(database, userId, message.content);
+			const id = FeedbackRequest.create(database, userId, stripCommandFromMessage(message.content));
 			response = `${message.member} submitted a track for feedback! Give them feedback using \`:edmp: feedback ${id} <feedback...>\``;
 		}
 		catch (error) {

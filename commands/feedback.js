@@ -37,6 +37,14 @@ const isAcceptable = feedback => {
 };
 
 /**
+ * Removes the command and arguments from the message content.
+ */
+const stripCommandFromMessage = (requestId, messageContent) => {
+	const index = messageContent.indexOf(requestId) + requestId.toString().length + 1;
+	return messageContent.substr(index);
+};
+
+/**
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
  * @param {Array<string>} args An array of tokens used as command arguments
@@ -57,7 +65,7 @@ exports.run = async (client, message, args) => {
 
 	const database = client.database;
 	const userId = message.member.id;
-	const messageContent = message.content;
+	const messageContent = stripCommandFromMessage(message.content);
 
 	let commentResult;
 	let response;
