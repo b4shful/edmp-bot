@@ -83,10 +83,10 @@ exports.conf = {
 };
 
 const help = {
-	name: 'getFeedback',
+	name: 'post',
 	category: 'Feedback',
-	description: '',
-	usage: ':edmp: getFeedback <link to your track> <any comments...>'
+	description: 'Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.',
+	usage: ':edmp: post <link to your track> <any comments...>'
 };
 
 exports.help = help;
