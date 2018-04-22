@@ -27,12 +27,12 @@ exports.run = async (client, message) => {
 	const matches = message.content.match(regex);
 
 	if (!matches || matches.length === 0) {
-		message.channel.send(`${message.member} You need to provide a link to your track. Usage: ${help.usage}`);
+		message.channel.send(`${message.member} You need to provide a link to your track. Usage: \`${help.usage}\``);
 		return;
 	}
 
 	if (matches.length > 1) {
-		message.channel.send(`${message.member} You can only ask for feedback on one track per point. Usage: ${help.usage}`);
+		message.channel.send(`${message.member} You can only ask for feedback on one track per point. Usage: \`${help.usage}\``);
 		return;
 	}
 
