@@ -24,8 +24,6 @@ const mentionsMember = message => {
 	if (members.size > 1) {
 		throw new TypeError('Give feedback to one person at a time.');
 	}
-
-	// TODO: Check if they're mentioning themself.
 };
 
 const isAcceptable = feedback => {
