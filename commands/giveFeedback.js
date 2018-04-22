@@ -65,7 +65,7 @@ exports.run = async (client, message, args) => {
 	const requestId = parseInt(args[0]);
 
 	if (!requestId) {
-		response = `${message.member} You must provide a valid request id to submit your feedback.\nUsage: \`${help.usage}\``;
+		response = `${message.member} You must provide a valid request id to submit your feedback. Usage: \`${help.usage}\``;
 	}
 
 	if (!response && !isAcceptable(messageContent)) {
@@ -123,7 +123,7 @@ const help = {
 	name: 'giveFeedback',
 	category: 'Feedback',
 	description: '',
-	usage: 'giveFeedback <requestId> <your feedback...>'
+	usage: ':edmp: giveFeedback <request ID> <your feedback...>'
 };
 
 exports.help = help;

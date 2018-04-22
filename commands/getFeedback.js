@@ -1,6 +1,7 @@
 const Logger = require('../util/Logger');
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
+const giveFeedbackUsage = require('./giveFeedback').help.usage;
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
@@ -26,12 +27,12 @@ exports.run = async (client, message) => {
 	const matches = message.content.match(regex);
 
 	if (!matches || matches.length === 0) {
-		message.channel.send('You need to provide a link to your track.');
+		message.channel.send(`${message.member} You need to provide a link to your track. Usage: ${help.usage}`);
 		return;
 	}
 
 	if (matches.length > 1) {
-		message.channel.send('You can only ask for feedback on one track per point.');
+		message.channel.send(`${message.member} You can only ask for feedback on one track per point. Usage: ${help.usage}`);
 		return;
 	}
 
@@ -55,7 +56,7 @@ exports.run = async (client, message) => {
 
 	if (!response && !redeemed) {
 		await message.delete();
-		response = `${message.member} you do not have any points available. Give someone else some feedback to earn a point to redeem.`;
+		response = `${message.member} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${giveFeedbackUsage}\``;
 	}
 	
 	if (!response && redeemed) {
@@ -63,7 +64,7 @@ exports.run = async (client, message) => {
 
 		try {
 			const id = FeedbackRequest.create(database, userId, message.content);
-			response = `You submitted a track for feedback! People can give you feedback using \`giveFeedback ${id} <feedback...>\``;
+			response = `${message.member} submitted a track for feedback! Give them feedback using \`:edmp: giveFeedback ${id} <feedback...>\``;
 		}
 		catch (error) {
 			Logger.error(error);
@@ -81,9 +82,11 @@ exports.conf = {
 	permLevel: 'User'
 };
 
-exports.help = {
+const help = {
 	name: 'getFeedback',
 	category: 'Feedback',
 	description: '',
-	usage: 'getFeedback'
+	usage: ':edmp: getFeedback <link to your track> <any comments...>'
 };
+
+exports.help = help;
