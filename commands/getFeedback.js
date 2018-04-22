@@ -1,5 +1,10 @@
 const Logger = require('../util/Logger');
 const FeedbackComment = require('../modules/feedback/FeedbackComment');
+const postUsage = require('./post').help.usage;
+
+// Duplicate from post.js
+// TODO: Move regex into utiliy file as part of feedback module (FeedbackLink.js?)
+const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
 /**
  * @param {Discord.Client} client The Discord API client
@@ -28,21 +33,25 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 
-	let response;
 	const url = args[0];
+
+	if (!url.match(regex)) {
+		message.channel.send(`${message.member} Please provide a valid URL for the track you submitted. Usage \`${help.usage}\``);
+		return;
+	}
+
 	const comments = FeedbackComment.searchByUrl(client.database, url);
 
 	if (comments.length === 0) {
-		response = `You have not received any feedback for ${url}`;
+		message.channel.send(`${message.member} No feedback was found for that track. Post your track using \`${postUsage}\``);
+		return;
 	}
 
-	if (!response) {
-		response = comments.reduce((response, { userId, timestamp, message }) => {
-			const readableTimestamp = new Date(timestamp);
-			const member = guild.members.get(userId);
-			return `${response}\n\`<${readableTimestamp}>\` From ${member}:\n${message}\n`;
-		}, `Feedback you've received for ${url}:\n`);
-	}
+	const response = comments.reduce((response, { userId, timestamp, message }) => {
+		const readableTimestamp = new Date(timestamp);
+		const member = guild.members.get(userId);
+		return `${response}\n\`<${readableTimestamp}>\` From ${member}:\n\n${message}\n`;
+	}, `Feedback you've received for ${url}:\n`);
 
 	message.member.send(response);
 };
@@ -54,9 +63,11 @@ exports.conf = {
 	permLevel: 'User'
 };
 
-exports.help = {
+const help = {
 	name: 'getFeedback',
 	category: 'Feedback',
-	description: '',
+	description: 'DMs all the feedback given for requests containing the given link.',
 	usage: ':edmp: getFeedback <link>'
 };
+
+exports.help = help;
