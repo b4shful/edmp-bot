@@ -20,7 +20,7 @@ exports.run = async (client, message) => {
 		const feedbackChannel =
 			message.guild.channels.find('name', 'feedback-trade') || '#feedback-trade';
 
-		message.channel.send(`\`getFeedback\` only works in ${feedbackChannel}.`);
+		message.channel.send(`\`${help.name}\` only works in ${feedbackChannel}.`);
 		return;
 	};
 
