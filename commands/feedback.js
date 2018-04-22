@@ -120,10 +120,10 @@ exports.conf = {
 };
 
 const help = {
-	name: 'giveFeedback',
+	name: 'feedback',
 	category: 'Feedback',
-	description: '',
-	usage: ':edmp: giveFeedback <request ID> <your feedback...>'
+	description: 'Submits a feedback for the track with the given request ID. If your feedback is acceptable you will receive a point.',
+	usage: ':edmp: feedback <request ID> <your feedback...>'
 };
 
 exports.help = help;

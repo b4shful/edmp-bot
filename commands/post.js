@@ -1,7 +1,7 @@
 const Logger = require('../util/Logger');
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
-const giveFeedbackUsage = require('./giveFeedback').help.usage;
+const feedbackUsage = require('./feedback').help.usage;
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
@@ -56,7 +56,7 @@ exports.run = async (client, message) => {
 
 	if (!response && !redeemed) {
 		await message.delete();
-		response = `${message.member} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${giveFeedbackUsage}\``;
+		response = `${message.member} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
 	}
 	
 	if (!response && redeemed) {
@@ -64,7 +64,7 @@ exports.run = async (client, message) => {
 
 		try {
 			const id = FeedbackRequest.create(database, userId, message.content);
-			response = `${message.member} submitted a track for feedback! Give them feedback using \`:edmp: giveFeedback ${id} <feedback...>\``;
+			response = `${message.member} submitted a track for feedback! Give them feedback using \`:edmp: feedback ${id} <feedback...>\``;
 		}
 		catch (error) {
 			Logger.error(error);
