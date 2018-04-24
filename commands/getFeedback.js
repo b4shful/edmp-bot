@@ -36,14 +36,16 @@ exports.run = async (client, message, args) => {
 	const url = args[0];
 
 	if (!url.match(regex)) {
-		message.channel.send(`${message.member} Please provide a valid URL for the track you submitted. Usage \`${help.usage}\``);
+		await message.delete();
+		message.member.send(`${message.member} Please provide a valid URL for the track you submitted. Usage \`${help.usage}\``);
 		return;
 	}
 
 	const comments = FeedbackComment.searchByUrl(client.database, url);
 
 	if (comments.length === 0) {
-		message.channel.send(`${message.member} No feedback was found for that track. Post your track using \`${postUsage}\``);
+		await message.delete();
+		message.member.send(`${message.member} No feedback was found for that track. Post your track using \`${postUsage}\``);
 		return;
 	}
 
@@ -53,6 +55,7 @@ exports.run = async (client, message, args) => {
 		return `${response}\n\`<${readableTimestamp}>\` From ${member}:\n\n${message}\n`;
 	}, `Feedback you've received for ${url}:\n`);
 
+	await message.delete();
 	message.member.send(response);
 };
 
