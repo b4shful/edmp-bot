@@ -30,13 +30,24 @@ module.exports = (client, message) => {
 
   // Also good practice to ignore any message that does not start with our prefix,
   // which is set in the configuration file.
-  if (message.content.indexOf(settings.prefix) !== 0) return;
+  let prefixFound = false;
+  let usedPrefix = 0;
+
+  for (var i = 0; i < settings.prefix.length; i++) {
+    if (message.content.indexOf(settings.prefix[i]) === 0) {
+	prefixFound = true;
+	usedPrefix = i;
+	break;
+    }
+  }
+  
+  if (prefixFound === false) return;
 
   // Here we separate our "command" name, and our "arguments" for the command.
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
   // command = say
   // args = ["Is", "this", "the", "real", "life?"]
-  const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(settings.prefix[usedPrefix].length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   // Get the user or member's permission level from the elevation
