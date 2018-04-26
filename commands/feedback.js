@@ -2,6 +2,24 @@ const Logger = require('../util/Logger');
 const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
 const FeedbackComment = require('../modules/feedback/FeedbackComment');
 
+
+// Necessary bullshit to handle using the primary prefix for the help command
+let prefix = "uninitialized";
+let help = {};
+
+exports.init = (client) => {
+    prefix = client.config.defaultSettings.prefix[0];
+
+    help = {
+	name: 'feedback',
+	category: 'Feedback',
+	description: 'Submits a feedback for the track with the given request ID. If your feedback is acceptable you will receive a point.',
+	usage: `${prefix} feedback <request ID> <your feedback...>`
+    };
+
+    exports.help = help;
+}
+
 /**
  * NOTE: Unused for the time being.
  */
@@ -124,12 +142,3 @@ exports.conf = {
 	aliases: [],
 	permLevel: 'User'
 };
-
-const help = {
-	name: 'feedback',
-	category: 'Feedback',
-	description: 'Submits a feedback for the track with the given request ID. If your feedback is acceptable you will receive a point.',
-	usage: ':edmp: feedback <request ID> <your feedback...>'
-};
-
-exports.help = help;
