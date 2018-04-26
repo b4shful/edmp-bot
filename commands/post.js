@@ -5,6 +5,23 @@ const feedbackUsage = require('./feedback').help.usage;
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
+// Necessary bullshit to handle using the primary prefix for the help command
+let prefix = "uninitialized";
+let help = {};
+
+exports.init = (client) => {
+    prefix = client.config.defaultSettings.prefix[0];
+
+    help = {
+	name: 'post',
+	category: 'Feedback',
+	description: 'Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.',
+	usage: `${prefix} post <link to your track> <any comments...>`
+    };
+
+    exports.help = help;
+}
+
 /**
  * Removes the command and arguments from the message content.
  */
@@ -72,7 +89,7 @@ exports.run = async (client, message) => {
 
 		try {
 			const id = FeedbackRequest.create(database, userId, stripCommandFromMessage(message.content));
-			response = `${message.member} submitted a track for feedback! Give them feedback using \`:edmp: feedback ${id} <feedback...>\``;
+			response = `${message.member} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
 		}
 		catch (error) {
 			Logger.error(error);
@@ -90,11 +107,5 @@ exports.conf = {
 	permLevel: 'User'
 };
 
-const help = {
-	name: 'post',
-	category: 'Feedback',
-	description: 'Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.',
-	usage: ':edmp: post <link to your track> <any comments...>'
-};
 
-exports.help = help;
+
