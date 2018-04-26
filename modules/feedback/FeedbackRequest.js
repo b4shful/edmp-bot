@@ -50,9 +50,7 @@ exports.recent = (database, length) => {
 		throw new TypeError('Missing number of requests to retreive.');
 	}
 
-	const SELECT_RECENT = `SELECT * FROM FeedbackRequest
-	ORDER BY timestamp DESC
-	LIMIT $length`;
+	const SELECT_RECENT = `SELECT FeedbackRequest.*, count(FeedbackComment.requestId) as comments FROM FeedbackRequest LEFT JOIN FeedbackComment ON FeedbackRequest.id = FeedbackComment.requestId GROUP BY FeedbackRequest.id ORDER BY timestamp DESC LIMIT $length`;
 	const parameters = { length };
 
 	logQuery(SELECT_RECENT, parameters);
