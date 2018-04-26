@@ -51,7 +51,7 @@ exports.run = async (client, message, args) => {
 
 	const response = comments.reduce((response, { userId, timestamp, message }) => {
 		const readableTimestamp = new Date(timestamp);
-		const member = guild.members.get(userId);
+		const member = guild.members.get(userId).displayName;
 		return `${response}\n<${readableTimestamp}> From ${member}:\n\n${message}\n`;
 	}, `Feedback you've received for ${url}:\n`);
 
