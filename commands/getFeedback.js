@@ -56,7 +56,7 @@ exports.run = async (client, message, args) => {
 
 	const url = args[0];
 
-	if (!url.match(regex)) {
+	if (!url || !url.match(regex)) {
 		await message.delete();
 		message.member.send(`${message.member} Please provide a valid URL for the track you submitted. Usage \`${help.usage}\``);
 		return;
