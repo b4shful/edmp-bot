@@ -54,7 +54,10 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 
-	const url = args[0];
+        const url = args[0];
+
+        if (url && url.charAt[0] === "<" && url.charAt[url.length] === ">")
+	    url = url.substring(1, url.length -1);
 
 	if (!url || !url.match(regex)) {
 		await message.delete();
