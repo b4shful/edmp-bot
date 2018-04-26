@@ -30,13 +30,45 @@ module.exports = (client, message) => {
 
   // Also good practice to ignore any message that does not start with our prefix,
   // which is set in the configuration file.
-  if (message.content.indexOf(settings.prefix) !== 0) return;
+  let prefixFound = false;
+  let usedPrefix = 0;
+
+  for (var i = 0; i < settings.prefix.length; i++) {
+
+    // This compares the prefixes to the message character by character.
+    // string.indexOf() parses the entire string if it's a 'miss', no good!
+    // This method breaks on the first miss, or at the prefix's length
+    // the full string is _never_ parsed.
+    for (var j = 0; j < settings.prefix[i].length; j++) {
+      if (message.content.charAt(j) !== settings.prefix[i].charAt(j)) {
+	break;
+      }
+      if (j === settings.prefix[i].length - 1) {
+	prefixFound = true;
+	usedPrefix = i;
+      }
+    }
+
+    // don't process anymore prefixes if we've found one  
+    if (prefixFound === true)
+      break;
+
+    // Below is wat the code above is doing, it's just slower.
+    
+    //if (message.content.indexOf(settings.prefix[i]) === 0) {
+    //	prefixFound = true;
+    //	usedPrefix = i;
+    //	break;
+    //}
+  }
+  
+  if (prefixFound === false) return;
 
   // Here we separate our "command" name, and our "arguments" for the command.
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
   // command = say
   // args = ["Is", "this", "the", "real", "life?"]
-  const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(settings.prefix[usedPrefix].length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   // Get the user or member's permission level from the elevation
