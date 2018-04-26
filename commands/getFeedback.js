@@ -51,12 +51,21 @@ exports.run = async (client, message, args) => {
 
 	const response = comments.reduce((response, { userId, timestamp, message }) => {
 		const readableTimestamp = new Date(timestamp);
-		const member = guild.members.get(userId);
-		return `${response}\n\`<${readableTimestamp}>\` From ${member}:\n\n${message}\n`;
+		const member = guild.members.get(userId).displayName;
+		return `${response}\n<${readableTimestamp}> From ${member}:\n\n${message}\n`;
 	}, `Feedback you've received for ${url}:\n`);
 
 	await message.delete();
-	message.member.send(response);
+
+        const buf = new Buffer(response, "utf-8");
+        const dt = new Date();
+    
+        message.author.send({
+	        files: [{
+		        attachment: buf,
+		        name: `${dt} feedback.txt`
+		    }]
+	}) 
 };
 
 exports.conf = {
