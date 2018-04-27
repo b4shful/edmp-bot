@@ -57,6 +57,28 @@ exports.recent = (database, length) => {
 	return database.prepare(SELECT_RECENT).all(parameters);
 };
 
+/**
+ * @param {Database} database
+ * @param {number} length
+ * @returns List of the `length` most recent FeedbackRequests without any FeedbackComments
+ * @throws If execution of database statement fails
+ */
+exports.need = (database, length) => {
+	if (!database) {
+		throw new TypeError('Expected a database connection.');
+	}
+
+	if (!length || typeof length !== 'number') {
+		throw new TypeError('Missing number of requests to retreive.');
+	}
+
+	const SELECT_NEEDED = `SELECT * FROM (SELECT FeedbackRequest.*, count(FeedbackComment.requestId) as comments FROM FeedbackRequest LEFT JOIN FeedbackComment ON FeedbackRequest.id = FeedbackComment.requestId GROUP BY FeedbackRequest.id) WHERE comments = 0 ORDER BY timestamp DESC LIMIT $length`;
+	const parameters = { length };
+
+	logQuery(SELECT_NEEDED, parameters);
+	return database.prepare(SELECT_NEEDED).all(parameters);
+};
+
 const URL_PATTERN = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
 /**
