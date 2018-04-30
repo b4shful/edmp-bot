@@ -187,4 +187,41 @@ module.exports = (client) => {
   process.on("unhandledRejection", err => {
     client.logger.error(`Unhandled rejection: ${err}`);
   });
+
+    // Checks to see if the test string is the first string in input.
+    // Works on strings or arrays
+    // Returns the index of where the match was found in the array
+    // or returns true of the string contains the value
+   client.matchFirstString = (input, test) => {
+	if (typeof test == "object")
+	    return fArray(input, test);
+	else if (typeof test == "string")
+	    fString(input, test);
+    };
+    
+};
+
+
+const fArray = (input, test) => {
+    for (var i = 0; i < test.length; i++) {
+	if(fString(input, test[i]))
+	    return i;
+    }
+    return false;
+};
+
+const fString = (input, test) => {
+    for (var j = 0; j < test.length; j++) {
+	// This compares the test strings to the input character by character.
+	// string.indexOf() parses the entire string if it's a 'miss', no good!
+	// This method breaks on the first miss, or at the test's length
+	// the full string is _never_ parsed.
+	if (input.charAt(j) !== test.charAt(j)) {
+	    break;
+	}
+	if (j === test.length - 1) {
+	    return true;
+	}
+    }
+    return false;
 };
