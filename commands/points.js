@@ -74,6 +74,6 @@ exports.conf = {
 exports.help = {
 	name: 'points',
 	category: 'Feedback',
-	description: '',
+	description: 'The current points for the requesting user.',
 	usage: 'points'
 };

@@ -60,6 +60,6 @@ exports.conf = {
 exports.help = {
 	name: 'need',
 	category: 'Feedback',
-	description: '',
+	description: 'Shows tracks requesting feedback that have not recieved any',
 	usage: 'need'
 };
