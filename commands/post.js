@@ -1,7 +1,7 @@
-const Logger = require('../util/Logger');
-const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
-const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
-const feedbackUsage = require('./feedback').help.usage;
+const Logger = require("../util/Logger");
+const FeedbackPoint = require("../modules/feedback/FeedbackPoint");
+const FeedbackRequest = require("../modules/feedback/FeedbackRequest");
+const feedbackUsage = require("./feedback").help.usage;
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
 
@@ -9,18 +9,19 @@ const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-
 let prefix = "uninitialized";
 let help = {};
 
-exports.init = (client) => {
-    prefix = client.config.defaultSettings.prefix[0];
+exports.init = client => {
+	prefix = client.config.defaultSettings.prefix[0];
 
-    help = {
-	name: 'post',
-	category: 'Feedback',
-	description: 'Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.',
-	usage: `${prefix} post <link to your track> <any comments...>`
-    };
+	help = {
+		name: "post",
+		category: "Feedback",
+		description:
+			"Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.",
+		usage: `${prefix} post <link to your track> <any comments...>`
+	};
 
-    exports.help = help;
-}
+	exports.help = help;
+};
 
 /**
  * Removes the command and arguments from the message content.
@@ -41,13 +42,12 @@ exports.run = async (client, message) => {
 		return;
 	}
 
-	if (message.channel.name !== 'feedback-trade') {
-		const feedbackChannel =
-			message.guild.channels.find('name', 'feedback-trade') || '#feedback-trade';
+	if (message.channel.name !== "feedback-trade") {
+		const feedbackChannel = message.guild.channels.find("name", "feedback-trade") || "#feedback-trade";
 
 		message.channel.send(`\`${help.name}\` only works in ${feedbackChannel}.`);
 		return;
-	};
+	}
 
 	const matches = message.content.match(regex);
 
@@ -57,7 +57,9 @@ exports.run = async (client, message) => {
 	}
 
 	if (matches.length > 1) {
-		message.channel.send(`${message.member} You can only ask for feedback on one track per point. Usage: \`${help.usage}\``);
+		message.channel.send(
+			`${message.member} You can only ask for feedback on one track per point. Usage: \`${help.usage}\``
+		);
 		return;
 	}
 
@@ -73,27 +75,33 @@ exports.run = async (client, message) => {
 
 	try {
 		redeemed = FeedbackPoint.redeem(database, userId);
-	}
-	catch (error) {
+	} catch (error) {
 		Logger.error(error);
-		response = 'Something went wrong, please notify `@Staff`.';
+		response = "Something went wrong, please notify `@Staff`.";
 	}
 
 	if (!response && !redeemed) {
 		await message.delete();
-		response = `${message.member} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
+		response = `${
+			message.member
+		} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
 	}
-	
+
 	if (!response && redeemed) {
-		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) redeemed a FeedbackPoint`);
+		Logger.log(
+			`${message.member.displayName} (${message.author.username}#${
+				message.author.discriminator
+			}) redeemed a FeedbackPoint`
+		);
 
 		try {
 			const id = FeedbackRequest.create(database, userId, stripCommandFromMessage(message.content));
-			response = `${message.member} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
-		}
-		catch (error) {
+			response = `${
+				message.member
+			} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
+		} catch (error) {
 			Logger.error(error);
-			response = 'Something went wrong, please notify `@Staff`.';
+			response = "Something went wrong, please notify `@Staff`.";
 		}
 	}
 
@@ -104,8 +112,5 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'User'
+	permLevel: "User"
 };
-
-
-

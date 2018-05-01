@@ -1,27 +1,25 @@
-const Logger = require('../util/Logger');
-const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
+const Logger = require("../util/Logger");
+const FeedbackRequest = require("../modules/feedback/FeedbackRequest");
 
 const formatRequestList = (members, requests) => {
-	const list = requests.map(request => {
-		try {
-			const link = FeedbackRequest.getLink(request);
-			const displayName = members.get(request.userId).displayName;
-			return `- \`${request.id}\` ${displayName} - <${link}>`;
-		}
-		catch (error) {
-			Logger.error(error);
-			return '';
-		}
-	}).filter(item => item.length !== 0);
+	const list = requests
+		.map(request => {
+			try {
+				const link = FeedbackRequest.getLink(request);
+				const displayName = members.get(request.userId).displayName;
+				return `- \`${request.id}\` ${displayName} - <${link}>`;
+			} catch (error) {
+				Logger.error(error);
+				return "";
+			}
+		})
+		.filter(item => item.length !== 0);
 
 	if (!(list.length > 0)) {
-		return 'No one has requested feedback yet!';
+		return "No one has requested feedback yet!";
 	}
 
-	return [
-		'Requests that haven\'t received any feedback:',
-		...list
-	].join('\n');
+	return ["Requests that haven't received any feedback:", ...list].join("\n");
 };
 
 /**
@@ -37,9 +35,8 @@ exports.run = (client, message) => {
 		return;
 	}
 
-	if (message.channel.name !== 'feedback-trade') {
-		const feedbackChannel =
-			message.guild.channels.find('name', 'feedback-trade') || '#feedback-trade';
+	if (message.channel.name !== "feedback-trade") {
+		const feedbackChannel = message.guild.channels.find("name", "feedback-trade") || "#feedback-trade";
 
 		message.channel.send(`\`need\` only works in ${feedbackChannel}.`);
 		return;
@@ -48,18 +45,18 @@ exports.run = (client, message) => {
 	const members = message.guild.members;
 	const requests = FeedbackRequest.need(client.database, 6);
 	message.channel.send(formatRequestList(members, requests));
-}
+};
 
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'User'
+	permLevel: "User"
 };
 
 exports.help = {
-	name: 'need',
-	category: 'Feedback',
-	description: 'Shows tracks requesting feedback that have not recieved any',
-	usage: 'need'
+	name: "need",
+	category: "Feedback",
+	description: "Shows tracks requesting feedback that have not recieved any",
+	usage: "need"
 };
