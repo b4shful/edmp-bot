@@ -1,7 +1,7 @@
 /**
  * A feedback point is used to track when a guild member gives useful feedback
  * to someone in the feedback channel.
- * 
+ *
  * FeedbackPoints are usable within an hour after they are created. Afterwards
  * an hour the point expires and cannot be redeemed for requesting feedback.
  * When dealing with FeedbackPoints in code, use this module for applying
@@ -19,12 +19,12 @@ export type FeedbackPoint = {
 */
 
 exports.create = (userId, message) => {
-	if (!userId || typeof userId !== 'string') {
-		throw new TypeError('A FeedbackPoint requires a userId string');
+	if (!userId || typeof userId !== "string") {
+		throw new TypeError("A FeedbackPoint requires a userId string");
 	}
 
-	if (!message || typeof message !== 'string') {
-		throw new TypeError('A FeedbackPoint requires a message string');
+	if (!message || typeof message !== "string") {
+		throw new TypeError("A FeedbackPoint requires a message string");
 	}
 
 	const timestamp = Date.now();
@@ -38,6 +38,6 @@ exports.create = (userId, message) => {
 	};
 };
 
-exports.isExpired = point => !((Date.now() - point.timestamp) < ONE_HOUR);
+exports.isExpired = point => !(Date.now() - point.timestamp < ONE_HOUR);
 
 exports.use = point => ({ ...point, used: true });
