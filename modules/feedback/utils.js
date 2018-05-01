@@ -1,4 +1,4 @@
-const Logger = require('../../util/Logger');
+const Logger = require("../../util/Logger");
 
 exports.SQLITE_FALSE = 0;
 exports.SQLITE_TRUE = 1;

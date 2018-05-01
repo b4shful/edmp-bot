@@ -3,7 +3,7 @@
  * request. It requires a reference to the feedback request, and should
  * reward a feedback point to the user making the comment.
  */
-const logQuery = require('./utils').logQuery;
+const logQuery = require("./utils").logQuery;
 
 /**
  * @param {Database} database
@@ -38,11 +38,11 @@ const numComments = (database, requestId, userId) => {
 
 exports.searchByUrl = (database, url) => {
 	if (!database) {
-		throw new TypeError('Expected a database connection.');
+		throw new TypeError("Expected a database connection.");
 	}
 
-	if (!url || typeof url !== 'string') {
-		throw new TypeError('The url string is required to search.');
+	if (!url || typeof url !== "string") {
+		throw new TypeError("The url string is required to search.");
 	}
 
 	const query = `SELECT userId, timestamp, message FROM (SELECT id FROM FeedbackRequest WHERE message LIKE $pattern) requests JOIN FeedbackComment ON requests.id = FeedbackComment.requestId`;
@@ -67,19 +67,19 @@ exports.searchByUrl = (database, url) => {
  */
 exports.create = (database, requestId, userId, message) => {
 	if (!database) {
-		throw new TypeError('Expected a database connection.');
+		throw new TypeError("Expected a database connection.");
 	}
 
-	if (!requestId || typeof requestId !== 'number') {
-		throw new TypeError('A FeedbackComment requires a requestId number');
+	if (!requestId || typeof requestId !== "number") {
+		throw new TypeError("A FeedbackComment requires a requestId number");
 	}
 
-	if (!userId || typeof userId !== 'string') {
-		throw new TypeError('A FeedbackComment requires a userId string');
+	if (!userId || typeof userId !== "string") {
+		throw new TypeError("A FeedbackComment requires a userId string");
 	}
 
-	if (!message || typeof message !== 'string') {
-		throw new TypeError('A FeedbackComment requires a message string');
+	if (!message || typeof message !== "string") {
+		throw new TypeError("A FeedbackComment requires a message string");
 	}
 
 	let result = {
@@ -100,7 +100,7 @@ exports.create = (database, requestId, userId, message) => {
 	}
 
 	const count = numComments(database, requestId, userId);
-	
+
 	if (count > 0) {
 		result = { ...result, extraFeedback: true };
 	}
