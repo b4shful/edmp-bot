@@ -4,7 +4,7 @@ const FeedbackComment = require("../modules/feedback/FeedbackComment");
 
 // Necessary bullshit to handle using the primary prefix for the help command
 let prefix = "uninitialized";
-const help = {};
+let help = {};
 
 exports.init = client => {
 	prefix = client.config.defaultSettings.prefix[0];
