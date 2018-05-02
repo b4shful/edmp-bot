@@ -36,6 +36,57 @@ exports.create = (database, userId, message) => {
 
 /**
  * @param {Database} database
+ * @param {number} requestId
+ * @returns FeedbackRequest with given `requestId`
+ * @throws If execution of database statement fails
+ */
+exports.get = (database, requestId) => {
+	if (!database) {
+		throw new TypeError("Expected a database connection.");
+	}
+
+	if (!requestId || typeof requestId !== "number") {
+		throw new TypeError("Getting a FeedbackRequest requires a requestId number");
+	}
+
+	const GET_REQUEST = `SELECT * FROM FeedbackRequest WHERE id = $requestId`;
+	const parameters = { requestId };
+
+	logQuery(GET_REQUEST, parameters);
+	return database.prepare(GET_REQUEST).get(parameters);
+};
+
+/**
+ * @param {Database} database
+ * @param {number} requestId
+ * @param {string} message
+ * @returns {Object} Changes made to the FeedbackRequest with the given `requestId`
+ * @throws If execution of database statement fails
+ */
+exports.update = (database, requestId, message) => {
+	if (!database) {
+		throw new TypeError("Expected a database connection.");
+	}
+
+	if (!requestId || typeof requestId !== "number") {
+		throw new TypeError("Updating a FeedbackRequest requires a requestId number");
+	}
+
+	if (!message || typeof message !== "string") {
+		throw new TypeError("Updating a FeedbackRequest requires a message string");
+	}
+
+	const UPDATE_REQUEST = `UPDATE FeedbackRequest SET message = $message WHERE id = $requestId`;
+	const parameters = { requestId, message };
+
+	logQuery(UPDATE_REQUEST, parameters);
+	const { changes } = database.prepare(UPDATE_REQUEST).run(parameters);
+
+	return changes;
+};
+
+/**
+ * @param {Database} database
  * @param {number} length
  * @returns List of the `length` most recent FeedbackRequests
  * @throws If execution of database statement fails
