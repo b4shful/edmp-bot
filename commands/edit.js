@@ -5,7 +5,7 @@ const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-
 
 // Necessary bullshit to handle using the primary prefix for the help command
 let prefix = "uninitialized";
-let help = {};
+const help = {};
 
 exports.init = client => {
 	prefix = client.config.defaultSettings.prefix[0];
@@ -14,7 +14,7 @@ exports.init = client => {
 		name: "edit",
 		category: "Feedback",
 		description: "Edit a feedback request you have made.",
-		usage: `${prefix} edit <link to your track> <any comments...>`
+		usage: `${prefix} edit <id> <link to your track> <any comments...>`
 	};
 
 	exports.help = help;
@@ -45,7 +45,7 @@ exports.run = (client, message, args) => {
 	if (channel.name !== "feedback-trade") {
 		const feedbackChannel = message.guild.channels.find("name", "feedback-trade") || "#feedback-trade";
 
-		channel.send(`\`need\` only works in ${feedbackChannel}.`);
+		channel.send(`\`edit\` only works in ${feedbackChannel}.`);
 		return;
 	}
 
@@ -72,6 +72,7 @@ exports.run = (client, message, args) => {
 	}
 
 	// TODO: Parse link if it's permitted (audio host whitelist).
+        // TOTO: Check for 403/404/x0x
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
@@ -109,6 +110,6 @@ exports.run = (client, message, args) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	aliases: [],
+	aliases: ['update', 'replace', 'change'],
 	permLevel: "User"
 };
