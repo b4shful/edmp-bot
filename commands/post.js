@@ -67,45 +67,53 @@ exports.run = async (client, message) => {
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
-	const database = client.database;
-	const userId = message.member.id;
-
-	let redeemed;
+	let url = stripCommandFromMessage(message.content);
 	let response;
 
-	try {
-		redeemed = FeedbackPoint.redeem(database, userId);
-	} catch (error) {
-		Logger.error(error);
-		response = "Something went wrong, please notify `@Staff`.";
-	}
+	client.statusCodeVerify(url, async statusCode => {
+		if (statusCode === 200) {
+			const database = client.database;
+			const userId = message.member.id;
 
-	if (!response && !redeemed) {
-		await message.delete();
-		response = `${
-			message.member
-		} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
-	}
+			let redeemed;
 
-	if (!response && redeemed) {
-		Logger.log(
-			`${message.member.displayName} (${message.author.username}#${
-				message.author.discriminator
-			}) redeemed a FeedbackPoint`
-		);
+			try {
+				redeemed = FeedbackPoint.redeem(database, userId);
+			} catch (error) {
+				Logger.error(error);
+				response = "Something went wrong, please notify `@Staff`.";
+			}
 
-		try {
-			const id = FeedbackRequest.create(database, userId, stripCommandFromMessage(message.content));
-			response = `${
-				message.member
-			} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
-		} catch (error) {
-			Logger.error(error);
-			response = "Something went wrong, please notify `@Staff`.";
+			if (!response && !redeemed) {
+				await message.delete();
+				response = `${
+					message.member
+				} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
+			}
+
+			if (!response && redeemed) {
+				Logger.log(
+					`${message.member.displayName} (${message.author.username}#${
+						message.author.discriminator
+					}) redeemed a FeedbackPoint`
+				);
+
+				try {
+					const id = FeedbackRequest.create(database, userId, url);
+					response = `${
+						message.member
+					} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
+				} catch (error) {
+					Logger.error(error);
+					response = "Something went wrong, please notify `@Staff`.";
+				}
+			}
+		} else {
+			response = `Something went wrong with your link. Status Code ${statusCode}. Please notify @Staff`;
 		}
-	}
 
-	message.channel.send(response);
+		message.channel.send(response);
+	});
 };
 
 exports.conf = {

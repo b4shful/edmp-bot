@@ -136,26 +136,16 @@ module.exports = client => {
 		}
 		delete require.cache[require.resolve(`../commands/${commandName}.js`)];
 		return false;
-	};
-	/* MISCELANEOUS NON-CRITICAL FUNCTIONS */ // EXTENDING NATIVE TYPES IS BAD PRACTICE. Why? Because if JavaScript adds this
-	// later, this conflicts with native code. Also, if some other lib you use does
-	// this, a conflict also occurs. KNOWING THIS however, the following 2 methods
-	// are, we feel, very useful in code.
-	// <String>.toPropercase() returns a proper-cased string such as:
-	// "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
+	}; /* MISCELANEOUS NON-CRITICAL FUNCTIONS */ // EXTENDING NATIVE TYPES IS BAD PRACTICE. Why? Because if JavaScript adds this // later, this conflicts with native code. Also, if some other lib you use does // this, a conflict also occurs. KNOWING THIS however, the following 2 methods // are, we feel, very useful in code. // <String>.toPropercase() returns a proper-cased string such as: // "Mary had a little lamb".toProperCase() returns "Mary Had A Little Lamb"
 	String.prototype.toProperCase = function() {
 		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		});
-	};
-	// <Array>.random() returns a single random element from an array
-	// [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
+	}; // <Array>.random() returns a single random element from an array // [1, 2, 3, 4, 5].random() can return 1, 2, 3, 4 or 5.
 	Array.prototype.random = function() {
 		return this[Math.floor(Math.random() * this.length)];
-	};
-	// `await client.wait(1000);` to "pause" for 1 second.
-	client.wait = require("util").promisify(setTimeout);
-	// These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
+	}; // `await client.wait(1000);` to "pause" for 1 second.
+	client.wait = require("util").promisify(setTimeout); // These 2 process methods will catch exceptions and give *more details* about the error and stack trace.
 	process.on("uncaughtException", err => {
 		const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
 		client.logger.error(`Uncaught Exception: ${errorMsg}`);
@@ -166,10 +156,26 @@ module.exports = client => {
 	process.on("unhandledRejection", err => {
 		client.logger.error(`Unhandled rejection: ${err}`);
 	});
-	// Checks to see if the test string is the first string in input.
-	// Works on strings or arrays
-	// Returns the index of where the match was found in the array
-	// or returns true of the string contains the value
+	client.statusCodeVerify = (url, f) => {
+		let link = require("url").parse(url);
+		let options = {
+			host: link.hostname,
+			path: link.path,
+			port: link.port,
+			headers: { "User-Agent": "EDMPbot/1.0" }
+		};
+		const httpReq = url.startsWith("https") ? require("https") : require("http");
+		let req = httpReq.request(options, res => {
+			client.logger.log(`Status code: ${res.statusCode}, Message: ${res.statusMessage}`);
+			f(res.statusCode);
+		});
+		req.on("error", e => {
+			client.logger.error(e);
+			f(0);
+		});
+		req.end();
+		client.logger.log("end of gscfu");
+	}; // Checks to see if the test string is the first string in input.// Works on strings or arrays// Returns the index of where the match was found in the array// or returns true of the string contains the value
 	client.matchFirstString = (input, test) => {
 		if (typeof test == "object") return fArray(input, test);
 		else if (typeof test == "string") fString(input, test);
