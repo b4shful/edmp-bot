@@ -16,7 +16,7 @@ const formatRequestList = (members, requests) => {
 		.filter(item => item.length !== 0);
 
 	if (!(list.length > 0)) {
-		return "No one has requested feedback yet!";
+		return "Seems everyone has received some feedback. Don't let that stop you, use `recent` to see some tracks you can give feedback.";
 	}
 
 	return ["Requests that haven't received any feedback:", ...list].join("\n");
