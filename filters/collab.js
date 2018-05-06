@@ -33,9 +33,9 @@ References: http://soma.fm
 	}
 };
 
-// Filters can have channelIDs as a single string or an array of strings.
+// Filters can have channelNames as a single string or an array of strings.
 // This applies the filter to all IDs listed.
 exports.help = {
 	name: "collab",
-	channelID: ["collab-bro"]
+	channelNames: ["collab-bro"]
 };

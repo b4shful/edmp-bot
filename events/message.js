@@ -22,8 +22,8 @@ module.exports = (client, message) => {
 
 	let prefixMatch = client.matchFirstString(message.content, settings.prefix);
 
-	// Run the filter if it exists and matches the channelID
-	// client.filters is an enmap, if the filter has an array of channelIDs then each ID is its own property
+	// Run the filter if it exists and matches the channelName
+	// client.filters is an enmap, if the filter has an array of channelName then each name is its own property
 	// the key is the filter object.
 	// We can allow commands based on allowCategory or allowCommands, so certain commands can be used despite the filter
 	if (filterMap) {

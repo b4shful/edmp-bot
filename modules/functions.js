@@ -94,12 +94,12 @@ module.exports = client => {
 				props.init(client);
 			}
 			// Support arrays of channel IDs incase the filter applies to multiple channels.
-			if (props.help.channelID.constructor === Array) {
-				for (let i of props.help.channelID) {
+			if (props.help.channelNames.constructor === Array) {
+				for (let i of props.help.channelNames) {
 					client.filters.set(i, props);
 				}
 			} else {
-				client.filters.set(props.help.channelID, props);
+				client.filters.set(props.help.channelNames, props);
 			}
 			return false;
 		} catch (e) {

@@ -27,9 +27,9 @@ Link: <https://soundcloud.com/ill-esha/sets/into-the-sun-collab-w-nine>
 	}
 };
 
-// Filters can have channelIDs as a single string or an array of strings.
+// Filters can have channelNames as a single string or an array of strings.
 // This applies the filter to all IDs listed.
 exports.help = {
 	name: "self-promotion",
-	channelID: ["self-promotion"]
+	channelNames: ["self-promotion"]
 };
