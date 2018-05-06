@@ -32,6 +32,20 @@ const stripCommandFromMessage = messageContent => {
 };
 
 /**
+ * Gets the first argument from the message
+ */
+
+const getFirstArgument = msg => {
+	const stripped = stripCommandFromMessage(msg);
+	const wsIndex = stripped.indexOf(" ");
+	if (wsIndex >= 0) {
+		return stripped.substr(0, stripped.indexOf(" "));
+	} else {
+		return stripped;
+	}
+};
+
+/**
  * @param {Discord.Client} client The Discord API client
  * @param {Discord.Message} message A message on Discord
  * @param {Array<string>} args An array of tokens used as command arguments
@@ -67,7 +81,7 @@ exports.run = async (client, message) => {
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
-	let url = stripCommandFromMessage(message.content);
+	let url = getFirstArgument(message.content);
 	let response;
 
 	client.statusCodeVerify(url, async statusCode => {

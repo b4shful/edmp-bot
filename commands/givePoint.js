@@ -23,9 +23,9 @@ const mentionsMember = message => {
 
 	const mentionedMember = members.first();
 
-	if (author.id === mentionedMember.id) {
-		throw new TypeError("**SHAME!** Do not give points to yourself!");
-	}
+	//	if (author.id === mentionedMember.id) {
+	//		throw new TypeError("**SHAME!** Do not give points to yourself!");
+	//	}
 
 	return mentionedMember;
 };
