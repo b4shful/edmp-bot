@@ -110,7 +110,7 @@ module.exports = client => {
 		const filterKey = filterName.toLowerCase();
 		let filter;
 		for ([k, v] of client.filters) {
-			if (v.help.name === filterKey) {
+			if (v.help.name.toLowerCase() === filterKey) {
 				filter = client.filters.get(k);
 				break;
 			}

@@ -31,5 +31,5 @@ Link: <https://soundcloud.com/ill-esha/sets/into-the-sun-collab-w-nine>
 // This applies the filter to all IDs listed.
 exports.help = {
 	name: "self-promotion",
-	channelID: ["253605007352397824"]
+	channelID: ["self-promotion"]
 };

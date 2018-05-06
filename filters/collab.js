@@ -37,5 +37,5 @@ References: http://soma.fm
 // This applies the filter to all IDs listed.
 exports.help = {
 	name: "collab",
-	channelID: ["284393945151307776", "414450318601093120"]
+	channelID: ["collab-bro"]
 };

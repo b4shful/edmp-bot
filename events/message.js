@@ -13,15 +13,6 @@ module.exports = (client, message) => {
 
 	const filterMap = client.filters;
 
-	// Run the filter if it exists and matches the channelID
-	// client.filters is an enmap, if the filter has an array of channelIDs then each ID is its own property
-	// the key is the filter object.
-	if (filterMap) {
-		if (filterMap.has(message.channel.id)) {
-			filterMap.get(message.channel.id).run(client, message);
-		}
-	}
-
 	// For ease of use in commands and functions, we'll attach the settings
 	// to the message object, so `message.settings` is accessible.
 	message.settings = settings;
@@ -30,6 +21,53 @@ module.exports = (client, message) => {
 	// which is set in the configuration file.
 
 	let prefixMatch = client.matchFirstString(message.content, settings.prefix);
+
+	// Run the filter if it exists and matches the channelID
+	// client.filters is an enmap, if the filter has an array of channelIDs then each ID is its own property
+	// the key is the filter object.
+	// We can allow commands based on allowCategory or allowCommands, so certain commands can be used despite the filter
+	if (filterMap) {
+		if (filterMap.has(message.channel.name)) {
+			let rFilter = filterMap.get(message.channel.name);
+			if (prefixMatch === false) {
+				rFilter.run(client, message);
+				return;
+			}
+
+			const command = message.content
+				.slice(settings.prefix[prefixMatch].length)
+				.trim()
+				.split(/ +/g)
+				.shift()
+				.toLowerCase();
+			const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
+			let catMatch = false;
+			let comMatch = false;
+
+			if (rFilter.help.allowCategory) {
+				if (rFilter.help.allowCategory.toLowerCase() === "all") {
+					catMatch = true;
+				}
+				if (cmd.help.category.toLowerCase() !== rFilter.allowCategory) {
+					catMatch = true;
+				}
+			}
+
+			if (rFilter.help.allowCommands) {
+				for (let i = 0; i < rFilter.help.allowCommands.length; i++) {
+					if (rFilter.help.allowCommands[i].toLowerCase() === cmd.help.name.toLowerCase()) {
+						comMatch = true;
+						break;
+					}
+				}
+			}
+
+			if (!catMatch && !comMatch) {
+				rFilter.run(client, message);
+				return;
+			}
+		}
+	}
 
 	if (prefixMatch === false) return;
 
