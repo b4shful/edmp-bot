@@ -28,7 +28,7 @@ exports.init = client => {
  */
 const stripCommandFromMessage = messageContent => {
 	const index = messageContent.indexOf(help.name) + help.name.length + 1;
-	return messageContent.substr(index);
+	return messageContent.substr(index).trim();
 };
 
 /**
@@ -37,9 +37,9 @@ const stripCommandFromMessage = messageContent => {
 
 const getFirstArgument = msg => {
 	const stripped = stripCommandFromMessage(msg);
-	const wsIndex = stripped.indexOf(" ");
+	const wsIndex = stripped.search(/\s/g);
 	if (wsIndex >= 0) {
-		return stripped.substr(0, stripped.indexOf(" "));
+		return stripped.substr(0, wsIndex);
 	} else {
 		return stripped;
 	}
