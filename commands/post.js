@@ -83,9 +83,10 @@ exports.run = async (client, message) => {
 
 	let url = getFirstArgument(message.content);
 	let response;
+	let acceptableCodes = [200, 201, 202, 206, 300, 301, 302, 307, 308];
 
 	client.statusCodeVerify(url, async statusCode => {
-		if (statusCode === 200) {
+		if (acceptableCodes.indexOf(statusCode) > -1) {
 			const database = client.database;
 			const userId = message.member.id;
 
