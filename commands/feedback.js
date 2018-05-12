@@ -1,7 +1,7 @@
 const Logger = require("../util/Logger");
 const FeedbackPoint = require("../modules/feedback/FeedbackPoint");
 const FeedbackComment = require("../modules/feedback/FeedbackComment");
-const Utilities = require("../Modules/feedback/utils");
+const Utilities = require("../modules/feedback/utils");
 
 // Necessary bullshit to handle using the primary prefix for the help command
 let prefix = "uninitialized";
