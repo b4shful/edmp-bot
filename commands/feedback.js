@@ -1,6 +1,7 @@
 const Logger = require("../util/Logger");
 const FeedbackPoint = require("../modules/feedback/FeedbackPoint");
 const FeedbackComment = require("../modules/feedback/FeedbackComment");
+const Utilities = require("../Modules/feedback/utils");
 
 // Necessary bullshit to handle using the primary prefix for the help command
 let prefix = "uninitialized";
@@ -115,21 +116,31 @@ exports.run = async (client, message, args) => {
 		response = `${message.member} That track doesn't exists.`;
 	}
 
-	if (!response && commentResult.created && commentResult.extraFeedback) {
-		response = `${message.member} Your feedback was added, but you already received a point for this track.`;
+	let fbReceiver = Utilities.getUserForId(database, requestId);
+
+	// We only get here in really strange circumstances. If this happens, pray to god that you can fix it.
+	if (!response && !fbReceiver && !commentResult.requestNotFound) {
+		response =
+			"There was a catastrophic database error that may result in total protonic reversal. Please contact @Staff. NOW!";
 	}
 
-	if (!response && commentResult.created) {
+	if (!response && commentResult.created && commentResult.extraFeedback) {
+		response = `${message.member} Your feedback was added for ${client.users.get(
+			fbReceiver
+		)}'s track, but you already received a point for this track.`;
+	}
+
+	if (!response && commentResult.created && fbReceiver) {
 		try {
 			FeedbackPoint.create(database, userId, messageContent);
 
 			Logger.log(
 				`${message.member.displayName} (${message.author.username}#${
 					message.author.discriminator
-				}) received a FeedbackPoint`
+				}) received a FeedbackPoint for giving feedback`
 			);
 
-			response = `${message.member} has been rewarded a point for giving feedback!`;
+			response = `${message.member} has been rewarded a point for giving feedback to ${client.users.get(fbReceiver)}`;
 		} catch (error) {
 			Logger.error(error);
 			response = "Something went wrong, please notify `@Staff`.";
