@@ -7,6 +7,12 @@ help command, its extended help is shown.
 */
 
 exports.run = (client, message, args, level) => {
+	// Don't spam feedback-trade with full help command
+	if (message.channel.name === "feedback-trade") {
+		client.commands.get("feedbackhelp").run(client, message, args, level);
+		return;
+	}
+
 	// If no specific command is called, show all filtered commands.
 	if (!args[0]) {
 		// Load guild settings (for prefixes and eventually per-guild tweaks)

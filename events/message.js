@@ -44,6 +44,8 @@ module.exports = (client, message) => {
 			let catMatch = false;
 			let comMatch = false;
 
+			if (!cmd) return;
+
 			if (rFilter.help.allowCategory) {
 				if (rFilter.help.allowCategory.toLowerCase() === "all") {
 					catMatch = true;
