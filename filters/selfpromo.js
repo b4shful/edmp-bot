@@ -1,11 +1,5 @@
-/**
- * Clean up collab-bro
- *
- * @param {Discord.Client} client The Discord API client
- * @param {Discord.Message} message A message on Discord
- */
 exports.run = async (client, message) => {
-	let tags = ["need", "style", "daw", "reference"];
+	let tags = ["genre", "description", "link"];
 	let missing = [];
 	let idiotValidation = true;
 
@@ -16,17 +10,17 @@ exports.run = async (client, message) => {
 	}
 
 	if (missing.length > 0) {
-		message.author
-			.send(` I'm sorry, but your message in #collab-bro must contain the following fields: "need", "style", "DAW", "reference" (or "references"). Quotes are not necessary.
+		message.author.send(` I'm sorry, but your message in #self-promotion must contain the following fields: ${tags.join(
+			", "
+		)}. Quotes are not necessary.
 
 You were missing: ${missing.join(", ")}
 
 Please try like this:
 
-Need: Female diva vocalist
-Style: post-neo-trapstep
-DAW: Disableton Studio Tools 10.5.3
-References: http://soma.fm
+Genre: Post-Neo Future-Trap-Bounce
+Description: The hottest stuff to hit miami since Rudy Eugene
+Link: <https://soundcloud.com/ill-esha/sets/into-the-sun-collab-w-nine>
 
 (If you actually post that, a Staff member will visit you with a ban-stick in hand.)`);
 		message.delete(0);
@@ -36,6 +30,6 @@ References: http://soma.fm
 // Filters can have channelNames as a single string or an array of strings.
 // This applies the filter to all IDs listed.
 exports.help = {
-	name: "collab",
-	channelNames: ["collab-bro"]
+	name: "self-promotion",
+	channelNames: ["self-promotion"]
 };

@@ -1,16 +1,48 @@
-const Logger = require('../util/Logger');
-const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
-const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
-const feedbackUsage = require('./feedback').help.usage;
+const Logger = require("../util/Logger");
+const FeedbackPoint = require("../modules/feedback/FeedbackPoint");
+const FeedbackRequest = require("../modules/feedback/FeedbackRequest");
+const feedbackUsage = require("./feedback").help.usage;
 
 const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gm;
+
+// Necessary bullshit to handle using the primary prefix for the help command
+let prefix = "uninitialized";
+let help = {};
+
+exports.init = client => {
+	prefix = client.config.defaultSettings.prefix[0];
+
+	help = {
+		name: "post",
+		category: "Feedback",
+		description:
+			"Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.",
+		usage: `${prefix} post <link to your track> <any comments...>`
+	};
+
+	exports.help = help;
+};
 
 /**
  * Removes the command and arguments from the message content.
  */
 const stripCommandFromMessage = messageContent => {
 	const index = messageContent.indexOf(help.name) + help.name.length + 1;
-	return messageContent.substr(index);
+	return messageContent.substr(index).trim();
+};
+
+/**
+ * Gets the first argument from the message
+ */
+
+const getFirstArgument = msg => {
+	const stripped = stripCommandFromMessage(msg);
+	const wsIndex = stripped.search(/\s/g);
+	if (wsIndex >= 0) {
+		return stripped.substr(0, wsIndex);
+	} else {
+		return stripped;
+	}
 };
 
 /**
@@ -24,13 +56,12 @@ exports.run = async (client, message) => {
 		return;
 	}
 
-	if (message.channel.name !== 'feedback-trade') {
-		const feedbackChannel =
-			message.guild.channels.find('name', 'feedback-trade') || '#feedback-trade';
+	if (message.channel.name !== "feedback-trade") {
+		const feedbackChannel = message.guild.channels.find("name", "feedback-trade") || "#feedback-trade";
 
 		message.channel.send(`\`${help.name}\` only works in ${feedbackChannel}.`);
 		return;
-	};
+	}
 
 	const matches = message.content.match(regex);
 
@@ -40,7 +71,9 @@ exports.run = async (client, message) => {
 	}
 
 	if (matches.length > 1) {
-		message.channel.send(`${message.member} You can only ask for feedback on one track per point. Usage: \`${help.usage}\``);
+		message.channel.send(
+			`${message.member} You can only ask for feedback on one track per point. Usage: \`${help.usage}\``
+		);
 		return;
 	}
 
@@ -48,53 +81,59 @@ exports.run = async (client, message) => {
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
-	const database = client.database;
-	const userId = message.member.id;
-
-	let redeemed;
+	let url = getFirstArgument(message.content);
 	let response;
+	let acceptableCodes = [200, 201, 202, 206, 300, 301, 302, 307, 308];
 
-	try {
-		redeemed = FeedbackPoint.redeem(database, userId);
-	}
-	catch (error) {
-		Logger.error(error);
-		response = 'Something went wrong, please notify `@Staff`.';
-	}
+	client.statusCodeVerify(url, async statusCode => {
+		if (acceptableCodes.indexOf(statusCode) > -1) {
+			const database = client.database;
+			const userId = message.member.id;
 
-	if (!response && !redeemed) {
-		await message.delete();
-		response = `${message.member} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
-	}
-	
-	if (!response && redeemed) {
-		Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) redeemed a FeedbackPoint`);
+			let redeemed;
 
-		try {
-			const id = FeedbackRequest.create(database, userId, stripCommandFromMessage(message.content));
-			response = `${message.member} submitted a track for feedback! Give them feedback using \`:edmp: feedback ${id} <feedback...>\``;
+			try {
+				redeemed = FeedbackPoint.redeem(database, userId);
+			} catch (error) {
+				Logger.error(error);
+				response = "Something went wrong, please notify `@Staff`.";
+			}
+
+			if (!response && !redeemed) {
+				await message.delete();
+				response = `${
+					message.member
+				} You do not have any points available. Give someone else some feedback to earn a point to redeem using \`${feedbackUsage}\``;
+			}
+
+			if (!response && redeemed) {
+				Logger.log(
+					`${message.member.displayName} (${message.author.username}#${
+						message.author.discriminator
+					}) redeemed a FeedbackPoint`
+				);
+
+				try {
+					const id = FeedbackRequest.create(database, userId, url);
+					response = `${
+						message.member
+					} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
+				} catch (error) {
+					Logger.error(error);
+					response = "Something went wrong, please notify `@Staff`.";
+				}
+			}
+		} else {
+			response = `Something went wrong with your link. Status Code ${statusCode}. Please notify @Staff`;
 		}
-		catch (error) {
-			Logger.error(error);
-			response = 'Something went wrong, please notify `@Staff`.';
-		}
-	}
 
-	message.channel.send(response);
+		message.channel.send(response);
+	});
 };
 
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'User'
+	permLevel: "User"
 };
-
-const help = {
-	name: 'post',
-	category: 'Feedback',
-	description: 'Posts a feedback request people can comment on. You must have at least one point to post a track for feedback.',
-	usage: ':edmp: post <link to your track> <any comments...>'
-};
-
-exports.help = help;

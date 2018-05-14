@@ -1,10 +1,10 @@
 const validateClient = client => {
 	if (!client.database) {
-		throw new TypeError('Database is missing.');
+		throw new TypeError("Database is missing.");
 	}
 
 	if (!client.database.open) {
-		throw new TypeError('Database connection is not open.');
+		throw new TypeError("Database connection is not open.");
 	}
 };
 
@@ -20,8 +20,7 @@ const CREATE_FEEDBACK_POINT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackPoint(
  * @param {Database} database
  * @throws If execution of statement fails
  */
-const createPointTable = database =>
-	database.prepare(CREATE_FEEDBACK_POINT_TABLE).run();
+const createPointTable = database => database.prepare(CREATE_FEEDBACK_POINT_TABLE).run();
 
 const CREATE_FEEDBACK_REQUEST_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackRequest (
 	id INTEGER PRIMARY KEY,
@@ -34,8 +33,7 @@ const CREATE_FEEDBACK_REQUEST_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackReques
  * @param {Database} database
  * @throws If execution of statement fails
  */
-const createRequestTable = database =>
-	database.prepare(CREATE_FEEDBACK_REQUEST_TABLE).run();
+const createRequestTable = database => database.prepare(CREATE_FEEDBACK_REQUEST_TABLE).run();
 
 const CREATE_FEEDBACK_COMMENT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackComment (
 	id INTEGER PRIMARY KEY,
@@ -49,8 +47,7 @@ const CREATE_FEEDBACK_COMMENT_TABLE = `CREATE TABLE IF NOT EXISTS FeedbackCommen
  * @param {Database} database
  * @throws If execution of statement fails
  */
-const createCommmentTable = database =>
-	database.prepare(CREATE_FEEDBACK_COMMENT_TABLE).run();
+const createCommmentTable = database => database.prepare(CREATE_FEEDBACK_COMMENT_TABLE).run();
 
 /**
  * @param {Database} database
@@ -68,10 +65,10 @@ const validateTables = database => {
  * @throws If execution of database statement fails
  */
 module.exports = client => {
-	client.logger.log('Adding feedback module...');
+	client.logger.log("Adding feedback module...");
 
 	validateClient(client);
 	validateTables(client.database);
 
-	client.logger.log('Successfully added feedback module to client.');
+	client.logger.log("Successfully added feedback module to client.");
 };

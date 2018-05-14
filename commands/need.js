@@ -2,16 +2,12 @@ const Logger = require("../util/Logger");
 const FeedbackRequest = require("../modules/feedback/FeedbackRequest");
 
 const formatRequestList = (members, requests) => {
-	const unchecked = "📡";
-	const checked = "✅";
-
 	const list = requests
 		.map(request => {
 			try {
-				const status = request.comments > 0 ? checked : unchecked;
 				const link = FeedbackRequest.getLink(request);
 				const displayName = members.get(request.userId).displayName;
-				return `${status} \`${request.id}\` ${displayName} - <${link}>`;
+				return `- \`${request.id}\` ${displayName} - <${link}>`;
 			} catch (error) {
 				Logger.error(error);
 				return "";
@@ -20,9 +16,10 @@ const formatRequestList = (members, requests) => {
 		.filter(item => item.length !== 0);
 
 	if (!(list.length > 0)) {
-		return "No one has requested feedback yet!";
+		return "Seems everyone has received some feedback. Don't let that stop you, use `recent` to see some tracks you can give feedback.";
 	}
-	return ["Recent feedback requests:", ...list].join("\n");
+
+	return ["Requests that haven't received any feedback:", ...list].join("\n");
 };
 
 /**
@@ -30,20 +27,24 @@ const formatRequestList = (members, requests) => {
  * @param {Discord.Message} message A message on Discord
  * @param {Array<string>} args An array of tokens used as command arguments
  * @param {number} level The permission level of the author of the message
- */ exports.run = (client, message) => {
-	const { author, channel, guild, member } = message;
+ */
+exports.run = (client, message) => {
+	const { author, member } = message;
 
 	if (author.bot || !member) {
 		return;
 	}
-	if (channel.name !== "feedback-trade") {
-		const feedbackChannel = guild.channels.find("name", "feedback-trade") || "#feedback-trade";
 
-		channel.send(`\`recent\` only works in ${feedbackChannel}.`);
+	if (message.channel.name !== "feedback-trade") {
+		const feedbackChannel = message.guild.channels.find("name", "feedback-trade") || "#feedback-trade";
+
+		message.channel.send(`\`need\` only works in ${feedbackChannel}.`);
 		return;
 	}
-	const requests = FeedbackRequest.recent(client.database, 6);
-	channel.send(formatRequestList(guild.members, requests));
+
+	const members = message.guild.members;
+	const requests = FeedbackRequest.need(client.database, 6);
+	message.channel.send(formatRequestList(members, requests));
 };
 
 exports.conf = {
@@ -54,8 +55,8 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "recent",
+	name: "need",
 	category: "Feedback",
-	description: "",
-	usage: "recent"
+	description: "Shows tracks requesting feedback that have not recieved any",
+	usage: "need"
 };

@@ -1,6 +1,5 @@
-const Logger = require('../util/Logger');
-const FeedbackRequest = require('../modules/feedback/FeedbackRequest');
-
+const Logger = require("../util/Logger");
+const FeedbackRequest = require("../modules/feedback/FeedbackRequest");
 
 /**
  * @param {Discord.Client} client The Discord API client
@@ -20,8 +19,7 @@ exports.run = async (client, message, args) => {
 		if (!requestId) {
 			throw new TypeError(`${message.member} You must provide a valid request id to submit your feedback.`);
 		}
-	}
-	catch (error) {
+	} catch (error) {
 		message.channel.send(error.message);
 		return;
 	}
@@ -31,18 +29,18 @@ exports.run = async (client, message, args) => {
 		const removed = FeedbackRequest.remove(client.database, requestId);
 
 		if (!removed) {
-			response = 'No FeedbackRequest with that id was found.';
-		}
-		else {
+			response = "No FeedbackRequest with that id was found.";
+		} else {
 			const { member } = message;
-			Logger.log(`${member.displayName} (${member.username}#${member.discriminator}) removed a FeedbackRequest ${requestId}`);
+			Logger.log(
+				`${member.displayName} (${member.username}#${member.discriminator}) removed a FeedbackRequest ${requestId}`
+			);
 
 			response = `${member} Feedback request ${requestId} was removed.`;
 		}
-	}
-	catch (error) {
+	} catch (error) {
 		Logger.error(error);
-		response = 'Something went wrong, please notify `@Staff`.';
+		response = "Something went wrong, please notify `@Staff`.";
 	}
 
 	message.channel.send(response);
@@ -52,12 +50,12 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'Mentor'
+	permLevel: "Mentor"
 };
 
 exports.help = {
-	name: 'removeRequest',
-	category: 'Feedback',
-	description: 'Removes an accepted feedback request. This is for moderation purposes and should not be used often.',
-	usage: 'removeRequest <requestId>'
+	name: "removeRequest",
+	category: "Feedback",
+	description: "Removes an accepted feedback request. This is for moderation purposes and should not be used often.",
+	usage: "removeRequest <requestId>"
 };

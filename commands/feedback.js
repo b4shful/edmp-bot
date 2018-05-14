@@ -1,6 +1,25 @@
-const Logger = require('../util/Logger');
-const FeedbackPoint = require('../modules/feedback/FeedbackPoint');
-const FeedbackComment = require('../modules/feedback/FeedbackComment');
+const Logger = require("../util/Logger");
+const FeedbackPoint = require("../modules/feedback/FeedbackPoint");
+const FeedbackComment = require("../modules/feedback/FeedbackComment");
+const Utilities = require("../modules/feedback/utils");
+
+// Necessary bullshit to handle using the primary prefix for the help command
+let prefix = "uninitialized";
+let help = {};
+
+exports.init = client => {
+	prefix = client.config.defaultSettings.prefix[0];
+
+	help = {
+		name: "feedback",
+		category: "Feedback",
+		description:
+			"Submits a feedback for the track with the given request ID. If your feedback is acceptable you will receive a point.",
+		usage: `${prefix} feedback <request ID> <your feedback...>`
+	};
+
+	exports.help = help;
+};
 
 /**
  * NOTE: Unused for the time being.
@@ -10,19 +29,19 @@ const mentionsMember = message => {
 	const { everyone, roles, members } = mentions;
 
 	if (everyone) {
-		throw new TypeError('You can\'t give feedback to everyone... or at least not at once.');
+		throw new TypeError("You can't give feedback to everyone... or at least not at once.");
 	}
 
 	if (roles.size > 0) {
-		throw new TypeError('Mention who you want to give feedback to, not their role(s).');
+		throw new TypeError("Mention who you want to give feedback to, not their role(s).");
 	}
 
 	if (!members || members.size <= 0) {
-		throw new TypeError('Mention who you are giving feedback to in order to receive a point.');
+		throw new TypeError("Mention who you are giving feedback to in order to receive a point.");
 	}
 
 	if (members.size > 1) {
-		throw new TypeError('Give feedback to one person at a time.');
+		throw new TypeError("Give feedback to one person at a time.");
 	}
 };
 
@@ -53,9 +72,8 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 
-	if (message.channel.name !== 'feedback-trade') {
-		const feedbackChannel =
-			message.guild.channels.find('name', 'feedback-trade') || '#feedback-trade';
+	if (message.channel.name !== "feedback-trade") {
+		const feedbackChannel = message.guild.channels.find("name", "feedback-trade") || "#feedback-trade";
 
 		message.channel.send(`\`${help.name}\` only works in ${feedbackChannel}.`);
 		return;
@@ -71,7 +89,9 @@ exports.run = async (client, message, args) => {
 	const messageContent = stripCommandFromMessage(requestId, message.content);
 
 	if (!requestId) {
-		response = `${message.member} You must provide a valid request id to submit your feedback. Usage: \`${help.usage}\``;
+		response = `${message.member} You must provide a valid request id to submit your feedback. Usage: \`${
+			help.usage
+		}\``;
 	}
 
 	if (!response && !isAcceptable(messageContent)) {
@@ -81,10 +101,9 @@ exports.run = async (client, message, args) => {
 	if (!response) {
 		try {
 			commentResult = FeedbackComment.create(database, requestId, userId, messageContent);
-		}
-		catch (error) {
+		} catch (error) {
 			Logger.error(error);
-			response = 'Something went wrong, please notify `@Staff`.';
+			response = "Something went wrong, please notify `@Staff`.";
 		}
 	}
 
@@ -97,21 +116,34 @@ exports.run = async (client, message, args) => {
 		response = `${message.member} That track doesn't exists.`;
 	}
 
-	if (!response && commentResult.created && commentResult.extraFeedback) {
-		response = `${message.member} Your feedback was added, but you already received a point for this track.`;
+	let fbReceiver = Utilities.getUserForId(database, requestId);
+
+	// We only get here in really strange circumstances. If this happens, pray to god that you can fix it.
+	if (!response && !fbReceiver && !commentResult.requestNotFound) {
+		response =
+			"There was a catastrophic database error that may result in total protonic reversal. Please contact @Staff. NOW!";
 	}
 
-	if (!response && commentResult.created) {
+	if (!response && commentResult.created && commentResult.extraFeedback) {
+		response = `${message.member} Your feedback was added for ${client.users.get(
+			fbReceiver
+		)}'s track, but you already received a point for this track.`;
+	}
+
+	if (!response && commentResult.created && fbReceiver) {
 		try {
 			FeedbackPoint.create(database, userId, messageContent);
 
-			Logger.log(`${message.member.displayName} (${message.author.username}#${message.author.discriminator}) received a FeedbackPoint`);
+			Logger.log(
+				`${message.member.displayName} (${message.author.username}#${
+					message.author.discriminator
+				}) received a FeedbackPoint for giving feedback`
+			);
 
-			response = `${message.member} has been rewarded a point for giving feedback!`;
-		}
-		catch (error) {
+			response = `${message.member} has been rewarded a point for giving feedback to ${client.users.get(fbReceiver)}`;
+		} catch (error) {
 			Logger.error(error);
-			response = 'Something went wrong, please notify `@Staff`.';
+			response = "Something went wrong, please notify `@Staff`.";
 		}
 	}
 
@@ -122,14 +154,5 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'User'
+	permLevel: "User"
 };
-
-const help = {
-	name: 'feedback',
-	category: 'Feedback',
-	description: 'Submits a feedback for the track with the given request ID. If your feedback is acceptable you will receive a point.',
-	usage: ':edmp: feedback <request ID> <your feedback...>'
-};
-
-exports.help = help;
