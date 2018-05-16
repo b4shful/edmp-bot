@@ -5,7 +5,7 @@ const getRole = (guild, roleId) => {
 	const role = guild.roles.get(roleId);
 
 	if (!role) {
-		const error = new TypeError("Server is missing the ${role} role.");
+		const error = new TypeError(`Server is missing the ${role} role.`);
 		Logger.error(error);
 		throw error;
 	}
