@@ -42,13 +42,16 @@ exports.run = async (client, message, args, level) => {
 
 				assignRole(message.member, role);
 
-				message.channel.send(`Role ${desiredRole} found! Thank you for doing business. Enjoy the server.`);
+				message.channel.send(
+					`Role ${bestMatch.bestMatch.target} found! Thank you for doing business. Enjoy the server.`
+				);
 				roleFound = true;
+				break;
 			}
 		}
 		if (roleFound === false) {
 			message.channel.send(
-				`Role ${desiredRole} not found. Here are the possible options: ${Object.keys(settings.selfRoles).join(", ")}`
+				`Role "${args}" not found. Here are the possible options: ${Object.keys(settings.selfRoles).join(", ")}`
 			);
 		}
 	} else {
