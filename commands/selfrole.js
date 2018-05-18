@@ -51,6 +51,8 @@ exports.run = async (client, message, args, level) => {
 				`Role ${desiredRole} not found. Here are the possible options: ${Object.keys(settings.selfRoles).join(", ")}`
 			);
 		}
+	} else {
+		Logger.error(`Channel failure. Actual channel is ${message.channel.name}. Expected "intro".`);
 	}
 };
 
