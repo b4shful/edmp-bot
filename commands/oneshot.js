@@ -25,10 +25,10 @@ exports.init = client => {
 		newObj.conf.permLevel = permLevel;
 
 		newObj.run = (client, message) => {
-			message.channel.send(preface + txt);
+			message.channel.send(`${preface ? preface : ""}${txt}`);
 		};
 
-		client.logger.log(`Loading Link: ${p}`);
+		client.logger.log(`Loading One Shot: ${p}`);
 		client.commands.set(p, newObj);
 	}
 };
@@ -65,7 +65,7 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "link",
+	name: "oneshot",
 	category: "One Shots",
 	description: "Links module. For handling links to users and other snarky one-lines.",
 	usage: "See other commands"
@@ -102,91 +102,91 @@ oneShots = {
 	},
 	avulsion: {
 		preface: "Avulsion: ",
-		link: "https://soundcloud.com/avulsion-music",
+		text: "https://soundcloud.com/avulsion-music",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Avulsion's SoundCloud."
 	},
 	dankbutter: {
 		preface: "Dank Butter - ",
-		link: "https://soundcloud.com/dankestbutter",
+		text: "https://soundcloud.com/dankestbutter",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Dank Butter's SoundCloud."
 	},
 	darkcat: {
 		preface: "dark cat: ",
-		link: "https://soundcloud.com/dark_cat",
+		text: "https://soundcloud.com/dark_cat",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to dark cat's SoundCloud."
 	},
 	dyce: {
 		preface: "dyce. - ",
-		link: "hl,https://soundcloud.com/dyce-dot",
+		text: "https://soundcloud.com/dyce-dot",
 		aliases: ["dyce."],
 		permLevel: "User",
 		description: "Responds with a link to dyce.'s SoundCloud."
 	},
 	eden: {
 		preface: "eden: ",
-		link: "hl,https://soundcloud.com/eden-sg",
+		text: "https://soundcloud.com/eden-sg",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to eden's SoundCloud."
 	},
 	edenc: {
 		preface: "EdenC: ",
-		link: "hl,https://soundcloud.com/edenscoming",
+		text: "https://soundcloud.com/edenscoming",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to EdenC's SoundCloud."
 	},
 	frost: {
 		preface: "frost: ",
-		link: "hl,https://soundcloud.com/frost",
+		text: "https://soundcloud.com/frost",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to frost's SoundCloud."
 	},
 	"ill-esha": {
 		preface: "ill-ēsha: ",
-		link: "hl,https://soundcloud.com/ill-esha",
+		text: "https://soundcloud.com/ill-esha",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to ill-ēsha's SoundCloud."
 	},
 	iro: {
 		preface: "Iro: ",
-		link: "hl,https://soundcloud.com/iromakesmusic",
+		text: "https://soundcloud.com/iromakesmusic",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Iro's SoundCloud."
 	},
 	ken: {
 		preface: "Ken: ",
-		link: "hl,https://soundcloud.com/kerusira",
+		text: "https://soundcloud.com/kerusira",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Ken's SoundCloud."
 	},
 	kindrid: {
 		preface: "Kindrid:\n",
-		link: "hl,https://soundcloud.com/kindridmusic\n<https://twitter.com/KindridOfficial>",
+		text: "https://soundcloud.com/kindridmusic\n<https://twitter.com/KindridOfficial>",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Kindrid's SoundCloud."
 	},
 	lysol: {
 		preface: "Aero Soul: ",
-		link: "hl,https://soundcloud.com/aerosoul",
+		text: "https://soundcloud.com/aerosoul",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Lysol's SoundCloud."
 	},
 	nathanielwyvern: {
 		preface: "Nathaniel Wyvern: ",
-		link: "hl,https://soundcloud.com/nathanielwyvern",
+		text: "https://soundcloud.com/nathanielwyvern",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Nathaniel Wyvern's SoundCloud."
@@ -199,42 +199,42 @@ oneShots = {
 	},
 	sdktheway: {
 		preface: "SDKtheway: ",
-		link: "hl,https://soundcloud.com/sdktheway",
+		text: "https://soundcloud.com/sdktheway",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to SDKtheway's SoundCloud."
 	},
 	syrant: {
 		preface: "Syrant: ",
-		link: "hl,https://soundcloud.com/syrantmusic",
+		text: "https://soundcloud.com/syrantmusic",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Syrant's SoundCloud."
 	},
 	tainmere: {
 		preface: "Tainmere's Production Resources: ",
-		link: "hl,http://bit.ly/2Ffgthb",
+		text: "http://bit.ly/2Ffgthb",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Tainmere's Music Resources."
 	},
 	ubida: {
 		preface: "Ubida: ",
-		link: "hl,https://soundcloud.com/ubida",
+		text: "https://soundcloud.com/ubida",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Ubida's SoundCloud."
 	},
 	vmotion: {
 		preface: "V:Motion: ",
-		link: "hl,https://soundcloud.com/vmotionmusic",
+		text: "https://soundcloud.com/vmotionmusic",
 		aliases: ["v:motion"],
 		permLevel: "User",
 		description: "Responds with a link to V:Motion's SoundCloud."
 	},
 	xan: {
 		preface: "Xan: ",
-		link: "hl,https://soundcloud.com/therealxan",
+		text: "https://soundcloud.com/therealxan",
 		aliases: [],
 		permLevel: "User",
 		description: "Responds with a link to Xan's SoundCloud."
@@ -242,7 +242,7 @@ oneShots = {
 	xy: {
 		preface:
 			"It seems like you are asking about a solution, not about your problem. Read this page and learn how to learn better: ",
-		link: "http://xyproblem.info",
+		text: "http://xyproblem.info",
 		aliases: [],
 		permLevel: "User",
 		description: "XY question"
