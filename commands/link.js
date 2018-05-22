@@ -1,21 +1,22 @@
 const Logger = require("../util/Logger");
 
 exports.init = client => {
-	for (p in links) {
+	for (p in oneShots) {
+		// Creating an ad-hoc "module" to pass along for command parsing in event/message.js
 		let newObj = {};
 		newObj.help = {
 			name: p,
-			category: "Links",
+			category: "One Shots",
 			description: "tbd",
 			usage: p
 		};
 		newObj.conf = module.exports.conf;
 
 		// anti-closure brigade, engage!
-		let curLink = links[p].link;
-		let permLevel = links[p].permLevel;
-		let aliases = links[p].aliases;
-		let desc = links[p].description;
+		let curLink = oneShots[p].link;
+		let permLevel = oneShots[p].permLevel;
+		let aliases = oneShots[p].aliases;
+		let desc = oneShots[p].description;
 
 		newObj.help.description = desc;
 		newObj.help.usage = p;
@@ -31,7 +32,25 @@ exports.init = client => {
 	}
 };
 
-exports.cleanup = client => {};
+// We must remove all one shots from the commands list when links is unloaded/shutdown.
+exports.shutdown = async client => {
+	for (p in oneShots) {
+		if (client.commands.has(p)) {
+			command = client.commands.get(p);
+		} else if (client.aliases.has(p)) {
+			command = client.commands.get(client.aliases.get(p));
+		}
+
+		if (!command) {
+			Logger.log(
+				`Failure in Oneshot Unloading. The command \`${p}\` doesn't seem to exist, nor is it an alias. Try again!`
+			);
+			return;
+		}
+		Logger.log(`Unloading One Shot: ${p}`);
+		client.commands.delete(p);
+	}
+};
 
 exports.run = (client, message) => {
 	message.channel.send(message);
@@ -41,17 +60,17 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: "User"
+	permLevel: "Administrator"
 };
 
 exports.help = {
 	name: "link",
-	category: "Links",
-	description: "Links module. For handling links to users and other snarky on-lines.",
+	category: "One Shots",
+	description: "Links module. For handling links to users and other snarky one-lines.",
 	usage: "See other commands"
 };
 
-links = {
+oneShots = {
 	soundcloud: {
 		link: "https://soundcloud.com/stream",
 		aliases: [],
