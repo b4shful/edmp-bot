@@ -138,9 +138,10 @@ const parse = async (client, message) => {
 	const cookie = getCookieRole(guild, cookieId);
 	const mentionedMember = getMentionedMember(message);
 
-	if (mentionedMember.mute) {
-		throw new TypeError("Cookies are for good children.");
-	}
+	//This is checking for Voice mute. Replace with role mute if desired.
+	//if (mentionedMember.mute) {
+	//	throw new TypeError("Cookies are for good children.");
+	//}
 
 	const isGivingCookieToSelf = message.author.id === mentionedMember.id;
 	if (isGivingCookieToSelf) {
