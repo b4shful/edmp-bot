@@ -1,7 +1,10 @@
 const Logger = require("../util/Logger");
 
 const welcomeMessage = (member, rulesChannel = "`#rules_and_how-to`") =>
-	`Welcome to EDMP ${member}! Take a moment to read ${rulesChannel}, then tell \`@Staff\` what DAW you use to get access to the dozens of other channels we have available. Please be patient as staff may not be immediately available to give you your role(s), they sleep too!\n\nDon't produce? That's fine! Tell us if you're a vocalist, graphic artist, or just a music fan and you'll get access.`;
+	`Welcome to EDMP ${member}! Take a moment to read ${rulesChannel}.
+To access the rest of the server please type \`$selfrole\` followed by the name of your DAW. If you don't have a DAW or don't produce then use \`$selfrole\` fam.
+
+Please ping @Staff if you need assistance, we're here to help. Thanks!`;
 
 /**
  * This event executes when a new member joins a server.
