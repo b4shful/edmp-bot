@@ -44,16 +44,16 @@ exports.run = async (client, message) => {
 
 								switch (d.getDate() % 5) {
 									case 0:
-										totalEntropy = channelEntropy[1];
+										totalEntropy = channelEntropy[0];
 										break;
 									case 1:
-										totalEntropy = channelEntropy[2];
+										totalEntropy = channelEntropy[1];
 										break;
 									case 2:
-										totalEntropy = channelEntropy[3];
+										totalEntropy = channelEntropy[2];
 										break;
 									case 3:
-										totalEntropy = channelEntropy[4];
+										totalEntropy = channelEntropy[3];
 										break;
 									case 4:
 										for (let i = 0; i < 4; i++) {
@@ -81,5 +81,5 @@ exports.run = async (client, message) => {
 exports.help = {
 	name: "memerating",
 	allowCategory: "all",
-	channelNames: ["off-topic"]
+	channelNames: ["general-archive"]
 };
