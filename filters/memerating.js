@@ -39,13 +39,35 @@ exports.run = async (client, message) => {
 										}
 									}
 								}
-								for (let i = 0; i < 4; i++) {
-									totalEntropy += channelEntropy[i] / 4;
+
+								let d = new Date();
+
+								switch (d.getDate() % 5) {
+									case 0:
+										totalEntropy = channelEntropy[1];
+										break;
+									case 1:
+										totalEntropy = channelEntropy[2];
+										break;
+									case 2:
+										totalEntropy = channelEntropy[3];
+										break;
+									case 3:
+										totalEntropy = channelEntropy[4];
+										break;
+									case 4:
+										for (let i = 0; i < 4; i++) {
+											totalEntropy += channelEntropy[i];
+										}
+										break;
 								}
 
-								// Logger.log(`Total Entropy is ${-totalEntropy}`);
-								// Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
-								message.channel.send(`I Rate it ${10 - -totalEntropy * 10 / 5.51}`);
+								Logger.log(`Total Entropy is ${-totalEntropy}`);
+								Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
+
+								let mult = (d.getDay() % 2) * 10;
+
+								message.channel.send(`I Rate it ${Math.abs(mult - -totalEntropy * 10 / 6)}`);
 							}
 						});
 				})
@@ -59,5 +81,5 @@ exports.run = async (client, message) => {
 exports.help = {
 	name: "memerating",
 	allowCategory: "all",
-	channelNames: ["off-topic"]
+	channelNames: ["general-archive"]
 };
