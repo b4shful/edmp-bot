@@ -62,12 +62,15 @@ exports.run = async (client, message) => {
 										break;
 								}
 
-								Logger.log(`Total Entropy is ${-totalEntropy}`);
-								Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
-
 								let mult = (d.getDay() % 2) * 10;
 
-								message.channel.send(`I Rate it ${Math.abs(mult - -totalEntropy * 10 / 6)}`);
+								Logger.log(`Total Entropy is ${-totalEntropy}`);
+								Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
+								Logger.log(`Mult = ${mult}`);
+
+								totalEntropy *= -1;
+
+								message.channel.send(`I Rate it ${Math.abs(mult - totalEntropy * 10 / 6)}`);
 							}
 						});
 				})
@@ -81,5 +84,5 @@ exports.run = async (client, message) => {
 exports.help = {
 	name: "memerating",
 	allowCategory: "all",
-	channelNames: ["off-topic"]
+	channelNames: ["general-archive"]
 };
