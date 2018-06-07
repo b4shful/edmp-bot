@@ -84,5 +84,5 @@ exports.run = async (client, message) => {
 exports.help = {
 	name: "memerating",
 	allowCategory: "all",
-	channelNames: ["offtopic", "general-archive"]
+	channelNames: ["off-topic", "general-archive"]
 };
