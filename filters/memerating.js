@@ -64,13 +64,13 @@ exports.run = async (client, message) => {
 
 								let mult = (d.getDay() % 2) * 10;
 
-								Logger.log(`Total Entropy is ${-totalEntropy}`);
-								Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
-								Logger.log(`Mult = ${mult}`);
+								// Logger.log(`Total Entropy is ${-totalEntropy}`);
+								// Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
+								// Logger.log(`Mult = ${mult}`);
 
 								totalEntropy *= -1;
 
-								message.channel.send(`I Rate it ${Math.abs(mult + 10 - totalEntropy * 10 / 6)}`);
+								message.channel.send(`I Rate it ${Math.abs(mult - totalEntropy * 10 / 6)}`);
 							}
 						});
 				})
