@@ -64,9 +64,9 @@ exports.run = async (client, message) => {
 
 								let mult = (d.getDay() % 2) * 10;
 
-								//Logger.log(`Total Entropy is ${-totalEntropy}`);
-								//Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
-								//Logger.log(`Mult = ${mult}`);
+								Logger.log(`Total Entropy is ${-totalEntropy}`);
+								Logger.log(`Image size ${image.bitmap.width} x ${image.bitmap.height}`);
+								Logger.log(`Mult = ${mult}`);
 
 								totalEntropy *= -1;
 
