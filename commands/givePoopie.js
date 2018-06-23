@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const Logger = require("../util/Logger");
 const Message = require("../util/Message");
 
-const POOPIE_IMAGE_URL = "https://cdn.discordapp.com/attachments/309056894587240450/459885598321279007/unknown.png";
+const POOPIE_IMAGE_URL = "https://cdn.discordapp.com/attachments/309056894587240450/459892980854161440/unknown.png";
 
 /**
  * Returns a Discord.js RichEmbed to use as a response for a user earning
