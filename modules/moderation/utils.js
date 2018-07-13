@@ -21,6 +21,55 @@ exports.getMentionedMember = message => {
 };
 
 /**
+ * @param {Discord.Message} message A Discord message
+ * @returns {Discord.Guild} The Discord server
+ * @throws {TypeError} If the guild is not included in the message
+ */
+exports.getGuild = message => {
+	const { guild } = message;
+
+	if (!guild) {
+		throw new TypeError("This command is only available in the server.");
+	}
+
+	return guild;
+};
+
+exports.isMutedInServer = member => {
+	const role = member.roles.find('name', 'Muted');
+
+	return role ? true : false;
+};
+
+exports.muteInServer = async (guild, member, reason) => {
+	const role = guild.roles.find('name', 'Muted');
+
+	if (!role) {
+		throw new TypeError('Mute is not set up on this server');
+	}
+
+	if (exports.isMutedInServer(member)) {
+		throw new TypeError('Member is already muted');
+	}
+
+	return member.addRole(role, reason);
+};
+
+exports.unmuteInServer = async (guild, member) => {
+	const role = guild.roles.find('name', 'Muted');
+
+	if (!role) {
+		throw new TypeError('Mute is not set up on this server');
+	}
+
+	if (!exports.isMutedInServer(member)) {
+		throw new TypeError('Member is not muted');
+	}
+
+	return member.removeRole(role);
+};
+
+/**
  * Higher-order function to ignore messages from bot users.
  * 
  * @param {Discord.Message} message 

@@ -1,38 +1,39 @@
 const Logger = require('../util/Logger');
 const {
+	getGuild,
 	getMentionedMember,
+	muteInServer,
 	ignoreBots,
 	respond
 } = require('../modules/moderation/utils');
 
+const Task = require('../modules/tasks/Task');
+
 exports.run = (_client, message, args) =>
-	ignoreBots(message,
-		() => respond(message, async () => {
+	ignoreBots(message, () =>
+		respond(message, async () => {
+			const guild = getGuild(message);
 			const member = getMentionedMember(message);
 
 			if (message.author.id === member.user.id) {
 				throw new TypeError('Don\'t mute yourself');
 			}
 
-			if (member.serverMute) {
-				throw new TypeError('Member is already muted in this server');
+			if (message.mentions.members.length > 1) {
+				throw new TypeError('Please mute one person at a time');
 			}
-
-			let reason = 'No reason';
 
 			// Only one mentioned allowed, so following tokens are reason message.
-			if (args.length > 1) {
-				reason = `${args.slice(1).join(' ')}`;
-			}
+			const reason = args.length > 1 ? `${args.slice(1).join(' ')}` : 'No reason';
 
 			try {
-				await member.setMute(true, reason);
+				await muteInServer(guild, member, reason);
 			}
 			catch (error) {
 				throw new TypeError(`Unable to mute user: ${error.message}`);
 			}
 
-			const response = `${member.displayName} (${member.user.username}#${member.user.discriminator}) was muted (\`${reason}\`)`;
+			const response = `${member.displayName} (\`${member.user.username}#${member.user.discriminator}\`) was muted (\`${reason}\`)`;
 			Logger.log(`${response} by ${message.author.username}#${message.author.discriminator}`);
 			return response;
 		})
