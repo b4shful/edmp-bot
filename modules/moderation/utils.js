@@ -69,6 +69,14 @@ exports.unmuteInServer = async (guild, member) => {
 	return member.removeRole(role);
 };
 
+exports.banUser = async (member, reason) => {
+	return member.ban(reason);
+};
+
+exports.unbanUser = async (guild, user) => {
+	return guild.unban(user);
+};
+
 /**
  * Higher-order function to ignore messages from bot users.
  * 
