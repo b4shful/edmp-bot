@@ -7,8 +7,6 @@ const {
 	respond
 } = require('../modules/moderation/utils');
 
-const Task = require('../modules/tasks/Task');
-
 exports.run = (_client, message, args) =>
 	ignoreBots(message, () =>
 		respond(message, async () => {
