@@ -8,7 +8,7 @@ module.exports = (_client, message) => {
 	}
 
 	const logChannel = guild.channels.find(({ type, name }) =>
-		type === 'text' && name === 'modtalk-admin'
+		type === 'text' && name === 'logs-general'
 	);
 
 	if (!logChannel) {
