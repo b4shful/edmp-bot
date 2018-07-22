@@ -19,7 +19,7 @@ module.exports = (_client, oldMessage, newMessage) => {
   const { channel, cleanContent: beforeContent } = oldMessage;
   const { cleanContent: afterContent } = newMessage;
 	const { id, username, discriminator } = author;
-	const logMessage = `${username}#${discriminator} (\`${id}\`) message edited in **#${channel.name}**:\nBefore: ${beforeContent}\nAfter: ${afterContent}`;
+	const logMessage = `${username}#${discriminator} (\`${id}\`) message edited in **#${channel.name}**:\n**Before:** ${beforeContent}\n**After:** ${afterContent}`;
 	Logger.log(logMessage);
 	logChannel.send(logMessage);
 };
