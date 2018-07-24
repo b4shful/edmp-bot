@@ -7,13 +7,7 @@ To access the rest of the server please type \`$selfrole\` followed by the name 
 
 Please ping @Staff if you need assistance, we're here to help. Thanks!`;
 
-/**
- * This event executes when a new member joins a server.
- *
- * @param {Discord.Client} client The Discord API client
- * @param {Discord.Member} member A message on Discord
- */
-module.exports = (client, member) => {
+const welcome = (client, member) => {
 	const { modLogChannel, welcomeEnabled, welcomeChannel } = client.settings.get(member.guild.id);
 
 	// If welcome is off, don't proceed (don't welcome the user)
@@ -49,4 +43,31 @@ module.exports = (client, member) => {
 		.find("name", welcomeChannel)
 		.send(message)
 		.catch(Logger.error);
+};
+
+/**
+ * This event executes when a new member joins a server.
+ *
+ * @param {Discord.Client} client The Discord API client
+ * @param {Discord.Member} member A message on Discord
+ */
+module.exports = (client, member) => {
+	const { id, username, discriminator } = member;
+	Logger.debug(`${username}#${discriminator} (${id}) joined the server`);
+
+	const logChannel = guild.channels.find(({ type, name }) =>
+		type === 'text' && name === 'logs-general'
+	);
+
+	if (!logChannel) {
+		Logger.warn('Unable to find logging channel in server');
+		return;
+	}
+
+	const logMessage = `${username}#${discriminator} (\`${id}\`) joined the server`;
+
+	Logger.log(logMessage);
+	logChannel.send(logMessage);
+
+	welcome(client, memeber);
 };
