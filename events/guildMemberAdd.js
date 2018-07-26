@@ -53,6 +53,7 @@ const welcome = (client, member) => {
  */
 module.exports = (client, member) => {
 	const { id, username, discriminator, guild } = member;
+
 	Logger.debug(`${username}#${discriminator} (${id}) joined the server`);
 
 	const logChannel = guild.channels.find(({ type, name }) => type === "text" && name === "logs-general");
