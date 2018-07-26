@@ -54,8 +54,8 @@ const welcome = (client, member) => {
 module.exports = (client, member) => {
 	const {
 		id,
-		user: [{ username: username }],
-		user: [{ discriminator: discriminator }],
+		user: { username },
+		user: { discriminator },
 		guild
 	} = member;
 

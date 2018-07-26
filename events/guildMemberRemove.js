@@ -6,10 +6,11 @@ const Logger = require("../util/Logger");
 module.exports = (_client, member) => {
 	const {
 		id,
-		user: [{ username: username }],
-		user: [{ discriminator: discriminator }],
+		user: { username },
+		user: { discriminator },
 		guild
 	} = member;
+
 	Logger.debug(`${username}#${discriminator} (${id}) left the server`);
 	if (bot || !guild || !guild.available) return;
 
