@@ -52,22 +52,20 @@ const welcome = (client, member) => {
  * @param {Discord.Member} member A message on Discord
  */
 module.exports = (client, member) => {
-	const { id, username, discriminator } = member;
+	const { id, username, discriminator, guild } = member;
 	Logger.debug(`${username}#${discriminator} (${id}) joined the server`);
 
-// 	const logChannel = guild.channels.find(({ type, name }) =>
-// 		type === 'text' && name === 'logs-general'
-// 	);
+	const logChannel = guild.channels.find(({ type, name }) => type === "text" && name === "logs-general");
 
-// 	if (!logChannel) {
-// 		Logger.warn('Unable to find logging channel in server');
-// 		return;
-// 	}
+	if (!logChannel) {
+		Logger.warn("Unable to find logging channel in server");
+		return;
+	}
 
-// 	const logMessage = `${username}#${discriminator} (\`${id}\`) joined the server`;
+	const logMessage = `${username}#${discriminator} (\`${id}\`) joined the server`;
 
-// 	Logger.log(logMessage);
-// 	logChannel.send(logMessage);
+	Logger.log(logMessage);
+	logChannel.send(logMessage);
 
 	welcome(client, member);
 };
