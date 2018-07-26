@@ -52,7 +52,12 @@ const welcome = (client, member) => {
  * @param {Discord.Member} member A message on Discord
  */
 module.exports = (client, member) => {
-	const { id, username, discriminator, guild } = member;
+	const {
+		id,
+		user: [{ username: username }],
+		user: [{ discriminator: discriminator }],
+		guild
+	} = member;
 
 	Logger.debug(`${username}#${discriminator} (${id}) joined the server`);
 
