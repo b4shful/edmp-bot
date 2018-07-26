@@ -69,5 +69,5 @@ module.exports = (client, member) => {
 	Logger.log(logMessage);
 	logChannel.send(logMessage);
 
-	welcome(client, memeber);
+	welcome(client, member);
 };
