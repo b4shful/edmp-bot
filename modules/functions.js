@@ -67,7 +67,7 @@ module.exports = client => {
 		return text;
 	};
 
-	client.loadCommand = commandName => {
+	client.loadCommand = (commandName, commandObj) => {
 		try {
 			const props = require(`../commands/${commandName}`);
 			if (props.init) {
