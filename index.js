@@ -20,6 +20,7 @@ const addModules = client => {
 
 	require("./modules/database")(client);
 	require("./modules/feedback")(client);
+	require("./modules/moderation")(client);
 };
 
 const addCommands = async client => {
