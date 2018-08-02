@@ -54,26 +54,24 @@ const welcome = (client, member) => {
  */
 module.exports = (client, member) => {
 	const {
-		id,
-		user: { username, discriminator },
+		user: { id, username, discriminator },
 		guild
 	} = member;
 
 	Logger.debug(`${username}#${discriminator} (${id}) joined the server`);
 
-	restoreUser(client.database, member);
-
 	const logChannel = guild.channels.find(({ type, name }) => type === "text" && name === "logs-general");
 
 	if (!logChannel) {
 		Logger.warn("Unable to find logging channel in server");
-		return;
 	}
 
 	const logMessage = `${username}#${discriminator} (\`${id}\`) joined the server`;
-
 	Logger.log(logMessage);
-	logChannel.send(logMessage);
+	if (logChannel) { logChannel.send(logMessage); }
+
+	restoreUser(client.database, member);
+	if (logChannel) { logChannel.send(`${username}#${discriminator} (\`${id}\`) was restored`); }
 
 	welcome(client, member);
 };
