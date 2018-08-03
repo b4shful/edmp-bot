@@ -1,4 +1,5 @@
 const Logger = require("../util/Logger");
+const { onGuildMemberAdd: restoreUser } = require('../modules/moderation/events');
 
 const welcomeMessage = (member, rulesChannel = "`#rules_and_how-to`") =>
 	`Welcome to EDMP ${member}! Take a moment to read ${rulesChannel}.
@@ -53,9 +54,7 @@ const welcome = (client, member) => {
  */
 module.exports = (client, member) => {
 	const {
-		id,
-		user: { username },
-		user: { discriminator },
+		user: { id, username, discriminator },
 		guild
 	} = member;
 
@@ -65,13 +64,14 @@ module.exports = (client, member) => {
 
 	if (!logChannel) {
 		Logger.warn("Unable to find logging channel in server");
-		return;
 	}
 
 	const logMessage = `${username}#${discriminator} (\`${id}\`) joined the server`;
-
 	Logger.log(logMessage);
-	logChannel.send(logMessage);
+	if (logChannel) { logChannel.send(logMessage); }
+
+	restoreUser(client.database, member);
+	if (logChannel) { logChannel.send(`${username}#${discriminator} (\`${id}\`) was restored`); }
 
 	welcome(client, member);
 };
