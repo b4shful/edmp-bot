@@ -30,17 +30,20 @@ exports.restoreUser = async (database, member) => {
   const { userId, nickname, roles, muted, deaf } = parsedBackup;
 
   if (roles) {
+    Logger.debug(`${username}#${discriminator} (${id}) has backed-up roles: ${roles}`);
     await member.setRoles(roles);
     Logger.debug(`${username}#${discriminator} (${id}) has restored roles: ${roles}`);
   }
 
   // Bots may not have permission to set nicknames by default
   if (nickname) {
+    Logger.debug(`${username}#${discriminator} (${id}) has backed-up nickname: ${nickname}`);
     await member.setNickname(nickname);
     Logger.debug(`${username}#${discriminator} (${id}) has restored nickname: ${nickname}`);
   }
 
   if (muted || deaf) {
+    Logger.debug(`${username}#${discriminator} (${id}) has backed-up voice settings: { muted: ${muted}, deaf: ${deaf} }`);
     await member.setMute(muted);
     await member.setDeaf(deaf);
     Logger.debug(`${username}#${discriminator} (${id}) has restored voice settings: { muted: ${muted}, deaf: ${deaf} }`);

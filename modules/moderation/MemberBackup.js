@@ -16,7 +16,7 @@
 const serializeMember = member => ({
   userId: member.user.id,
   nickname: member.nickname,
-  roles: JSON.stringify(member.roles.keyArray()),
+  roles: JSON.stringify(member.roles.filter(role => role.name !== '@everyone').keyArray()),
   muted: member.serverMute ? 1 : 0,
   deaf: member.serverDeaf ? 1 : 0
 });
