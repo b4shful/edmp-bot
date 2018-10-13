@@ -4,6 +4,8 @@ const { onGuildMemberAdd: restoreUser } = require('../modules/moderation/events'
 const welcomeMessage = (member, rulesChannel = "`#rules_and_how-to`") =>
 	`Welcome to EDMP ${member}! Take a moment to read ${rulesChannel}.
 
+Although we are named after our official parent - /r/edmproduction - we're inclusive of discussing and producing **ALL** music styles, so make yourself at home!
+
 To access the rest of the server please type \`$selfrole\` followed by the name of your DAW. If you don't have a DAW or don't produce then use \`$selfrole fam\`.
 
 Please ping @Staff if you need assistance, we're here to help. Thanks!`;
