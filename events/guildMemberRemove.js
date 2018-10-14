@@ -1,4 +1,6 @@
 const Logger = require("../util/Logger");
+const ModLogger = require('../util/ModLogger');
+
 const { onGuildMemberRemove: createBackup } = require('../modules/moderation/events');
 
 /**
@@ -12,19 +14,10 @@ module.exports = (client, member) => {
 	} = member;
 
 	Logger.debug(`${username}#${discriminator} (${id}) left the server`);
-	if (bot || !guild || !guild.available) return;
+
+	if (bot) { return; }
 
 	createBackup(client.database, member);
 
-	const logChannel = guild.channels.find(({ type, name }) => type === "text" && name === "logs-general");
-
-	if (!logChannel) {
-		Logger.warn("Unable to find logging channel in server");
-		return;
-	}
-
-	const logMessage = `${username}#${discriminator} (\`${id}\`) left the server`;
-
-	Logger.log(logMessage);
-	logChannel.send(logMessage);
+	ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) left the server`);
 };

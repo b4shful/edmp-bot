@@ -1,4 +1,6 @@
 const Logger = require("../util/Logger");
+const ModLogger = require('../util/ModLogger');
+
 const { onGuildMemberAdd: restoreUser } = require('../modules/moderation/events');
 
 const welcomeMessage = (member, rulesChannel = "`#rules_and_how-to`") =>
@@ -61,19 +63,8 @@ module.exports = (client, member) => {
 	} = member;
 
 	Logger.debug(`${username}#${discriminator} (${id}) joined the server`);
-
-	const logChannel = guild.channels.find(({ type, name }) => type === "text" && name === "logs-general");
-
-	if (!logChannel) {
-		Logger.warn("Unable to find logging channel in server");
-	}
-
-	const logMessage = `${username}#${discriminator} (\`${id}\`) joined the server`;
-	Logger.log(logMessage);
-	if (logChannel) { logChannel.send(logMessage); }
+	ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) joined the server`);
 
 	restoreUser(client.database, member);
-	if (logChannel) { logChannel.send(`${username}#${discriminator} (\`${id}\`) was restored`); }
-
 	welcome(client, member);
 };
