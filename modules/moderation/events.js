@@ -1,4 +1,6 @@
 const Logger = require('../../util/Logger');
+const ModLogger = require('../../util/ModLogger');
+
 const MemberBackup = require('./MemberBackup');
 
 // Restore occcur on:
@@ -24,8 +26,8 @@ exports.restoreUser = async (database, member) => {
 
   const parsedBackup = MemberBackup.deserializeMember(backup);
 
-  const { user: { id, username, discriminator } } = member;
-  Logger.debug(`${username}#${discriminator} (${id}) has guild member backup:\n${parsedBackup}`);
+  const { guild, user: { id, username, discriminator } } = member;
+  Logger.debug(`${username}#${discriminator} (${id}) has guild member backup:\n${JSON.stringify(parsedBackup)}`);
 
   const { userId, nickname, roles, muted, deaf } = parsedBackup;
 
@@ -49,7 +51,7 @@ exports.restoreUser = async (database, member) => {
     Logger.debug(`${username}#${discriminator} (${id}) has restored voice settings: { muted: ${muted}, deaf: ${deaf} }`);
   }
 
-  Logger.log(`${username}#${discriminator} (${userId}) was restored`)
+  ModLogger.log(guild, `${username}#${discriminator} (\`${userId}\`) was restored`)
 };
 
 exports.onGuildMemberAdd = async (database, member) =>
@@ -65,14 +67,14 @@ exports.onGuildMemberRemove = (database, member) => {
     return;
   }
 
-  const { user: { id, username, discriminator } } = member;
+  const { guild, user: { id, username, discriminator } } = member;
 
   if (!backup) {
     MemberBackup.create(database, member);
-    Logger.log(`${username}#${discriminator} (${id}) backup was created`)
+    ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) backup was created`)
   }
   else {
     MemberBackup.update(database, member);
-    Logger.log(`${username}#${discriminator} (${id}) backup was updated`)
+    ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) backup was updated`)
   }
 };
