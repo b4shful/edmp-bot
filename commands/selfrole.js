@@ -56,7 +56,7 @@ exports.run = async (client, message, args) => {
 
         message.channel.send(
             `Role ${role.name} found! ${
-                isIntro ? "Thank you for doing business. Enjoy the server." : `We'll notify you of further ${role.name} related events.`
+                isIntro ? "Thank you for doing business. Enjoy the server." : `We'll notify you of further \`${role.name}\` related events.`
             }`
         );
     } else {
