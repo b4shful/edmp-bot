@@ -58,7 +58,7 @@ exports.run = async (client, message, args, level) => {
                 .fetchMessages()
                 .then(messages => messages.filter(m => m.author.id === member.id))
                 .then(messages => {
-                    messages.forEach(msg => msg.delete().then(logDelete));
+                    messages.first(val).forEach(msg => msg.delete().then(logDelete));
                 })
                 .catch(console.error);
         })();
