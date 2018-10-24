@@ -61,7 +61,7 @@ exports.run = async (client, message, args) => {
         );
     } else {
         message.channel.send(
-            `Role "${args}" not found. Here are the possible options: ${Object.keys(
+            `Role \`${args}\` not found. Here are the possible options: ${Object.keys(
                 isIntro ? settings.selfRoles : settings.eventRoles
             ).join(", ")}`
         );
