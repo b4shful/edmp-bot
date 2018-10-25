@@ -28,6 +28,12 @@ exports.init = client => {
 			message.channel.send(`${preface ? preface : ""}${txt}`);
 		};
 
+		// This function is called _during_ command loading, so the aliases of these commands
+		// never get loaded unless we do it ourselves.
+		aliases.forEach(alias => {
+			client.aliases.set(alias, newObj.help.name);
+		});
+
 		client.logger.log(`Loading One Shot: ${p}`);
 		client.commands.set(p, newObj);
 	}
