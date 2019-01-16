@@ -62,7 +62,7 @@ exports.run = async (client, message) => {
 			}
 		} catch (error) {
 			Logger.error(error);
-			response = "Something went wrong, please notify `@Staff`.";
+			response = "Something went wrong, please notify `@Mods`.";
 		}
 	}
 

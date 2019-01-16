@@ -171,7 +171,7 @@ exports.run = async (client, message) => {
 	return Message.respond(message, async () => {
 		if (!client.config.roleIds.cookie) {
 			Logger.error("Missing `roleIds.cookie: string` in config file.");
-			throw new TypeError("The cookie is missing, please notify `@Staff`.");
+			throw new TypeError("The cookie is missing, please notify `@Mods`.");
 		}
 
 		return parse(client, message);

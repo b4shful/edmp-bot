@@ -59,7 +59,7 @@ exports.run = async (client, message) => {
 							!mentionedMember ? `, try giving some feedback by using \`${feedbackUsage}\`` : "."
 					  }`;
 		} catch (error) {
-			response = "Something went wrong, please notify `@Staff`.";
+			response = "Something went wrong, please notify `@Mods`.";
 		}
 	}
 

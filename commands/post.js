@@ -96,7 +96,7 @@ exports.run = async (client, message) => {
 				redeemed = FeedbackPoint.redeem(database, userId);
 			} catch (error) {
 				Logger.error(error);
-				response = "Something went wrong, please notify `@Staff`.";
+				response = "Something went wrong, please notify `@Mods`.";
 			}
 
 			if (!response && !redeemed) {
@@ -120,11 +120,11 @@ exports.run = async (client, message) => {
 					} submitted a track for feedback! Give them feedback using \`${prefix} feedback ${id} <feedback...>\``;
 				} catch (error) {
 					Logger.error(error);
-					response = "Something went wrong, please notify `@Staff`.";
+					response = "Something went wrong, please notify `@Mods`.";
 				}
 			}
 		} else {
-			response = `Something went wrong with your link. Status Code ${statusCode}. Please notify @Staff`;
+			response = `Something went wrong with your link. Status Code ${statusCode}. Please notify @Mods`;
 		}
 
 		message.channel.send(response);

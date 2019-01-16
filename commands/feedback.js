@@ -103,7 +103,7 @@ exports.run = async (client, message, args) => {
 			commentResult = FeedbackComment.create(database, requestId, userId, messageContent);
 		} catch (error) {
 			Logger.error(error);
-			response = "Something went wrong, please notify `@Staff`.";
+			response = "Something went wrong, please notify `@Mods`.";
 		}
 	}
 
@@ -121,7 +121,7 @@ exports.run = async (client, message, args) => {
 	// We only get here in really strange circumstances. If this happens, pray to god that you can fix it.
 	if (!response && !fbReceiver && !commentResult.requestNotFound) {
 		response =
-			"There was a catastrophic database error that may result in total protonic reversal. Please contact @Staff. NOW!";
+			"There was a catastrophic database error that may result in total protonic reversal. Please contact @Mods. NOW!";
 	}
 
 	if (!response && commentResult.created && commentResult.extraFeedback) {
@@ -143,7 +143,7 @@ exports.run = async (client, message, args) => {
 			response = `${message.member} has been rewarded a point for giving feedback to ${client.users.get(fbReceiver)}`;
 		} catch (error) {
 			Logger.error(error);
-			response = "Something went wrong, please notify `@Staff`.";
+			response = "Something went wrong, please notify `@Mods`.";
 		}
 	}
 

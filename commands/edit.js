@@ -81,7 +81,7 @@ exports.run = (client, message, args) => {
 		request = FeedbackRequest.get(database, requestId);
 	} catch (error) {
 		Logger.error(error);
-		channel.send("Something went wrong, please notify `@Staff`.");
+		channel.send("Something went wrong, please notify `@Mods`.");
 		return;
 	}
 
@@ -100,7 +100,7 @@ exports.run = (client, message, args) => {
 		FeedbackRequest.update(database, requestId, messageContent);
 	} catch (error) {
 		Logger.error(error);
-		channel.send("Something went wrong, please notify `@Staff`.");
+		channel.send("Something went wrong, please notify `@Mods`.");
 		return;
 	}
 

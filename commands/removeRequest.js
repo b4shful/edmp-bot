@@ -40,7 +40,7 @@ exports.run = async (client, message, args) => {
 		}
 	} catch (error) {
 		Logger.error(error);
-		response = "Something went wrong, please notify `@Staff`.";
+		response = "Something went wrong, please notify `@Mods`.";
 	}
 
 	message.channel.send(response);

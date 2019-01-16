@@ -171,7 +171,7 @@ exports.run = async (client, message) => {
 	return Message.respond(message, async () => {
 		if (!client.config.roleIds.poopie) {
 			Logger.error("Missing `roleIds.poopie: string` in config file.");
-			throw new TypeError("The poopie is missing, please notify `@Staff`.");
+			throw new TypeError("The poopie is missing, please notify `@Mods`.");
 		}
 
 		return parse(client, message);

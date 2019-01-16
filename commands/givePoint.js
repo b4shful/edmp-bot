@@ -64,7 +64,7 @@ exports.run = async (client, message, args) => {
 			response = `${mentionedMember} received a point for giving feedback!`;
 		} catch (error) {
 			Logger.error(error);
-			response = "Something went wrong, please notify `@Staff`.";
+			response = "Something went wrong, please notify `@Mods`.";
 		}
 	}
 
