@@ -1,7 +1,7 @@
 const Logger = require("../util/Logger");
-const ModLogger = require('../util/ModLogger');
+const ModLogger = require("../util/ModLogger");
 
-const { onGuildMemberRemove: createBackup } = require('../modules/moderation/events');
+const { onGuildMemberRemove: createBackup } = require("../modules/moderation/events");
 
 /**
  * This event executes when a member has left, or been kicked from, the server.

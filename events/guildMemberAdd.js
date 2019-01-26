@@ -1,7 +1,7 @@
 const Logger = require("../util/Logger");
-const ModLogger = require('../util/ModLogger');
+const ModLogger = require("../util/ModLogger");
 
-const { onGuildMemberAdd: restoreUser } = require('../modules/moderation/events');
+const { onGuildMemberAdd: restoreUser } = require("../modules/moderation/events");
 
 const welcomeMessage = (member, rulesChannel = "`#rules_and_how-to`") =>
 	`Welcome to EDMP ${member}! Take a moment to read ${rulesChannel}.

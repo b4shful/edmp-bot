@@ -1,5 +1,5 @@
-const Logger = require('../util/Logger');
-const ModLogger = require('../util/ModLogger');
+const Logger = require("../util/Logger");
+const ModLogger = require("../util/ModLogger");
 
 module.exports = (_client, guild, user) => {
 	const { id, bot, username, discriminator } = user;
