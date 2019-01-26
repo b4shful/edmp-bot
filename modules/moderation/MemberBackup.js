@@ -14,25 +14,25 @@
 // - GuildMemberRemove
 
 const serializeMember = member => ({
-  userId: member.user.id,
-  nickname: member.nickname,
-  roles: JSON.stringify(member.roles.filter(role => role.name !== '@everyone').keyArray()),
-  muted: member.serverMute ? 1 : 0,
-  deaf: member.serverDeaf ? 1 : 0
+	userId: member.user.id,
+	nickname: member.nickname,
+	roles: JSON.stringify(member.roles.filter(role => role.name !== "@everyone").keyArray()),
+	muted: member.serverMute ? 1 : 0,
+	deaf: member.serverDeaf ? 1 : 0
 });
 
 exports.deserializeMember = ({
-  id,
-  nickname,
-  roles, // string
-  muted, // number
-  deaf // number
+	id,
+	nickname,
+	roles, // string
+	muted, // number
+	deaf // number
 }) => ({
-  userId: id,
-  nickname,
-  roles: JSON.parse(roles), // Array of role ids
-  muted: muted > 0 ? true : false,
-  deaf: deaf > 0 ? true : false
+	userId: id,
+	nickname,
+	roles: JSON.parse(roles), // Array of role ids
+	muted: muted > 0 ? true : false,
+	deaf: deaf > 0 ? true : false
 });
 
 /**
@@ -44,20 +44,20 @@ exports.deserializeMember = ({
  * @throws If execution of a database statement fails
 */
 exports.create = (database, member) => {
-  if (!database) {
-    throw new TypeError('Expected a database connection');
-  }
+	if (!database) {
+		throw new TypeError("Expected a database connection");
+	}
 
-  if (!member) {
-    throw new TypeError('Expected a Discord guild member');
-  }
+	if (!member) {
+		throw new TypeError("Expected a Discord guild member");
+	}
 
-  const UPDATE_BACKUP = `INSERT INTO GuildMemberBackup (id, nickname, roles, muted, deaf) VALUES ($userId, $nickname, $roles, $muted, $deaf)`;
-  const parameters = serializeMember(member);
+	const UPDATE_BACKUP = "INSERT INTO GuildMemberBackup (id, nickname, roles, muted, deaf) VALUES ($userId, $nickname, $roles, $muted, $deaf)";
+	const parameters = serializeMember(member);
 
-  const { lastInsertROWID } = database.prepare(UPDATE_BACKUP).run(parameters);
-  return lastInsertROWID;
-}
+	const { lastInsertROWID } = database.prepare(UPDATE_BACKUP).run(parameters);
+	return lastInsertROWID;
+};
 
 /**
  * @param {Databse} database
@@ -68,19 +68,19 @@ exports.create = (database, member) => {
  * @throws If execution of a database statement fails
 */
 exports.get = (database, member) => {
-  if (!database) {
-    throw new TypeError('Expected a database connection');
-  }
+	if (!database) {
+		throw new TypeError("Expected a database connection");
+	}
 
-  if (!member) {
-    throw new TypeError('Expected a Discord guild member');
-  }
+	if (!member) {
+		throw new TypeError("Expected a Discord guild member");
+	}
 
-  const GET_BACKUP = `SELECT * FROM GuildMemberBackup WHERE id = $userId`;
-  const parameters = { userId: member.user.id };
+	const GET_BACKUP = "SELECT * FROM GuildMemberBackup WHERE id = $userId";
+	const parameters = { userId: member.user.id };
 
-  return database.prepare(GET_BACKUP).get(parameters);
-}
+	return database.prepare(GET_BACKUP).get(parameters);
+};
 
 /**
  * @param {Databse} database
@@ -91,17 +91,17 @@ exports.get = (database, member) => {
  * @throws If execution of a database statement fails
 */
 exports.update = (database, member) => {
-  if (!database) {
-    throw new TypeError('Expected a database connection');
-  }
+	if (!database) {
+		throw new TypeError("Expected a database connection");
+	}
 
-  if (!member) {
-    throw new TypeError('Expected a Discord guild member');
-  }
+	if (!member) {
+		throw new TypeError("Expected a Discord guild member");
+	}
 
-  const UPDATE_BACKUP = `UPDATE GuildMemberBackup SET nickname = $nickname, roles = $roles, muted = $muted, deaf = $deaf WHERE id = $userId`;
-  const parameters = serializeMember(member);
+	const UPDATE_BACKUP = "UPDATE GuildMemberBackup SET nickname = $nickname, roles = $roles, muted = $muted, deaf = $deaf WHERE id = $userId";
+	const parameters = serializeMember(member);
 
-  const { changes } = database.prepare(UPDATE_BACKUP).run(parameters);
-  return changes;
-}
+	const { changes } = database.prepare(UPDATE_BACKUP).run(parameters);
+	return changes;
+};

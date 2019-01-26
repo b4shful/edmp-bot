@@ -36,34 +36,34 @@ exports.getGuild = message => {
 };
 
 exports.isMutedInServer = member => {
-	const role = member.roles.find('name', 'Muted');
+	const role = member.roles.find("name", "Muted");
 
 	return role ? true : false;
 };
 
 exports.muteInServer = async (guild, member, reason) => {
-	const role = guild.roles.find('name', 'Muted');
+	const role = guild.roles.find("name", "Muted");
 
 	if (!role) {
-		throw new TypeError('Mute is not set up on this server');
+		throw new TypeError("Mute is not set up on this server");
 	}
 
 	if (exports.isMutedInServer(member)) {
-		throw new TypeError('Member is already muted');
+		throw new TypeError("Member is already muted");
 	}
 
 	return member.addRole(role, reason);
 };
 
 exports.unmuteInServer = async (guild, member) => {
-	const role = guild.roles.find('name', 'Muted');
+	const role = guild.roles.find("name", "Muted");
 
 	if (!role) {
-		throw new TypeError('Mute is not set up on this server');
+		throw new TypeError("Mute is not set up on this server");
 	}
 
 	if (!exports.isMutedInServer(member)) {
-		throw new TypeError('Member is not muted');
+		throw new TypeError("Member is not muted");
 	}
 
 	return member.removeRole(role);

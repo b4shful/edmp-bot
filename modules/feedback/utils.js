@@ -7,7 +7,7 @@ exports.logQuery = (query, parameters) =>
 	Logger.log(`Database operation:\n${query.trim()}\n${JSON.stringify(parameters, undefined, 2)}\n`);
 
 exports.getUserForId = (database, id) => {
-	const SELECT_USERID_FOR_ID = `select userId from FeedbackRequest where id = $id;`;
+	const SELECT_USERID_FOR_ID = "select userId from FeedbackRequest where id = $id;";
 
 	const selectParameters = { id };
 

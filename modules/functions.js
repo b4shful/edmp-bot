@@ -177,8 +177,8 @@ module.exports = client => {
 		client.logger.log("end of gscfu");
 	}; // Checks to see if the test string is the first string in input.// Works on strings or arrays// Returns the index of where the match was found in the array// or returns true of the string contains the value
 	client.matchFirstString = (input, test) => {
-		if (typeof test == "object") return fArray(input, test);
-		else if (typeof test == "string") fString(input, test);
+		if (typeof test === "object") return fArray(input, test);
+		else if (typeof test === "string") fString(input, test);
 	};
 };
 const fArray = (input, test) => {

@@ -1,7 +1,7 @@
-const Logger = require('../../util/Logger');
-const ModLogger = require('../../util/ModLogger');
+const Logger = require("../../util/Logger");
+const ModLogger = require("../../util/ModLogger");
 
-const MemberBackup = require('./MemberBackup');
+const MemberBackup = require("./MemberBackup");
 
 // Restore occcur on:
 // - GuildMemberAdd
@@ -11,70 +11,70 @@ const MemberBackup = require('./MemberBackup');
 // - GuildMemberRemove
 
 exports.restoreUser = async (database, member) => {
-  let backup;
-  try {
-    backup = MemberBackup.get(database, member);
-  }
-  catch (error) {
-    Logger.error(error.message);
-    return;
-  } 
+	let backup;
+	try {
+		backup = MemberBackup.get(database, member);
+	}
+	catch (error) {
+		Logger.error(error.message);
+		return;
+	} 
 
-  if (!backup) {
-    return; // No backup found, must be a brand new member
-  }
+	if (!backup) {
+		return; // No backup found, must be a brand new member
+	}
 
-  const parsedBackup = MemberBackup.deserializeMember(backup);
+	const parsedBackup = MemberBackup.deserializeMember(backup);
 
-  const { guild, user: { id, username, discriminator } } = member;
-  Logger.debug(`${username}#${discriminator} (${id}) has guild member backup:\n${JSON.stringify(parsedBackup)}`);
+	const { guild, user: { id, username, discriminator } } = member;
+	Logger.debug(`${username}#${discriminator} (${id}) has guild member backup:\n${JSON.stringify(parsedBackup)}`);
 
-  const { userId, nickname, roles, muted, deaf } = parsedBackup;
+	const { userId, nickname, roles, muted, deaf } = parsedBackup;
 
-  if (roles) {
-    Logger.debug(`${username}#${discriminator} (${id}) has backed-up roles: ${roles}`);
-    await member.setRoles(roles);
-    Logger.debug(`${username}#${discriminator} (${id}) has restored roles: ${roles}`);
-  }
+	if (roles) {
+		Logger.debug(`${username}#${discriminator} (${id}) has backed-up roles: ${roles}`);
+		await member.setRoles(roles);
+		Logger.debug(`${username}#${discriminator} (${id}) has restored roles: ${roles}`);
+	}
 
-  // Bots may not have permission to set nicknames by default
-  if (nickname) {
-    Logger.debug(`${username}#${discriminator} (${id}) has backed-up nickname: ${nickname}`);
-    await member.setNickname(nickname);
-    Logger.debug(`${username}#${discriminator} (${id}) has restored nickname: ${nickname}`);
-  }
+	// Bots may not have permission to set nicknames by default
+	if (nickname) {
+		Logger.debug(`${username}#${discriminator} (${id}) has backed-up nickname: ${nickname}`);
+		await member.setNickname(nickname);
+		Logger.debug(`${username}#${discriminator} (${id}) has restored nickname: ${nickname}`);
+	}
 
-  if (muted || deaf) {
-    Logger.debug(`${username}#${discriminator} (${id}) has backed-up voice settings: { muted: ${muted}, deaf: ${deaf} }`);
-    await member.setMute(muted);
-    await member.setDeaf(deaf);
-    Logger.debug(`${username}#${discriminator} (${id}) has restored voice settings: { muted: ${muted}, deaf: ${deaf} }`);
-  }
+	if (muted || deaf) {
+		Logger.debug(`${username}#${discriminator} (${id}) has backed-up voice settings: { muted: ${muted}, deaf: ${deaf} }`);
+		await member.setMute(muted);
+		await member.setDeaf(deaf);
+		Logger.debug(`${username}#${discriminator} (${id}) has restored voice settings: { muted: ${muted}, deaf: ${deaf} }`);
+	}
 
-  ModLogger.log(guild, `${username}#${discriminator} (\`${userId}\`) was restored`)
+	ModLogger.log(guild, `${username}#${discriminator} (\`${userId}\`) was restored`);
 };
 
 exports.onGuildMemberAdd = async (database, member) =>
-  exports.restoreUser(database, member);
+	exports.restoreUser(database, member);
 
 exports.onGuildMemberRemove = (database, member) => {
-  let backup;
-  try {
-    backup = MemberBackup.get(database, member);
-  }
-  catch (error) {
-    Logger.error(error.message);
-    return;
-  }
+	let backup;
+	try {
+		backup = MemberBackup.get(database, member);
+	}
+	catch (error) {
+		Logger.error(error.message);
+		return;
+	}
 
-  const { guild, user: { id, username, discriminator } } = member;
+	const { guild, user: { id, username, discriminator } } = member;
 
-  if (!backup) {
-    MemberBackup.create(database, member);
-    ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) backup was created`)
-  }
-  else {
-    MemberBackup.update(database, member);
-    ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) backup was updated`)
-  }
+	if (!backup) {
+		MemberBackup.create(database, member);
+		ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) backup was created`);
+	}
+	else {
+		MemberBackup.update(database, member);
+		ModLogger.log(guild, `${username}#${discriminator} (\`${id}\`) backup was updated`);
+	}
 };

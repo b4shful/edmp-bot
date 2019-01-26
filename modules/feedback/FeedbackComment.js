@@ -12,7 +12,7 @@ const logQuery = require("./utils").logQuery;
  * @throws If execution of database statement fails
  */
 const confirmRequestExists = (database, requestId) => {
-	const SELECT_REQUEST = `SELECT * FROM FeedbackRequest WHERE id = $requestId`;
+	const SELECT_REQUEST = "SELECT * FROM FeedbackRequest WHERE id = $requestId";
 	const parameters = { requestId };
 
 	logQuery(SELECT_REQUEST, parameters);
@@ -27,7 +27,7 @@ const confirmRequestExists = (database, requestId) => {
  * @throws If execution of database statement fails
  */
 const numComments = (database, requestId, userId) => {
-	const SELECT_COMMENT = `SELECT count(*) as comments FROM FeedbackComment WHERE requestId = $requestId AND userId = $userId`;
+	const SELECT_COMMENT = "SELECT count(*) as comments FROM FeedbackComment WHERE requestId = $requestId AND userId = $userId";
 	const parameters = { requestId, userId };
 
 	logQuery(SELECT_COMMENT, parameters);
@@ -45,7 +45,7 @@ exports.searchByUrl = (database, url) => {
 		throw new TypeError("The url string is required to search.");
 	}
 
-	const query = `SELECT userId, timestamp, message FROM (SELECT id FROM FeedbackRequest WHERE message LIKE $pattern) requests JOIN FeedbackComment ON requests.id = FeedbackComment.requestId`;
+	const query = "SELECT userId, timestamp, message FROM (SELECT id FROM FeedbackRequest WHERE message LIKE $pattern) requests JOIN FeedbackComment ON requests.id = FeedbackComment.requestId";
 	const parameters = { pattern: `%${url}%` };
 
 	logQuery(query, parameters);
@@ -105,7 +105,7 @@ exports.create = (database, requestId, userId, message) => {
 		result = { ...result, extraFeedback: true };
 	}
 
-	const INSERT_COMMENT = `INSERT INTO FeedbackComment (requestId, userId, message) VALUES ($requestId, $userId, $message)`;
+	const INSERT_COMMENT = "INSERT INTO FeedbackComment (requestId, userId, message) VALUES ($requestId, $userId, $message)";
 	const parameters = { requestId, userId, message };
 
 	logQuery(INSERT_COMMENT, parameters);

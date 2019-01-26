@@ -25,7 +25,7 @@ exports.create = (database, userId, message) => {
 		throw new TypeError("A FeedbackRequest requires a message string");
 	}
 
-	const INSERT_REQUEST = `INSERT INTO FeedbackRequest (userId, message) VALUES ($userId, $message)`;
+	const INSERT_REQUEST = "INSERT INTO FeedbackRequest (userId, message) VALUES ($userId, $message)";
 	const parameters = { userId, message };
 
 	logQuery(INSERT_REQUEST, parameters);
@@ -49,7 +49,7 @@ exports.get = (database, requestId) => {
 		throw new TypeError("Getting a FeedbackRequest requires a requestId number");
 	}
 
-	const GET_REQUEST = `SELECT * FROM FeedbackRequest WHERE id = $requestId`;
+	const GET_REQUEST = "SELECT * FROM FeedbackRequest WHERE id = $requestId";
 	const parameters = { requestId };
 
 	logQuery(GET_REQUEST, parameters);
@@ -76,7 +76,7 @@ exports.update = (database, requestId, message) => {
 		throw new TypeError("Updating a FeedbackRequest requires a message string");
 	}
 
-	const UPDATE_REQUEST = `UPDATE FeedbackRequest SET message = $message WHERE id = $requestId`;
+	const UPDATE_REQUEST = "UPDATE FeedbackRequest SET message = $message WHERE id = $requestId";
 	const parameters = { requestId, message };
 
 	logQuery(UPDATE_REQUEST, parameters);
@@ -100,7 +100,7 @@ exports.recent = (database, length) => {
 		throw new TypeError("Missing number of requests to retreive.");
 	}
 
-	const SELECT_RECENT = `SELECT FeedbackRequest.*, count(FeedbackComment.requestId) as comments FROM FeedbackRequest LEFT JOIN FeedbackComment ON FeedbackRequest.id = FeedbackComment.requestId GROUP BY FeedbackRequest.id ORDER BY timestamp DESC LIMIT $length`;
+	const SELECT_RECENT = "SELECT FeedbackRequest.*, count(FeedbackComment.requestId) as comments FROM FeedbackRequest LEFT JOIN FeedbackComment ON FeedbackRequest.id = FeedbackComment.requestId GROUP BY FeedbackRequest.id ORDER BY timestamp DESC LIMIT $length";
 	const parameters = { length };
 
 	logQuery(SELECT_RECENT, parameters);
@@ -122,7 +122,7 @@ exports.need = (database, length) => {
 		throw new TypeError("Missing number of requests to retreive.");
 	}
 
-	const SELECT_NEEDED = `SELECT * FROM (SELECT FeedbackRequest.*, count(FeedbackComment.requestId) as comments FROM FeedbackRequest LEFT JOIN FeedbackComment ON FeedbackRequest.id = FeedbackComment.requestId GROUP BY FeedbackRequest.id) WHERE comments = 0 ORDER BY timestamp DESC LIMIT $length`;
+	const SELECT_NEEDED = "SELECT * FROM (SELECT FeedbackRequest.*, count(FeedbackComment.requestId) as comments FROM FeedbackRequest LEFT JOIN FeedbackComment ON FeedbackRequest.id = FeedbackComment.requestId GROUP BY FeedbackRequest.id) WHERE comments = 0 ORDER BY timestamp DESC LIMIT $length";
 	const parameters = { length };
 
 	logQuery(SELECT_NEEDED, parameters);
