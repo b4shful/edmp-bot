@@ -5,7 +5,7 @@ exports.run = (client, message, args, level) => {
 	if (!args[0]) {
 		message.channel.send(commandsHelpOutput(client, message, level), { code: "asciidoc", split: { char: "\u200b" } });
 	} else if (args[0] === "rules") {
-		prefix = client.config.defaultSettings.prefix[0];
+		const prefix = client.config.defaultSettings.prefix[0];
 		// This should be added to help in some way. However I don't know how I want to do this yet.
 		// I hate template literal multiline strings. Disgusting formatting.
 		let output = "- Requesting feedback requires a point to spend.\n";
