@@ -2,7 +2,7 @@ const chalk = require("chalk");
 const moment = require("moment");
 
 class DiscordLogger {
-	static _log(content, type = 'log') {
+	static _log(content, type = "log") {
 		const timestamp = `[${moment().format("YYYY-MM-DD HH:mm:ss")}]:`;
 
 		switch (type) {
@@ -40,19 +40,19 @@ class DiscordLogger {
 	}
 
 	static debug(...args) {
-		this._log(...args, 'debug');
+		this._log(...args, "debug");
 	}
 
 	static warn(...args) {
-		this._log(...args, 'warn');
+		this._log(...args, "warn");
 	}
 
 	static error(...args) {
-		this._log(...args, 'error');
+		this._log(...args, "error");
 	}
 
 	static cmd(...args) {
-		this._log(...args, 'cmd');
+		this._log(...args, "cmd");
 	}
 }
 
@@ -79,15 +79,15 @@ class ModLogger extends DiscordLogger {
 		}
 
 		const logChannel = guild.channels.find(({ type, name }) =>
-			type === 'text' && name === 'logs-general'
+			type === "text" && name === "logs-general"
 		);
 
 		if (!logChannel) {
-			super.warn('Unable to find logging channel in server');
+			super.warn("Unable to find logging channel in server");
 			return;
 		}
 
-		const timestamp = `\`[${moment().utc().format('YYYY-MM-DD HH:mm:ss z')}]:\``;
+		const timestamp = `\`[${moment().utc().format("YYYY-MM-DD HH:mm:ss z")}]:\``;
 		logChannel.send(`${timestamp} ${content}`);
 	}
 }
