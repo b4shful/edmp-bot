@@ -7,6 +7,11 @@ extends:
 parserOptions:
   ecmaVersion: 2018
 rules:
+  max-len:
+    - warn
+    - {
+      code: 120
+    }
   indent:
     - error
     - tab
@@ -36,4 +41,11 @@ rules:
     - warn
   no-useless-escape:
     - warn
+  # Review the following
 
+  # Node.js convention is to throw error to process root? Will errors bubble out of Discord client?
+  no-process-exit:
+    - warn
+  # Deprecates based on latest version, any warnings need to check if latest is available in Node.js version used
+  node/no-deprecated-api:
+    - warn
