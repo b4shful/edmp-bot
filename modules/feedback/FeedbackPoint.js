@@ -141,7 +141,7 @@ exports.all = (database, userId) => {
 
 	const parameters = { userId };
 
-	logQuery(SELECT_USABLE_POINT_COUNT, parameters);
+	logQuery(SELECT_ALL_POINT_COUNT, parameters);
 	const { totalPoints } = database.prepare(SELECT_ALL_POINT_COUNT).get(parameters);
 
 	Logger.log(`User ${userId} has ${totalPoints} total points`);
