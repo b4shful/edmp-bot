@@ -6,7 +6,7 @@ exports.run = async (client, message, args, level) => {
 
 	if (val < 1) {
 		message.channel.send(
-			`${message.member} You must supply a number of messages to delete that's greater than 0. \`${help.usage}\``
+			`${message.member} You must supply a number of messages to delete that's greater than 0. \`${exports.help.usage}\``
 		);
 		return;
 	}
@@ -16,7 +16,7 @@ exports.run = async (client, message, args, level) => {
 			`${
 				message.member
 			} What do you think I'm gonna do? You didn't supply a member or a number of messages. I'm not psychic! \`${
-				help.usage
+				exports.help.usage
 			}\``
 		);
 		return;
@@ -82,7 +82,7 @@ exports.help = {
 	usage: "mute <user> <number>"
 };
 
-getClearArgs = (message, args) => {
+const getClearArgs = (message, args) => {
 	const mentionedMembers = message.mentions.members;
 	let retObj = { member: null, val: 0 };
 
