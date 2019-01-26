@@ -1,7 +1,7 @@
 const Logger = require("../util/Logger");
 
 exports.init = client => {
-	for (p in oneShots) {
+	for (const p in oneShots) {
 		// Creating an ad-hoc "module" to pass along for command parsing in event/message.js
 		let newObj = {};
 		newObj.help = {
@@ -41,7 +41,8 @@ exports.init = client => {
 
 // We must remove all one shots from the commands list when links is unloaded/shutdown.
 exports.shutdown = async client => {
-	for (p in oneShots) {
+	for (const p in oneShots) {
+		let command;
 		if (client.commands.has(p)) {
 			command = client.commands.get(p);
 		} else if (client.aliases.has(p)) {
@@ -77,7 +78,7 @@ exports.help = {
 	usage: "See other commands"
 };
 
-oneShots = {
+const oneShots = {
 	bee: {
 		preface: "AdmiralBumbleBee Blog: ",
 		text: "http://admiralbumblebee.com/edmp",
