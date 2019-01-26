@@ -79,8 +79,8 @@ exports.unbanUser = async (guild, user) => {
 
 /**
  * Higher-order function to ignore messages from bot users.
- * 
- * @param {Discord.Message} message 
+ *
+ * @param {Discord.Message} message
  */
 exports.ignoreBots = (message, callback) => {
 	if (!message.author.bot) {

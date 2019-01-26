@@ -10,11 +10,11 @@ const validateClient = client => {
 
 /**
  * This is similar to Rowboat's [GuildMemberBackup table](https://github.com/b1naryth1ef/rowboat/blob/master/rowboat/models/guild.py#L240).
- * 
+ *
  * In Rowboat, the primary key is a composite key of the user id and guild id.
  * The table would track the list of role ids associated with the user,
  * the user's nickname in the guild, whether they're muted in voice, and whether they were deaf in voice.
- * 
+ *
  * The Discord.js collections are Maps but they'll be serialized as a JSON object.
  */
 const CREATE_MEMBER_BACKUPS_TABLE = `CREATE TABLE IF NOT EXISTS GuildMemberBackup(

@@ -18,7 +18,7 @@ exports.restoreUser = async (database, member) => {
 	catch (error) {
 		Logger.error(error.message);
 		return;
-	} 
+	}
 
 	if (!backup) {
 		return; // No backup found, must be a brand new member

@@ -38,7 +38,7 @@ exports.deserializeMember = ({
 /**
  * @param {Databse} database
  * @param {Discord.GuildMember} member
- * 
+ *
  * @returns Id of newly created GuildMemberBackup
  *
  * @throws If execution of a database statement fails
@@ -62,7 +62,7 @@ exports.create = (database, member) => {
 /**
  * @param {Databse} database
  * @param {Discord.GuildMember} member
- * 
+ *
  * @returns {Object | undefined} GuildMemberBackup with the user id of the given `member`
  *
  * @throws If execution of a database statement fails
@@ -85,7 +85,7 @@ exports.get = (database, member) => {
 /**
  * @param {Databse} database
  * @param {Discord.GuildMember} member
- * 
+ *
  * @returns {Object} Changes made to the GuildMemberBackup with the user id of the given `member`
  *
  * @throws If execution of a database statement fails

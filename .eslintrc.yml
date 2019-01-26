@@ -28,6 +28,8 @@ rules:
   eqeqeq:
     - warn
     - always
+  no-trailing-spaces:
+    - error
   no-console:
     - off
   no-unused-vars:
