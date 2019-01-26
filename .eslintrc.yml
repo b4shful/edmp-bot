@@ -14,8 +14,21 @@ rules:
     - error
     - unix
   quotes:
-    - error
+    - warn
     - double
   semi:
-    - error
+    - warn
     - always
+  comma-dangle:
+    - warn
+    - never
+  eqeqeq:
+    - warn
+    - always
+  no-console:
+    - off
+  no-unused-vars:
+    - warn
+  no-useless-escape:
+    - warn
+
