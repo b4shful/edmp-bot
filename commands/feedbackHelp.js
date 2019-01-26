@@ -35,7 +35,7 @@ const commandsHelpOutput = (client, message, level) => {
 	const commandNames = myCommands.keyArray();
 	const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
-	let output = `== Feedback Help ==\n`;
+	let output = "== Feedback Help ==\n";
 
 	myCommands.forEach(x => {
 		const cat = x.help.category.toProperCase();

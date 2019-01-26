@@ -20,6 +20,6 @@ exports.conf = {
 exports.help = {
 	name: "reloadFilter",
 	category: "System",
-	description: 'Reloads a filter that"s been modified.',
+	description: "Reloads a filter that\"s been modified.",
 	usage: "reloadFilter [command]"
 };

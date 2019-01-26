@@ -72,7 +72,7 @@ exports.run = (client, message, args) => {
 	}
 
 	// TODO: Parse link if it's permitted (audio host whitelist).
-        // TOTO: Check for 403/404/x0x
+	// TOTO: Check for 403/404/x0x
 	// NOTE: For some services, check if the link is a playlist/set
 	// and respond with a "you can only request feedback for one track".
 
@@ -110,6 +110,6 @@ exports.run = (client, message, args) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	aliases: ['update', 'replace', 'change'],
+	aliases: ["update", "replace", "change"],
 	permLevel: "User"
 };

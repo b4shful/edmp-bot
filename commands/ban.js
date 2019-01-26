@@ -1,10 +1,10 @@
-const Logger = require('../util/Logger');
+const Logger = require("../util/Logger");
 const {
 	getMentionedMember,
 	banUser,
 	ignoreBots,
 	respond
-} = require('../modules/moderation/utils');
+} = require("../modules/moderation/utils");
 
 exports.run = (_client, message, args) =>
 	ignoreBots(message, () =>
@@ -12,15 +12,15 @@ exports.run = (_client, message, args) =>
 			const member = getMentionedMember(message);
 
 			if (message.author.id === member.user.id) {
-				throw new TypeError('Like I\'d let you');
+				throw new TypeError("Like I'd let you");
 			}
 
 			if (message.mentions.members.length > 1) {
-				throw new TypeError('Please ban one person at a time');
+				throw new TypeError("Please ban one person at a time");
 			}
 
 			// Only one mentioned allowed, so following tokens are reason message.
-			const reason = args.length > 1 ? `${args.slice(1).join(' ')}` : 'No reason';
+			const reason = args.length > 1 ? `${args.slice(1).join(" ")}` : "No reason";
 
 			try {
 				await banUser(member, reason);
@@ -39,12 +39,12 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'Staff'
+	permLevel: "Staff"
 };
 
 exports.help = {
-	name: 'ban',
-	category: 'Moderation',
-	description: 'Bans a member indefinitely',
-	usage: 'ban <reason...>'
+	name: "ban",
+	category: "Moderation",
+	description: "Bans a member indefinitely",
+	usage: "ban <reason...>"
 };

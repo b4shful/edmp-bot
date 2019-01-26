@@ -1,11 +1,11 @@
-const Logger = require('../util/Logger');
+const Logger = require("../util/Logger");
 const {
 	getGuild,
 	getMentionedMember,
 	unmuteInServer,
 	ignoreBots,
 	respond
-} = require('../modules/moderation/utils');
+} = require("../modules/moderation/utils");
 
 exports.run = (_client, message) =>
 	ignoreBots(message, () =>
@@ -14,11 +14,11 @@ exports.run = (_client, message) =>
 			const member = getMentionedMember(message);
 
 			if (message.author.id === member.user.id) {
-				throw new TypeError('Like I would let you');
+				throw new TypeError("Like I would let you");
 			}
 
 			if (message.mentions.members.length > 1) {
-				throw new TypeError('Please unmute one person at a time');
+				throw new TypeError("Please unmute one person at a time");
 			}
 
 			try {
@@ -38,12 +38,12 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [],
-	permLevel: 'Staff'
+	permLevel: "Staff"
 };
 
 exports.help = {
-	name: 'unmute',
-	category: 'Moderation',
-	description: 'Unmutes a member',
-	usage: 'unmute <reason...>'
+	name: "unmute",
+	category: "Moderation",
+	description: "Unmutes a member",
+	usage: "unmute <reason...>"
 };

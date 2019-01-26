@@ -94,7 +94,7 @@ oneShots = {
 	},
 	analogwarmth: {
 		text:
-			'<:warmth:419293308653797386> SoundOnSound article on "What is analog warmth?" - https://www.soundonsound.com/techniques/analogue-warmth',
+			"<:warmth:419293308653797386> SoundOnSound article on \"What is analog warmth?\" - https://www.soundonsound.com/techniques/analogue-warmth",
 		aliases: [],
 		permLevel: "User",
 		description: "What is analog warmth?"
