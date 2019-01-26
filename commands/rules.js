@@ -20,13 +20,10 @@ exports.run = async (client, message, args, level) => {
 			var rulesJson = JSON.parse(body);
 
 			if (!args[0]) {
-				rulesList = "Server rules:\n";
+				let rulesList = "Server rules:\n";
 
-				var ruleNumber = 1;
-
-				for (let rule of rulesJson.rules) {
+				for (const rule of rulesJson.rules) {
 					rulesList += rule + "\n";
-					ruleNumber++;
 				}
 				message.channel.send(rulesList);
 			} else if (parseInt(args[0])) {
