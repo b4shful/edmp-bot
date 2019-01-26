@@ -109,7 +109,7 @@ module.exports = client => {
 	client.unloadFilter = async filterName => {
 		const filterKey = filterName.toLowerCase();
 		let filter;
-		for ([k, v] of client.filters) {
+		for (const [k, v] of client.filters) {
 			if (v.help.name.toLowerCase() === filterKey) {
 				filter = client.filters.get(k);
 				break;
