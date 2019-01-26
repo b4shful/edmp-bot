@@ -57,7 +57,7 @@ exports.run = async (client, message) => {
 					? `${memberName} has ${numPoints} ${numPoints > 1 ? "points." : "point."}`
 					: `${memberName} has no usable points${
 						!mentionedMember ? `, try giving some feedback by using \`${feedbackUsage}\`` : "."
-					  }`;
+					}`;
 		} catch (error) {
 			response = "Something went wrong, please notify `@Mods`.";
 		}
