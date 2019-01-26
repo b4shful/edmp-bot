@@ -6,7 +6,8 @@
     "start": "node index.js"
   },
   "engines": {
-    "node": ">=8"
+    "node": "~8.12",
+    "yarn": "~1.13"
   },
   "author": "",
   "license": "MIT",
