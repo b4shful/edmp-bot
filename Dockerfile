@@ -5,6 +5,8 @@ FROM node:lts-alpine
 RUN apk update
 
 # Install node-gyp dependencies, see https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#node-gyp-alpine
+# Requires Python 2.7, 3.x is unsupported by node-gyp
+
 ## Install build toolchain, install node deps and compile native add-ons
 RUN apk add --no-cache --virtual .gyp python make g++
 
