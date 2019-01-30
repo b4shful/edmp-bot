@@ -31,7 +31,7 @@ const addCommands = async client => {
 
 	// Here we load **commands** into memory, as a collection, so they're accessible
 	// here and everywhere else.
-	const cmdFiles = await readdir("./commands/");
+	const cmdFiles = await readdir(`${__dirname}/commands/`);
 	client.logger.log(`Loading a total of ${cmdFiles.length} commands.`);
 	cmdFiles.forEach(f => {
 		if (!f.endsWith(".js")) return;
@@ -46,7 +46,7 @@ const addFilters = async client => {
 	// Subsequently, if not obviously, we load channel filters
 	// Filters are stored with the channelNames as the key, this is important!
 	// You must use help.name for the name.
-	const fltrFiles = await readdir("./filters/");
+	const fltrFiles = await readdir(`${__dirname}/filters/`);
 	client.logger.log(`Loading a total of ${fltrFiles.length} Filters.`);
 	fltrFiles.forEach(f => {
 		if (!f.endsWith(".js")) return;
@@ -57,7 +57,7 @@ const addFilters = async client => {
 
 const addEventListeners = async client => {
 	// Then we load events, which will include our message and ready event.
-	const evtFiles = await readdir("./events/");
+	const evtFiles = await readdir(`${__dirname}/events/`);
 	client.logger.log(`Loading a total of ${evtFiles.length} events.`);
 	evtFiles.forEach(file => {
 		const eventName = file.split(".")[0];
@@ -84,7 +84,7 @@ const init = async () => {
 	//
 	// client.config.token contains the bot's token
 	// client.config.prefix contains the message prefix
-	const configPath = process.env.CONFIG_PATH || "./config.js";
+	const configPath = process.env.CONFIG_PATH || "../config.js";
 	client.config = require(configPath);
 
 	// Check for required config and exit with error if missing.

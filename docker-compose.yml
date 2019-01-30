@@ -6,12 +6,6 @@ services:
     restart: always
     build: .
     volumes:
-      # This is why you keep source code in its own directory
-      - ./commands:/home/node/app/commands
-      - ./events:/home/node/app/events
-      - ./filters:/home/node/app/filters
-      - ./modules:/home/node/app/modules
-      - ./util:/home/node/app/util
       - ./config.js:/home/node/app/config.js
-      - ./index.js:/home/node/app/index.js
-    command: ["node", "index.js"]
+      - ./src:/home/node/app/src
+    command: ["node", "src/index.js"]

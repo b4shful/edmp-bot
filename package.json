@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "lint": "yarn eslint commands/ events/ filters/ modules/ util/ index.js",
-    "start": "node index.js"
+    "lint": "yarn eslint src/",
+    "start": "node src/index.js"
   },
   "engines": {
     "node": "~10.15",
