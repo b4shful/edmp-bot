@@ -6,6 +6,7 @@ services:
     restart: always
     build: .
     volumes:
+      - ./data:/home/node/app/data
       - ./config.js:/home/node/app/config.js
       - ./src:/home/node/app/src
     command: ["node", "src/index.js"]

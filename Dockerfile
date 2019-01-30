@@ -35,4 +35,6 @@ COPY . /home/node/app
 # Switch from root user
 USER node
 
+VOLUME [ "/data" ]
+
 EXPOSE 80
