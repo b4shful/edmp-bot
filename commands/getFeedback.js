@@ -82,7 +82,7 @@ exports.run = async (client, message, args) => {
 
 	await message.delete();
 
-	const buf = new Buffer(response, "utf-8");
+	const buf = Buffer.from(response, "utf-8");
 	const dt = new Date();
 
 	message.author.send({
