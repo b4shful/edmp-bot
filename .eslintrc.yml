@@ -48,4 +48,7 @@ rules:
     - warn
   # Deprecates based on latest version, any warnings need to check if latest is available in Node.js version used
   node/no-deprecated-api:
-    - warn
+    - error
+    - ignoreModuleItems:
+        # Deprecated in v11.0.0, we're v8.x
+        - url.parse
