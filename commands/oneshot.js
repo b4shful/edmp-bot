@@ -245,6 +245,12 @@ oneShots = {
 		permLevel: "User",
 		description: "Responds with a link to V:Motion's SoundCloud."
 	},
+	works: {
+		text: "*If it works, it works™*",
+		aliases: ["itworks"],
+		permLevel: "User",
+		description: "If it works, it works™"
+	},
 	xan: {
 		preface: "Xan: ",
 		text: "https://soundcloud.com/therealxan",
